@@ -1,5 +1,5 @@
 import { useState } from "react";
-import hamburguesa from "../Assets/hamburguesa.png"; // Importa la imagen de hamburguesa
+import hamburguesa from "../Assets/hamburguesa.png";
 
 const App = () => {
   const [open, setOpen] = useState(true);
@@ -26,7 +26,6 @@ const App = () => {
             className="lg:text-white"
             onClick={toggleSidebar}
           >
-            {/* Aplica clases para ajustar el tamaño de la imagen */}
             <img src={hamburguesa} alt="Hamburguesa" className="w-6 h-6" />
           </button>
           <h1
@@ -55,7 +54,6 @@ const App = () => {
               >
                 {Menu.title}
               </span>
-              {/* Línea de división */}
               <div
                 className={`w-1/2 mt-5 border-t border-gray-500 ${
                   open ? "block" : "hidden"
