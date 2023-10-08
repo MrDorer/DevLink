@@ -22,9 +22,7 @@ const App = () => {
   return (
     <div className="flex">
       <div
-        className={`${
-          open ? "w-60" : "w-20 "
-        } bg-dark-purple h-screen p-5 pt-6 relative duration-500 transition-transform transform-gpu`}
+        className={`${open ? "w-72" : "w-16 "} bg-dark-purple h-screen p-5 pt-6 relative duration-500 `}
       >
         <div className="flex gap-x-4 items-center">
           <button
