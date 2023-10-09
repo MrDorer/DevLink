@@ -7,8 +7,10 @@ function Inicio() {
     return (
         <>
         
+        
             <div className='flex flex-col justify-between h-screen'>
                 <Heather />
+
                 <Home/>
                 <Footer />
             </div>
