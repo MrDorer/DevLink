@@ -22,13 +22,17 @@ const App = () => {
   return (
     <div className="flex">
       <div
-        className={`${open ? "w-72" : "w-16 "} bg-dark-purple h-screen p-5 pt-6 relative duration-500 `}
+        className={`${
+          open ? "w-72" : "w-16 "
+        } bg-dark-purple h-screen p-5 pt-6`}
+        style={{
+          position: "sticky",
+          top: 0, 
+          zIndex: 100, 
+        }}
       >
         <div className="flex gap-x-4 items-center">
-          <button
-            className="lg:text-white"
-            onClick={toggleSidebar}
-          >
+          <button className="lg:text-white" onClick={toggleSidebar}>
             <img src={hamburguesa} alt="Hamburguesa" className="w-6 h-6" />
           </button>
           <h1
@@ -60,11 +64,7 @@ const App = () => {
                 transitionDelay: `${animationDelay + index * 100}ms`,
               }}
             >
-              <span
-                className={`${
-                  open ? "origin-left duration-100" : "hidden"
-                }`}
-              >
+              <span className={`${open ? "origin-left duration-100" : "hidden"}`}>
                 {Menu.title}
               </span>
               <div
