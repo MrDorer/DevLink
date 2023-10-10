@@ -5,7 +5,7 @@ const Home = () => {
   return (
     <div className="flex">
       <Sidebar />
-      <div className="flex flex-grow justify-center">
+      <div className="flex mt-28 flex-grow justify-center">
         <div className='flex flex-wrap w-8/12 min-w-6/12 bg-[#F2F2F2] justify-center p-12'>
 
           {/*Inicio del post*/}
