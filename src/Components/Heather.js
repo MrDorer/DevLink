@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import LogoGris from '../Assets/LogoGris.png';
 import IconoBuscar from '../Assets/IconoBuscar.png';
 import Iconoperfil from '../Assets/Iconoperfil.png';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function Header() {
   const [mostrarBarraBusqueda, setMostrarBarraBusqueda] = useState(false);
@@ -17,9 +18,11 @@ function Header() {
   };
 
   return (
-    <header className="bg-purple-500 p-4 flex items-center justify-between" style={{ backgroundColor: 'rgb(93, 48, 193)' }}>
+    <header className="bg-purple-500 p-4 flex items-center justify-between w-full fixed top-0 z-50" style={{ backgroundColor: 'rgb(93, 48, 193)' }}>
       <div className="container mx-auto flex items-center">
         <img src={LogoGris} alt="Logo" className="h-20" />
+        <div><h1 className="text-white text-4xl font-serif font-extrabold ml-4">DevLink</h1></div>
+        <FontAwesomeIcon icon={['fas', 'layer-group']} className="text-white ml-2" />
       </div>
 
       <div className="container mx-auto flex justify-end items-center">

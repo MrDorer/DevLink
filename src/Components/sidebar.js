@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import hamburguesa from "../Assets/hamburguesa.png";
 
 const App = () => {
@@ -20,15 +20,14 @@ const App = () => {
   };
 
   return (
-    <div className="flex">
+    <div className="mt-28 fixed flex min-h-screen"> {/* Ajusta el valor de mt-10 para separar más */}
       <div
-        className={`${open ? "w-40" : "w-16 "} bg-dark-purple h-screen p-5 pt-6 relative duration-500 `}
+        className={`${
+          open ? "w-40" : "w-16"
+        } bg-dark-purple p-5 pt-6 relative duration-500 flex-shrink-0`}
       >
         <div className="flex gap-x-4 items-center">
-          <button
-            className="lg:text-white"
-            onClick={toggleSidebar}
-          >
+          <button className="lg:text-white" onClick={toggleSidebar}>
             <img src={hamburguesa} alt="Hamburguesa" className="w-6 h-6" />
           </button>
           <h1
@@ -46,7 +45,7 @@ const App = () => {
             <li
               key={index}
               className={`flex flex-col items-center rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm transform ${
-                Menu.gap ? "mt-9" : "mt-2"
+                Menu.gap ? "mt-12" : "mt-2" // Ajusta el valor de mt-12 para separar más el elemento "Home"
               } ${index === 0 && "bg-light-white"}`}
               style={{
                 transform: open ? "translateX(0)" : "translateX(-100%)",
@@ -76,6 +75,7 @@ const App = () => {
           ))}
         </ul>
       </div>
+      <div className="flex-grow bg-dark-purple"></div> {/* Fondo morado que se extiende */}
     </div>
   );
 };
