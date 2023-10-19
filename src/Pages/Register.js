@@ -1,7 +1,9 @@
 import React from "react";
 import { Link } from 'react-router-dom';
-
 import LogoM from '../Assets/LogoM.png';
+
+//Register
+
 function Register() {
     return (
         <>
