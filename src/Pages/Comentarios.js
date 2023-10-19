@@ -1,15 +1,13 @@
 import Footer from '../Components/Footer';
 import Heather from '../Components/Heather';
-import Home from './Home';
+import Post from '../Components/Post'
 
 function Inicio() {
     return (
         <>
-        
-        
             <div className='flex flex-col justify-between h-screen'>
                 <Heather />
-                <Home/>
+                <Post/>
                 <Footer />
             </div>
         </>

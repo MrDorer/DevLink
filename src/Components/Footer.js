@@ -8,7 +8,7 @@ import TwitterIcon from '../Assets/TwitterIcon.png'
 function Footer() {
     return (
         <>
-            <footer className="bg-purple-500 p-4 flex flex-col items-center justify-center  "style={{ backgroundColor: 'rgb(93, 48, 193)' }}>
+            <footer className="bg-purple-500 p-4 flex flex-col items-center justify-center z-50  "style={{ backgroundColor: 'rgb(93, 48, 193)' }}>
                 <div className=" flex mb-4">
                     <img src={InstagramIcon} alt="Logo" className="h-8 mr-4" />
                     <img src={FacebookIcon} alt="Logo" className="h-8 mr-4" />
