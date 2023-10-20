@@ -5,6 +5,7 @@ import Home from './Pages/Home';
 import Login from './Pages/Login';
 import Register from './Pages/Register';
 import HomeVisit from './Pages/HomeVisit';
+import CrearProyecto from './Pages/CrearProyecto';
 
 function AppRouter() {
   return (
@@ -15,6 +16,7 @@ function AppRouter() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/homevisit" element={<HomeVisit />} />
+        <Route path="/crearproyecto" element={<CrearProyecto />} />
       </Routes>
     </>
   );
