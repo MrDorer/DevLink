@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import hamburguesa from "../Assets/hamburguesa.png";
 import Group from "../Assets/Group.png";
+import { Link } from "react-router-dom";
 
 const App = () => {
   const [open, setOpen] = useState(true);
@@ -8,7 +9,6 @@ const App = () => {
   const Menus = [
     { title: "Home", gap: true },
     { title: "Perfiles", gap: true },
-    { title: "Proyectos", gap: true },
     { title: "Explorar", gap: true },
   ];
 
@@ -38,7 +38,7 @@ const App = () => {
             <li
               key={index}
               className={`flex flex-col items-center rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm transform ${
-                Menu.gap ? "mt-12" : "mt-2" // Ajusta el valor de mt-12 para separar más el elemento "Home"
+                Menu.gap ? "mt-12" : "mt-2"
               } ${index === 0 && "bg-light-white"}`}
               style={{
                 transform: open ? "translateX(0)" : "translateX(-100%)",
@@ -66,8 +66,9 @@ const App = () => {
               ></div>
             </li>
           ))}
+          <Link to='./config'>
           <img src={Group} alt="Group" className={`absolute mt-auto right-5 w-6 h-6 duration-200 ${open ? 'visible' : 'hidden '}`} />
-
+          </Link>
         </ul>  
        
       </div>

@@ -15,7 +15,10 @@ function Header() {
   return (
     <header className="bg-purple-500 p-4 flex items-center justify-between w-full fixed top-0 z-50" style={{ backgroundColor: 'rgb(93, 48, 193)' }}>
       <div className="container mx-auto flex items-center">
+        <Link  to="/">
         <img src={LogoGris} alt="Logo" className="h-20" />
+        </Link>
+
         <div><h1 className="text-white text-4xl font-serif font-extrabold ml-4">DevLink</h1></div>
         <FontAwesomeIcon icon={['fas', 'layer-group']} className="text-white ml-2" />
       </div>

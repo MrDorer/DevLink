@@ -6,7 +6,6 @@ import Register from './Pages/Register';
 import Config from './Pages/Config'
 import Comentarios from './Pages/Comentarios'
 import Perfil from './Pages/Perfil';
-
 function AppRouter() {
   return (
     <>
