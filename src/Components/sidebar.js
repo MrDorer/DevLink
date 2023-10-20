@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import hamburguesa from "../Assets/hamburguesa.png";
+import Group from "../Assets/Group.png";
 
 const App = () => {
   const [open, setOpen] = useState(true);
@@ -28,17 +29,9 @@ const App = () => {
       >
         <div className="flex gap-x-4 items-center">
           <button className="lg:text-white" onClick={toggleSidebar}>
-            <img src={hamburguesa} alt="Hamburguesa" className="w-6 h-6" />
+            <img src={hamburguesa} alt="Hamburguesa" className="w-6 h-6 duration-200" />
           </button>
-          <h1
-            className={`${
-              open
-                ? "text-white origin-left font-medium text-xl duration-200"
-                : "hidden"
-            }`}
-          >
-            Menu
-          </h1>
+          <h1 className={`${open ? "text-white origin-left font-medium text-xl duration-200": "hidden"}`}>Menu</h1>
         </div>
         <ul className="pt-6">
           {Menus.map((Menu, index) => (
@@ -73,9 +66,11 @@ const App = () => {
               ></div>
             </li>
           ))}
-        </ul>
+          <img src={Group} alt="Group" className={`absolute mt-auto right-5 w-6 h-6 duration-200 ${open ? 'visible' : 'hidden'}`} />
+
+        </ul>  
+       
       </div>
-      <div className="flex-grow bg-dark-purple"></div> {/* Fondo morado que se extiende */}
     </div>
   );
 };

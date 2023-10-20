@@ -4,7 +4,7 @@ import Inicio from './Pages/Inicio';
 import Home from './Pages/Home';
 import Login from './Pages/Login';
 import Register from './Pages/Register';
-
+import Perfil from './Pages/Perfil';
 function AppRouter() {
   return (
     <>
@@ -13,6 +13,7 @@ function AppRouter() {
         <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/perfil" element={<Perfil />} />
       </Routes>
     </>
   );
