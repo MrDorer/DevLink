@@ -17,7 +17,7 @@ function AppRouter() {
         <Route path="/register" element={<Register />} />
         <Route path="/perfil" element={<Perfil />} />
         <Route path ='/config' element={<Config/>}/>
-            <Route path ='/comentar' element={<Comentarios/>}/>
+        <Route path ='/comentar' element={<Comentarios/>}/>
 
       </Routes>
     </>

@@ -66,7 +66,7 @@ const App = () => {
               ></div>
             </li>
           ))}
-          <img src={Group} alt="Group" className={`absolute mt-auto right-5 w-6 h-6 duration-200 ${open ? 'visible' : 'hidden'}`} />
+          <img src={Group} alt="Group" className={`absolute mt-auto right-5 w-6 h-6 duration-200 ${open ? 'visible' : 'hidden '}`} />
 
         </ul>  
        
