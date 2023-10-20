@@ -1,6 +1,5 @@
 import Footer from '../Components/Footer';
 import Heather from '../Components/Heather';
-import Sidebar from '../Components/sidebar';
 import Home from './Home';
 
 function Inicio() {
@@ -10,7 +9,6 @@ function Inicio() {
         
             <div className='flex flex-col justify-between h-screen'>
                 <Heather />
-
                 <Home/>
                 <Footer />
             </div>
