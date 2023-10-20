@@ -5,6 +5,7 @@ import perfil from '../Assets/perfil.png';
 import Followers from '../Assets/Followers.png';
 import configperfil from '../Assets/configperfil.png';
 import crearpost from '../Assets/crearpost.png';
+import Puntofoll from '../Assets/Puntofoll.png';
 
 function Perfil() {
   const [open, setOpen] = useState(true);
@@ -16,9 +17,150 @@ function Perfil() {
   return (
     <div className="mt-28 text-center">
       <Header />
-      <div className="flex">
-        <img src={perfil} alt="Perfil" className="ml-4 mt-4 mb-4 w-44 h-44 overflow-hidden float-left"/>
-  
+      <div className="fixed">
+        <div className={`flex ${open ? "flex-col" : "hidden"}`}>
+          <img src={perfil} alt="Perfil" className="ml-4 mt-4 mb-4 w-[250px] h-[250px] overflow-hidden float-left" />
+          <div className="">
+            <div className="ml-11 text-black text-3xl text-start">
+              Jason Momoa
+            </div>
+          </div>
+        </div>
+        <div>
+          <a href="/config" className="ml-12 bg-violet-950 flex w-[175px] max-w-full flex-col grow shrink-0 basis-auto pt-1 pb-1.5 px-5 rounded-xl">
+            <div className="text-white text-2xl leading-[206.67%] self-center">
+              Edit perfil
+
+            </div>
+
+          </a>
+        </div>
+        <div>
+
+          <div
+            class="flex w-[315px] max-w-full items-start gap-1 ml-4 mt-4 max-md:justify-center max-md:ml-2.5"
+          >
+            <img src={Followers} alt="Followers"
+              class="ml-4 aspect-square object-cover object-center w-[30px] overflow-hidden shrink-0"
+            />
+            <div class="flex flex-col">
+              <div class="text-zinc-400 text-1xl">Followers</div>
+              <img
+                loading="lazy"
+                srcset="..."
+                class="aspect-[123] object-cover object-center w-[75px] stroke-[1px] stroke-zinc-400 overflow-hidden shrink-0 mt-px mb-2"
+              />        </div>
+            <img
+              src={Puntofoll} alt="Perfil"
+              class="aspect-square object-cover object-center w-2 fill-zinc-300 overflow-hidden self-center shrink-0 my-auto"
+            />
+            <div class="flex flex-col">
+              <div class="text-zinc-400 text-1xl">Following</div>
+              <img
+                loading="lazy"
+                srcset="..."
+                class="aspect-[123] object-cover object-center w-[75px] stroke-[1px] stroke-zinc-400 overflow-hidden shrink-0 mt-px"
+              />
+
+            </div>
+          </div>
+          <p className="ml-10  text-center object-cover object-center  w-[175px] stroke-[1px] stroke-zinc-400 overflow-hidden shrink-0 mt-px">I am a highly competent programmer who masters a variety of technologies and programming languages, including Git, Python, Felt, React, JavaScript, C#, among others.</p>
+
+        </div>
+        <img src={crearpost} alt="Followers"
+          class="ml-2 object-cover object-center w-[75px] overflow-hidden shrink-0"
+        />
+      </div>
+      <div>
+        <div class="flex flex-col px-5">
+          <div class="text-black text-4xl leading-[155%] self-center ml-0 w-[180px]">
+            Proyects
+          </div>
+          <div class="self-stretch mt-7 max-md:max-w-full">
+            <div class="gap-5 flex max-md:flex-col max-md:items-stretch max-md:gap-0">
+              <div class="flex flex-col items-stretch w-6/12 max-md:w-full max-md:ml-0">
+                <div class="flex grow flex-col mt-1 max-md:mt-12">
+                  <img
+                    loading="lazy"
+                    srcset="..."
+                    class="aspect-[1.26] object-cover object-center w-full fill-violet-700 overflow-hidden self-stretch"
+                  />
+                  <div
+                    class="text-black text-4xl leading-[155%] self-center ml-0 w-[135px]"
+                  >
+                    Report
+                  </div>
+                  <img
+                    loading="lazy"
+                    srcset="..."
+                    class="aspect-[1.45] object-cover object-center w-full fill-violet-700 overflow-hidden self-stretch mt-1"
+                  />
+                  <div class="text-black text-4xl leading-[155%] self-center -ml-2">
+                    ProjectMass
+                  </div>
+                  <img
+                    loading="lazy"
+                    srcset="..."
+                    class="aspect-[1.45] object-cover object-center w-full fill-violet-700 overflow-hidden self-stretch mt-px"
+                  />
+                  <div
+                    class="text-black text-4xl leading-[155%] self-center w-[135px] ml-2.5"
+                  >
+                    Sneak
+                  </div>
+                  <img
+                    loading="lazy"
+                    srcset="..."
+                    class="aspect-[1.45] object-cover object-center w-full fill-violet-700 overflow-hidden self-stretch grow mt-2.5"
+                  />
+                </div>
+              </div>
+              <div
+                class="flex flex-col items-stretch w-6/12 ml-5 max-md:w-full max-md:ml-0"
+              >
+                <div class="flex flex-col max-md:mt-12">
+                  <img
+                    loading="lazy"
+                    srcset="..."
+                    class="aspect-[1.26] object-cover object-center w-full fill-violet-700 overflow-hidden self-stretch"
+                  />
+                  <div
+                    class="text-black text-4xl leading-[155%] self-center ml-0 w-[135px]"
+                  >
+                    Report
+                  </div>
+                  <img
+                    loading="lazy"
+                    srcset="..."
+                    class="aspect-[1.45] object-cover object-center w-full fill-violet-700 overflow-hidden self-stretch mt-1"
+                  />
+                  <div class="text-black text-4xl leading-[155%] self-center -ml-2">
+                    ProjectMass
+                  </div>
+                  <img
+                    loading="lazy"
+                    srcset="..."
+                    class="aspect-[1.45] object-cover object-center w-full fill-violet-700 overflow-hidden self-stretch mt-px"
+                  />
+                  <div
+                    class="text-black text-4xl leading-[155%] self-center w-[135px] ml-2.5"
+                  >
+                    Sneak
+                  </div>
+                  <img
+                    loading="lazy"
+                    srcset="..."
+                    class="aspect-[1.45] object-cover object-center w-full fill-violet-700 overflow-hidden self-stretch grow mt-2.5"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="text-black text-3xl leading-[206.67%] self-center -ml-2 mt-7">
+            <p> 1 2 </p>
+          </div>
+        </div>
+
       </div>
       <Footer />
     </div>
@@ -26,69 +168,3 @@ function Perfil() {
 }
 
 export default Perfil;
-
-
-
-
-
-          {/*}
-          {/* Contenido debajo de la imagen 
-          <div className="bg-white flex flex-col px-5">
-            <div className="flex w-[386px] max-w-full flex-col ml-1.5 mt-[200px]">
-              <div className="flex w-[362px] max-w-full flex-col">
-                <div className="text-black text-4xl leading-[100%] self-center ml-1.5">
-                  Jason Momoa
-                </div>
-                <div className="flex w-[309px] max-w-full items-start gap-0 mt-3">
-                  <div className="bg-violet-950 flex w-[268px] max-w-full flex-col grow shrink-0 basis-auto pt-3 pb-1.5 px-5 rounded-xl">
-                    <div className="text-white text-3xl leading-[206.67%] self-center">
-                      Edit perfil
-                    </div>
-                  </div>
-                  <img
-                    src={configperfil}
-                    alt="configperfil"
-                    className="aspect-square object-cover object-center w-[41px] justify-center items-center overflow-hidden shrink-0 mt-4"
-                  />
-                </div>
-                <div className="flex w-[315px] max-w-full items-start gap-1 mt-4 max-md:justify-center">
-                  <img
-                    src={Followers}
-                    alt="Followers"
-                    className="aspect-square object-cover object-center w-[38px] overflow-hidden shrink-0 mt-2 mr-1"
-                  />
-                  <div className="flex flex-col mt-2">
-                    <div className="text-zinc-400 text-3xl">Followers</div>
-                    <img
-                      loading="lazy"
-                      srcSet="..."
-                      className="aspect-[124] object-cover object-center w-[124px] stroke-[1px] stroke-zinc-400 overflow-hidden shrink-0 mt-2"
-                    />
-                  </div>
-                  <img
-                    loading="lazy"
-                    srcSet="..."
-                    className="aspect-square object-cover object-center w-2 fill-zinc-300 overflow-hidden self-center shrink-0 my-auto"
-                  />
-                  <div className="flex flex-col mt-2">
-                    <div className="text-zinc-400 text-3xl">Following</div>
-                    <img
-                      loading="lazy"
-                      srcSet="..."
-                      className="aspect-[124] object-cover object-center w-[124px] stroke-[1px] stroke-zinc-400 overflow-hidden shrink-0 mt-2"
-                    />
-                  </div>
-                </div>
-                <div className="text-zinc-600 text-center text-3xl leading-[116.67%] self-stretch w-full ml-1.5 mr-px mt-2.5">
-                  I am a highly competent programmer who masters a variety of
-                  technologies and programming languages, including Git, Python, Felt,
-                  React, JavaScript, C#, among others.
-                </div>
-              </div>
-              <img
-                src={crearpost}
-                alt="crearpost"
-                className="aspect-[1.01] object-cover object-center w-[150px] overflow-hidden shrink-0 mt-[461px] max-md:mt-52"
-              />
-            </div>
-          </div>*/}
