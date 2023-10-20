@@ -25,7 +25,7 @@ const Home = () => {
             <img
               src="https://www.infobae.com/new-resizer/X28aHlsLoDl3i749c00aiQki6oc=/768x432/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/UGGM3NC5C5CVPJ7BCNSG6ALLBE.jpg"
               className="object-cover w-full h-full rounded-full"
-              alt="Description of the image"
+              alt="profile"
             />
           </div>
                 <div className='text-left flex justify-between w-[88.5%] items-center'>
@@ -44,7 +44,7 @@ const Home = () => {
                   <p className='text-lg py-2'>Yo si no fuera pobre :(</p>
                 </div>
                 <div className='w-full h-96 bg-[#724DC5] rounded-md self-end'>
-                  <img src="https://i.pinimg.com/736x/aa/62/d3/aa62d34b2fb002fd55be6c080520998d.jpg" className="object-cover w-full h-full rounded-md"></img>
+                  <img src="https://i.pinimg.com/736x/aa/62/d3/aa62d34b2fb002fd55be6c080520998d.jpg" className="object-cover w-full h-full rounded-md" alt="content"></img>
                 </div>
                 <div className='w-full'>
                 <input className='border-2 rounded-md w-[91%] mt-2 px-2 text-sm' placeholder='Comentar...'></input>
@@ -65,7 +65,7 @@ const Home = () => {
             <img
               src="https://avatars.githubusercontent.com/u/132917889?v=4"
               className="object-cover w-full h-full rounded-full"
-              alt="Description of the image"
+              alt="profile"
             />
           </div>
                 <div className='text-left flex justify-between w-[88.5%] items-center'>
@@ -84,7 +84,7 @@ const Home = () => {
                   <p className='text-lg py-2'>Ya ponganse a hacer el front</p>
                 </div>
                 <div className='w-full h-96 bg-black rounded-md self-end'>
-                  <img src="https://i.pinimg.com/736x/b7/51/36/b75136666a5654d5f3fe1c1dd1699396.jpg" className="w-full h-full rounded-md object-contain"></img>
+                  <img src="https://i.pinimg.com/736x/b7/51/36/b75136666a5654d5f3fe1c1dd1699396.jpg" className="w-full h-full rounded-md object-contain" alt="content2"></img>
                 </div>
                 <div className='w-full'>
                 <input className='border-2 rounded-md w-[91%] mt-2 px-2 text-sm' placeholder='Comentar...'></input>
@@ -104,7 +104,7 @@ const Home = () => {
             <img
               src="https://avatars.githubusercontent.com/u/78885703?v=4"
               className="object-cover w-full h-full rounded-full"
-              alt="Description of the image"
+              alt="profile"
             />
           </div>
                 <div className='text-left flex justify-between w-[88.5%] items-center'>
@@ -123,7 +123,7 @@ const Home = () => {
                   <p className='text-lg py-2'>Supraaaaaaa</p>
                 </div>
                 <div className='w-full h-96 bg-[#724DC5] rounded-md self-end'>
-                  <img src="https://www.hgkshop.com/cdn/shop/collections/toyota-supra-mkiv-turbotarga-780x405_1400x.jpg?v=1593681769" className="object-cover w-full h-full rounded-md"></img>
+                  <img src="https://www.hgkshop.com/cdn/shop/collections/toyota-supra-mkiv-turbotarga-780x405_1400x.jpg?v=1593681769" className="object-cover w-full h-full rounded-md" alt="conten3"></img>
                 </div>
                 <div className='w-full'>
                 <input className='border-2 rounded-md w-[91%] mt-2 px-2 text-sm' placeholder='Comentar...'></input>
@@ -143,7 +143,7 @@ const Home = () => {
             <img
               src={Donitas}
               className="object-cover w-full h-full rounded-full"
-              alt="Description of the image"
+              alt="profile"
             />
           </div>
                 <div className='text-left flex justify-between w-[88.5%] items-center'>
@@ -162,7 +162,7 @@ const Home = () => {
                   <p className='text-lg py-2'>Las donitas de la chava de la esquina son 10/10</p>
                 </div>
                 <div className='w-full h-96 bg-[#724DC5] rounded-md self-end'>
-                  <img src={Donitas} className="object-cover w-full h-full rounded-md"></img>
+                  <img src={Donitas} className="object-cover w-full h-full rounded-md" alt="content4"></img>
                 </div>
                 <div className='w-full'>
                 <input className='border-2 rounded-md w-[91%] mt-2 px-2 text-sm' placeholder='Comentar...'></input>
