@@ -1,12 +1,12 @@
 import Footer from '../Components/Footer';
-import Heather from '../Components/Heather';
+import Header from '../Components/Header';
 import ConfUser from '../Components/ConfUser';
 
-function Inicio() {
+function Config(){
     return (
         <>
             <div className='flex flex-col justify-between h-screen'>
-                <Heather />
+                <Header />
                 <ConfUser/>
                 <Footer />
             </div>
@@ -14,4 +14,4 @@ function Inicio() {
     )
 }
 
-export default Inicio
+export default Config
