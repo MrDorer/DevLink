@@ -1,12 +1,12 @@
 import Footer from '../Components/Footer';
-import Heather from '../Components/Heather';
+import Header from '../Components/Header';
 import Post from '../Components/Post'
 
-function Inicio() {
+function Comentarios() {
     return (
         <>
             <div className='flex flex-col justify-between h-screen'>
-                <Heather />
+                <Header />
                 <Post/>
                 <Footer />
             </div>
@@ -14,4 +14,4 @@ function Inicio() {
     )
 }
 
-export default Inicio
+export default Comentarios
