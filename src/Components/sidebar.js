@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom"; // Importa Link
 import hamburguesa from "../Assets/hamburguesa.png";
 import Group from "../Assets/Group.png";
-import { Link } from 'react-router-dom'
 
 const App = () => {
   const [open, setOpen] = useState(true);
