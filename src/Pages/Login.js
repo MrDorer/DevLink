@@ -9,6 +9,7 @@ function Login() {
     const [loginError, setLoginError] = useState(null);
 
     const navigate = useNavigate(); // Usa useNavigate para acceder a la navegación
+//gabo
 
     const handleLogin = async (e) => {
         e.preventDefault();

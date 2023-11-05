@@ -10,6 +10,7 @@ function Register() {
     const [registrationError, setRegistrationError] = useState(null); // Estado para el mensaje de error
 
     const handleRegister = async () => {
+        //gabo
         // Validaciones de nombre, usuario, email y contraseña
         if (name.trim() === "") {
             setRegistrationError("Por favor, ingresa tu nombre.");
