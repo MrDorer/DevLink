@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import LogoM from "../Assets/LogoM.png";
+import { useNavigate } from "react-router-dom";
 
 function Register() {
     const [name, setName] = useState("");
@@ -8,9 +9,13 @@ function Register() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [registrationError, setRegistrationError] = useState(null); // Estado para el mensaje de error
+    const navigate = useNavigate(); // Usa useNavigate para acceder a la navegación
 
-    const handleRegister = async () => {
-        //gabo
+    // eslint-disable-next-line
+    const handleRegister = async (e) => {
+        // ... código de manejo de registro
+        e.preventDefault(); // Evitar que el formulario se envíe automáticamente
+
         // Validaciones de nombre, usuario, email y contraseña
         if (name.trim() === "") {
             setRegistrationError("Por favor, ingresa tu nombre.");
@@ -32,20 +37,29 @@ function Register() {
             return;
         }
 
+        // Crear un objeto con los datos del usuario
+        const userData = {
+            name,
+            username,
+            email,
+            password,
+        };
+
         try {
-            const response = await fetch("http://localhost:8082/register", {
+            const response = await fetch("http://localhost:8082/Register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ name, username, email, password }),
+                body: JSON.stringify(userData),
             });
-
+    
             if (response.status === 200) {
                 alert("Usuario registrado con éxito");
-                // Puedes redirigir al usuario a la página de inicio de sesión, por ejemplo.
+                navigate("/Login");
             } else {
-                setRegistrationError("Error al registrar el usuario");
+                const errorText = await response.text();
+                setRegistrationError(errorText);
             }
         } catch (error) {
             console.error("Error al registrar el usuario:", error);
@@ -80,7 +94,7 @@ function Register() {
                 </div>
 
                 <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form className="space-y-6">
+                    <form className="space-y-6" onSubmit={handleRegister}>
                         {/* Alerta para errores de registro */}
                         {registrationError && (
                             <p className="mt-2 text-center text-red-600">{registrationError}</p>
@@ -158,7 +172,10 @@ function Register() {
                         </div>
 
                         <div>
-                            <button onClick={handleRegister} className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                            <button
+                                type="submit" // Cambia el tipo de botón a "submit" para que el formulario se envíe como POST
+                                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                            >
                                 Sign up
                             </button>
                         </div>
