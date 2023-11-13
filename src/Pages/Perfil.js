@@ -5,18 +5,14 @@ import perfil from '../Assets/perfil.png';
 import Followers from '../Assets/Followers.png';
 import crearpost from '../Assets/crearpost.png';
 import Puntofoll from '../Assets/Puntofoll.png';
-import aya from '../Assets/aya.png';
 import wordpress from '../Assets/wordpress.png';
 import shopyfy from '../Assets/shopify.png';
 import nasa from '../Assets/nasa.png';
-import portafolio from '../Assets/portafolio.png';
-import softshop from '../Assets/softshop.png';
-import githup from '../Assets/githup.png';
-import pagwong from '../Assets/pagwong.png';
+
 
 function Perfil() {
 
-  const [array, setArray] = useState([{titulo: 'WordPress', imagen:wordpress}, {titulo: 'Shopyfy', imagen:shopyfy}, {titulo:'Nasa', imagen: nasa},{titulo: 'WordPress', imagen:wordpress}, {titulo: 'Shopyfy', imagen:shopyfy}, {titulo:'Nasa', imagen: nasa}])
+  const [array] = useState([{titulo: 'WordPress', imagen:wordpress}, {titulo: 'Shopyfy', imagen:shopyfy}, {titulo:'Nasa', imagen: nasa},{titulo: 'WordPress', imagen:wordpress}, {titulo: 'Shopyfy', imagen:shopyfy}, {titulo:'Nasa', imagen: nasa}])
   const [open, setOpen] = useState(true);
 
   const toggleSidebar = () => {

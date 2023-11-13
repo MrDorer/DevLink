@@ -2,19 +2,18 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import LogoM from "../Assets/LogoM.png";
 import { useNavigate } from "react-router-dom";
+import Swal from 'sweetalert2';
 
 function Register() {
     const [name, setName] = useState("");
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [registrationError, setRegistrationError] = useState(null); // Estado para el mensaje de error
-    const navigate = useNavigate(); // Usa useNavigate para acceder a la navegación
+    const [registrationError, setRegistrationError] = useState(null);
+    const navigate = useNavigate();
 
-    // eslint-disable-next-line
     const handleRegister = async (e) => {
-        // ... código de manejo de registro
-        e.preventDefault(); // Evitar que el formulario se envíe automáticamente
+        e.preventDefault();
 
         // Validaciones de nombre, usuario, email y contraseña
         if (name.trim() === "") {
@@ -37,7 +36,6 @@ function Register() {
             return;
         }
 
-        // Crear un objeto con los datos del usuario
         const userData = {
             name,
             username,
@@ -53,9 +51,16 @@ function Register() {
                 },
                 body: JSON.stringify(userData),
             });
-    
+
             if (response.status === 200) {
-                alert("Usuario registrado con éxito");
+                // Registro exitoso
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Registro exitoso',
+                    text: '¡Bienvenido a DevLink!',
+                    showConfirmButton: true,
+                    timer: 1200,
+                });
                 navigate("/Login");
             } else {
                 const errorText = await response.text();
@@ -68,16 +73,13 @@ function Register() {
     };
 
     const emailIsValid = (email) => {
-        // Esta es una validación simple de email, puedes agregar una validación más robusta si es necesario
         const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
         return emailPattern.test(email);
     };
 
     const passwordIsValid = (password) => {
-        // Puedes agregar tus propias reglas de validación de contraseña aquí
-        return password.length >= 6; // Ejemplo: al menos 6 caracteres
+        return password.length >= 6;
     };
-
     return (
         <>
             <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
