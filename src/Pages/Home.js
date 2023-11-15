@@ -12,6 +12,17 @@ import Donitas from '../Assets/donitas.jpg';
 
 const Home = () => {
   const [news, setNews] = useState([]);
+  const [publicaciones,setPublicaciones] = useState([])
+
+  const getPublicaciones = async () => {
+    try {
+      const response = await axios.get('http://localhost:8082/publicaciones');
+      console.log(response.data);
+      setPublicaciones(response.data)
+    } catch (error) {
+      console.error('Error fetching publicaciones:', error);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,7 +42,7 @@ const Home = () => {
         console.error('Error fetching data:', error);
       }
     };
-
+    getPublicaciones()
     fetchData();
   }, []); // La dependencia vacía asegura que se ejecute solo una vez al montar el componente
 
@@ -41,8 +52,15 @@ const Home = () => {
     {/* Sección a la izquierda */}
     <div className="flex mt-0 flex-grow justify-center">
       <div className=' p-10 w-full ml-36 mt-20'>
-        {/*Inicio del post*/}
-          <div className='flex w-full bg-white mx-12 rounded-md p-7 mb-6 flex-wrap h-fit' >
+
+
+          {/*Inicio del post*/}
+
+          
+          {publicaciones ? (
+          publicaciones.map((publicacion, index) => (
+            <>
+              <div className='flex w-full bg-white mx-12 rounded-md p-7 mb-6 flex-wrap h-fit' >
             <div className="h-14 w-14 bg-[#724DC5] rounded-full mr-4">
               <img
                 src="https://www.infobae.com/new-resizer/X28aHlsLoDl3i749c00aiQki6oc=/768x432/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/UGGM3NC5C5CVPJ7BCNSG6ALLBE.jpg"
@@ -52,8 +70,8 @@ const Home = () => {
             </div>
             <div className='text-left flex justify-between w-[88.5%] items-center'>
               <div>
-                <h2 className='text-md'>Dorersenpai</h2>
-                <p className='text-sm'>@MrDorer</p>
+                <h2 className='text-md'>{publicacion.usuario}</h2>
+                <p className='text-sm'>{publicacion.correo}</p>
               </div>
 
               <div >
@@ -63,11 +81,15 @@ const Home = () => {
               </div>
             </div>
             <div className='w-full'>
-              <p className='text-lg py-2'>Yo si no fuera pobre :(</p>
+              <p className='text-lg py-2'>{ publicacion.img ? (publicacion.titulo) : (publicacion.contenido) }</p>
             </div>
-            <div className='w-full h-96 bg-[#724DC5] rounded-md self-end'>
-              <img src="https://i.pinimg.com/736x/aa/62/d3/aa62d34b2fb002fd55be6c080520998d.jpg" className="object-cover w-full h-full rounded-md" alt="content"></img>
-            </div>
+            
+              { publicacion.img && (
+                <div className='w-full h-96 bg-[#724DC5] rounded-md self-end'>
+                  <img src={publicacion.img} className="object-cover w-full h-full rounded-md" alt="content"></img>
+                </div>
+             )}
+            
             <div className='w-full'>
               <input className='border-2 rounded-md w-[91%] mt-2 px-2 text-sm' placeholder='Comentar...'></input>
               <Link to="/comentar">
@@ -78,125 +100,17 @@ const Home = () => {
               <button type="submit"> <FontAwesomeIcon icon={faPaperPlane} className='pl-1' size="lg" style={{ color: "#5D30C1", }} /></button>
             </div>
           </div>
+            </>
+          ))
+        ) : (
+          <p>Loading...</p>
+        )}
+
           {/*Final del post*/}
 
 
-          {/*Inicio del post 2*/}
-          <div className='flex w-full bg-white mx-12 rounded-md p-7 mb-6 flex-wrap h-fit' >
-            <div className="h-14 w-14 bg-[#724DC5] rounded-full mr-4">
-              <img
-                src="https://avatars.githubusercontent.com/u/132917889?v=4"
-                className="object-cover w-full h-full rounded-full"
-                alt="profile"
-              />
-            </div>
-            <div className='text-left flex justify-between w-[88.5%] items-center'>
-              <div>
-                <h2 className='text-md'>Gabriel24</h2>
-                <p className='text-sm'>@DarkShadowXx64</p>
-              </div>
 
-              <div >
-                <button><FontAwesomeIcon icon={faHeart} size="lg" /> </button>
-                <button><FontAwesomeIcon className='mx-2' icon={faStar} size="lg" /></button>
-                <button><FontAwesomeIcon icon={faBookmark} size="lg" /></button>
-              </div>
-            </div>
-            <div className='w-full'>
-              <p className='text-lg py-2'>Ya ponganse a hacer el front</p>
-            </div>
-            <div className='w-full h-96 bg-black rounded-md self-end'>
-              <img src="https://i.pinimg.com/736x/b7/51/36/b75136666a5654d5f3fe1c1dd1699396.jpg" className="w-full h-full rounded-md object-contain" alt="content2"></img>
-            </div>
-            <div className='w-full'>
-              <input className='border-2 rounded-md w-[91%] mt-2 px-2 text-sm' placeholder='Comentar...'></input>
-              <Link to="/comentar">
-                <button>
-                  <FontAwesomeIcon icon={faComment} className='pl-1' size="lg" style={{ color: "#5D30C1" }} />
-                </button>
-              </Link>
-              <button type="submit"> <FontAwesomeIcon icon={faPaperPlane} className='pl-1' size="lg" style={{ color: "#5D30C1", }} /></button>
-            </div>
-          </div>
-          {/*Final del post*/}
-
-          {/*Inicio del post*/}
-          <div className='flex w-full bg-white mx-12 rounded-md p-7 mb-6 flex-wrap h-fit' >
-            <div className="h-14 w-14 bg-[#724DC5] rounded-full mr-4">
-              <img
-                src="https://avatars.githubusercontent.com/u/78885703?v=4"
-                className="object-cover w-full h-full rounded-full"
-                alt="profile"
-              />
-            </div>
-            <div className='text-left flex justify-between w-[88.5%] items-center'>
-              <div>
-                <h2 className='text-md'>EthanIsHere</h2>
-                <p className='text-sm'>@Cana23</p>
-              </div>
-
-              <div >
-                <button><FontAwesomeIcon icon={faHeart} size="lg" /> </button>
-                <button><FontAwesomeIcon className='mx-2' icon={faStar} size="lg" style={{ color: "#eeff00", }} /></button>
-                <button><FontAwesomeIcon icon={faBookmark} size="lg" /></button>
-              </div>
-            </div>
-            <div className='w-full'>
-              <p className='text-lg py-2'>Supraaaaaaa</p>
-            </div>
-            <div className='w-full h-96 bg-[#724DC5] rounded-md self-end'>
-              <img src="https://www.hgkshop.com/cdn/shop/collections/toyota-supra-mkiv-turbotarga-780x405_1400x.jpg?v=1593681769" className="object-cover w-full h-full rounded-md" alt="conten3"></img>
-            </div>
-            <div className='w-full'>
-              <input className='border-2 rounded-md w-[91%] mt-2 px-2 text-sm' placeholder='Comentar...'></input>
-              <Link to="/comentar">
-                <button>
-                  <FontAwesomeIcon icon={faComment} className='pl-1' size="lg" style={{ color: "#5D30C1" }} />
-                </button>
-              </Link>
-              <button type="submit"> <FontAwesomeIcon icon={faPaperPlane} className='pl-1' size="lg" style={{ color: "#5D30C1", }} /></button>
-            </div>
-          </div>
-          {/*Final del post*/}
-
-          {/*Inicio del post*/}
-          <div className='flex w-full bg-white mx-12 rounded-md p-7 mb-6 flex-wrap h-fit' >
-            <div className="h-14 w-14 bg-[#724DC5] rounded-full mr-4">
-              <img
-                src={Donitas}
-                className="object-cover w-full h-full rounded-full"
-                alt="profile"
-              />
-            </div>
-            <div className='text-left flex justify-between w-[88.5%] items-center'>
-              <div>
-                <h2 className='text-md'>Elizabeth CT</h2>
-                <p className='text-sm'>@elizabethct26</p>
-              </div>
-
-              <div >
-                <button><FontAwesomeIcon icon={faHeart} size="lg" style={{ color: "#ff0066", }} /> </button>
-                <button><FontAwesomeIcon className='mx-2' icon={faStar} size="lg" /></button>
-                <button><FontAwesomeIcon icon={faBookmark} size="lg" /></button>
-              </div>
-            </div>
-            <div className='w-full'>
-              <p className='text-lg py-2'>Las donitas de la chava de la esquina son 10/10</p>
-            </div>
-            <div className='w-full h-96 bg-[#724DC5] rounded-md self-end'>
-              <img src={Donitas} className="object-cover w-full h-full rounded-md" alt="content4"></img>
-            </div>
-            <div className='w-full'>
-              <input className='border-2 rounded-md w-[91%] mt-2 px-2 text-sm' placeholder='Comentar...'></input>
-              <Link to="/comentar">
-                <button>
-                  <FontAwesomeIcon icon={faComment} className='pl-1' size="lg" style={{ color: "#5D30C1" }} />
-                </button>
-              </Link>
-              <button type="submit"> <FontAwesomeIcon icon={faPaperPlane} className='pl-1' size="lg" style={{ color: "#5D30C1", }} /></button>
-            </div>
-          </div>
-          </div>
+</div>
   {/* Sección a la derecha */}
   <div className="flex">
         <div className="flex mt-28 flex-grow justify-center">
@@ -226,6 +140,9 @@ const Home = () => {
             </div>
           </div>
         </div>
+
+
+
       </div>
     </div>
   );

@@ -60,8 +60,10 @@ function Login() {
         // Credenciales inválidas
         setLoginError("Credenciales inválidas");
       }
+      console.log(response.data[0])
     } catch (error) {
       console.error("Error al iniciar sesión:", error);
+      
       setLoginError("Error al iniciar sesión");
     }
   };
