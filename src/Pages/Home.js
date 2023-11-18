@@ -13,6 +13,15 @@ import Donitas from '../Assets/donitas.jpg';
 const Home = () => {
   const [news, setNews] = useState([]);
   const [publicaciones,setPublicaciones] = useState([])
+  const [datos,setDatos] = useState({
+    titulo: '',
+    contenido: '',
+    id_usuario: '',
+    likes_publicacion:0,
+    img:''
+  })
+
+  const [comentarios, setComentarios] = useState([]);
 
   const getPublicaciones = async () => {
     try {
@@ -22,6 +31,43 @@ const Home = () => {
     } catch (error) {
       console.error('Error fetching publicaciones:', error);
     }
+  };
+
+  const handleChange = (e) => {
+    const {name, value} = e.target
+    setDatos({...datos, [name]:value})
+  }
+
+ const handleChangeCom = (e, id) => {
+  e.preventDefault();
+  const { name, value } = e.target;
+  // Encuentra el comentario correspondiente por su id y actualiza solo ese comentario
+  setComentarios((prevComentarios) => [
+    ...prevComentarios,
+    { id_publicacion: id, id_usuario: datos.id_usuario, comentario: value },
+  ]);
+};
+
+  const handleSubmitPublicaciones = async (e) => {
+      e.preventDefault()    
+      
+    axios.post('http://localhost:8082/agregarPublicaciones',datos)
+      .then( response => {
+        console.log(response.data)
+      })
+  };
+
+  const handleSubmitComentarios = async (e) => {
+    e.preventDefault();
+  
+    // Iterar sobre los comentarios y enviar cada uno
+    comentarios.forEach((comentario) => {
+      axios.post('http://localhost:8082/agregarComentarios', comentario).then((response) => {
+        console.log(response.data);
+      });
+    });
+    e.target.reset();
+    setComentarios([]);
   };
 
   useEffect(() => {
@@ -35,19 +81,24 @@ const Home = () => {
             },
           }
         );
-
         // Establecer los datos en el estado
         setNews(response.data.articles);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
+      const user = JSON.parse(sessionStorage.getItem('user'));
+      setDatos({ ...datos, id_usuario: user.id });
+      setComentarios([]); // Initialize comentarios as an empty array
+      console.log(comentarios);
     };
-    getPublicaciones()
+  
+    getPublicaciones();
     fetchData();
   }, []); // La dependencia vacía asegura que se ejecute solo una vez al montar el componente
+  
 
   return (
-    <div className="flex">
+    <div className="flex flex-wrap">
     <Sidebar />
     {/* Sección a la izquierda */}
     <div className="flex mt-0 flex-grow justify-center">
@@ -58,9 +109,9 @@ const Home = () => {
 
           
           {publicaciones ? (
-          publicaciones.map((publicacion, index) => (
+          publicaciones.map((publicacion) => (
             <>
-              <div className='flex w-full bg-white mx-12 rounded-md p-7 mb-6 flex-wrap h-fit' >
+              <div className='flex w-full bg-white mx-12 rounded-md p-7 mb-6 flex-wrap h-fit' key={publicacion.id}>
             <div className="h-14 w-14 bg-[#724DC5] rounded-full mr-4">
               <img
                 src="https://www.infobae.com/new-resizer/X28aHlsLoDl3i749c00aiQki6oc=/768x432/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/UGGM3NC5C5CVPJ7BCNSG6ALLBE.jpg"
@@ -91,14 +142,28 @@ const Home = () => {
              )}
             
             <div className='w-full'>
-              <input className='border-2 rounded-md w-[91%] mt-2 px-2 text-sm' placeholder='Comentar...'></input>
-              <Link to="/comentar">
-                <button>
-                  <FontAwesomeIcon icon={faComment} className='pl-1' size="lg" style={{ color: "#5D30C1" }} />
-                </button>
-              </Link>
-              <button type="submit"> <FontAwesomeIcon icon={faPaperPlane} className='pl-1' size="lg" style={{ color: "#5D30C1", }} /></button>
+              <form onSubmit= {(e) => handleSubmitComentarios(e)} >
+
+                <input 
+                className='border-2 rounded-md w-[91%] mt-2 px-2 text-sm'
+                name='comentario' 
+                placeholder='Comentar...'
+                value={comentarios.comentario}
+                onChange={(e) => handleChangeCom(e, publicacion.id)}
+                
+                ></input>
+
+
+                <Link to="/comentar">
+                  <button>
+                    <FontAwesomeIcon icon={faComment} className='pl-1' size="lg" style={{ color: "#5D30C1" }} />
+                  </button>
+                </Link>
+                <button type='submit'>submit</button>
+              </form>
             </div>
+            
+            
           </div>
             </>
           ))
@@ -109,9 +174,47 @@ const Home = () => {
           {/*Final del post*/}
 
 
+      <div className='w-full flex flex-wrap'>
+        <form onSubmit={handleSubmitPublicaciones}>
+        
+        <input 
+        placeholder='titulo?'
+        name='titulo'
+        className='border border-black rounded-md px-2'
+        value={datos.titulo}
+        onChange={handleChange}
+        />
 
+        <input 
+        placeholder='contenido?'
+        name='contenido'
+        className='border border-black rounded-md px-2'
+        value={datos.contenido}
+        onChange={handleChange}
+        />
+
+        <input 
+        placeholder='imagen?'
+        name='img'
+        className='border border-black rounded-md px-2'
+        value={datos.img}
+        onChange={handleChange}
+        />
+
+
+        <button type="submit">Publicar</button>
+        </form>
+        
+      </div>
 </div>
-  {/* Sección a la derecha */}
+
+
+
+
+
+
+
+  {/* Sección a la derecha  NO COLOCAR NADA PASADO ESTO*/}
   <div className="flex">
         <div className="flex mt-28 flex-grow justify-center">
           <div className='flex flex-wrap w-7/12 min-w-6/12 bg-[#F2F2F2] justify-center p-10 '>
@@ -141,7 +244,7 @@ const Home = () => {
           </div>
         </div>
 
-
+  {/* Fin Sección a la derecha  NO COLOCAR NADA PASADO ESTO*/}
 
       </div>
     </div>
