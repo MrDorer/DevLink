@@ -6,6 +6,7 @@ import Register from './Pages/Register';
 import Config from './Pages/Config'
 import Comentarios from './Pages/Comentarios'
 import Perfil from './Pages/Perfil';
+import HomeVisit from './Pages/HomeVisit';
 function AppRouter() {
   return (
     <>
@@ -17,6 +18,7 @@ function AppRouter() {
         <Route path="/perfil" element={<Perfil />} />
         <Route path ='/config' element={<Config/>}/>
         <Route path ='/comentar' element={<Comentarios/>}/>
+        <Route path ='/homevisit' element={<HomeVisit/>}/>
 
       </Routes>
     </>
