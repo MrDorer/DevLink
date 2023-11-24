@@ -78,7 +78,7 @@ function Register() {
     };
 
     const passwordIsValid = (password) => {
-        return password.length >= 6;
+        return password.trim().length >= 8;
     };
     return (
         <>

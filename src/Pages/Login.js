@@ -55,7 +55,7 @@ function Login() {
         setUser(data);
         sessionStorage.setItem('user', JSON.stringify(data));
         // Redirige al usuario a la página principal
-        navigate("/");
+        navigate("/home");
       } else {
         // Credenciales inválidas
         setLoginError("Credenciales inválidas");
@@ -74,7 +74,7 @@ function Login() {
   };
 
   const passwordIsValid = (password) => {
-    return password.length >= 6;
+    return password.trim().length >= 8;
   };
 
 

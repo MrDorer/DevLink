@@ -26,7 +26,6 @@ const Home = () => {
   const getPublicaciones = async () => {
     try {
       const response = await axios.get('http://localhost:8082/publicaciones');
-      console.log(response.data);
       setPublicaciones(response.data)
     } catch (error) {
       console.error('Error fetching publicaciones:', error);
@@ -74,7 +73,7 @@ const Home = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          'https://newsapi.org/v2/everything?q=apple&from=2023-11-12&to=2023-11-12&sortBy=popularity',
+          'https://newsapi.org/v2/everything?q=software&pageSize=6&sortBy=popularity',
           {
             headers: {
               'X-Api-Key': '0ab8e04dbe1944d79178f1f971919ec0',
@@ -89,7 +88,6 @@ const Home = () => {
       const user = JSON.parse(sessionStorage.getItem('user'));
       setDatos({ ...datos, id_usuario: user.id });
       setComentarios([]); // Initialize comentarios as an empty array
-      console.log(comentarios);
     };
   
     getPublicaciones();
@@ -217,26 +215,26 @@ const Home = () => {
   {/* Sección a la derecha  NO COLOCAR NADA PASADO ESTO*/}
   <div className="flex">
         <div className="flex mt-28 flex-grow justify-center">
-          <div className='flex flex-wrap w-7/12 min-w-6/12 bg-[#F2F2F2] justify-center p-10 '>
+          <div className='flex flex-wrap w-full min-w-6/12 bg-[#F2F2F2] justify-center py-8 px-4'>
          
               <div className="container mx-auto p-4">
-                <h1 className="text-3xl font-bold mb-4">Noticias de Apple</h1>
+                <h1 className="text-2xl font-bold mb-4">Noticias de tecnologia</h1>
                 <ul>
                   {news.map((article) => (
-                    <li key={article.url} className="mb-4">
-                      <h2 className="text-xl font-bold">{article.title}</h2>
+                    <a
+                    href={article.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  
+                  >
+                    <li key={article.url} className="mb-2 bg-[#FAFAFA] p-2 rounded-md">
+                      <h2 className="text-lg font-semibold">{article.title}</h2>
                       {article.urlToImage && (
                         <img src={article.urlToImage} alt="Noticia" className="rounded-md my-2 w-full h-48 object-cover" />
                       )}
-                      <a
-                        href={article.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className=" bg-blue-300 rounded-md py-1 px-2 text-white hover:bg-blue-400"
-                      >
-                        ver más
+                        </li>
                       </a>
-                    </li>
+                    
                   ))}
                 </ul>
               </div>
