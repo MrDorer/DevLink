@@ -7,7 +7,7 @@ const App = () => {
   const [open, setOpen] = useState(true);
   const [animationDelay, setAnimationDelay] = useState(open ? 0 : 1000);
   const Menus = [
-    { title: "Home", path: "/", gap: true }, // Agrega las rutas
+    { title: "Home", path: "/home", gap: true }, // Agrega las rutas
     { title: "Perfiles", path: "/perfil", gap: true },
     { title: "Proyectos", path: "/perfil", gap: true },
     { title: "Explorar", path: "/", gap: true },

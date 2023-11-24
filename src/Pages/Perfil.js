@@ -9,6 +9,7 @@
   import shopyfy from '../Assets/shopify.png';
   import nasa from '../Assets/nasa.png';
   import axios from 'axios'
+  import MyMap from "../Components/Map";
 
 
   function Perfil() {
@@ -110,9 +111,10 @@
                   </div>
                   
                 </div>
-                <p className="ml-10 text-center object-cover object-center w-[175px] stroke-[1px] stroke-zinc-400 overflow-hidden shrink-0 mt-px">
+                <p className="ml-10 text-center object-cover object-center w-[175px] stroke-[1px] stroke-zinc-400 overflow-hidden shrink-0 mt-px mb-4">
                   I am a highly competent programmer who masters a variety of technologies and programming languages, including Git, Python, Felt, React, JavaScript, C#, among others.
                 </p>
+                <MyMap/>
               </div>
               <img
                 src={crearpost}
@@ -120,6 +122,7 @@
                 class="ml-2 object-cover object-center w-[75px] overflow-hidden shrink-0"
               />
             </div>
+            
           </div>
 
           {/* Imagenes */}
@@ -130,7 +133,7 @@
             <div>
               <div class=" grid gap-10 my-10 w-full grid-flow-row grid-cols-2">
 
-
+              
                 {
                   github.map((repositorio, index) => {
                     return (
