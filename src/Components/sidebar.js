@@ -5,16 +5,19 @@ import Group from "../Assets/Group.png";
 
 const App = () => {
   const [open, setOpen] = useState(true);
+  const [user, setUser] = useState()
   const [animationDelay, setAnimationDelay] = useState(open ? 0 : 1000);
   const Menus = [
     { title: "Home", path: "/home", gap: true }, // Agrega las rutas
-    { title: "Perfiles", path: "/perfil", gap: true },
+    { title: "Perfil", path: `/perfil/${user}`, gap: true },
     { title: "Proyectos", path: "/perfil", gap: true },
     { title: "Explorar", path: "/", gap: true },
   ];
 
   useEffect(() => {
     setAnimationDelay(open ? 0 : 200);
+    const username = JSON.parse(sessionStorage.getItem('user'));
+    setUser(username.username)
   }, [open]);
 
   const toggleSidebar = () => {

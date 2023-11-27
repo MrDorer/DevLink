@@ -12,7 +12,7 @@ const MyMap = () => {
         libraries={['places']}
       >
         <GoogleMap
-          mapContainerStyle={{ height: '35vh', width: '35vh' }}
+          mapContainerStyle={{ height: '35vh', width: '100%' }}
           center={center}
           zoom={zoom}
         >
