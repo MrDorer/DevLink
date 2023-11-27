@@ -32,7 +32,7 @@ function Register() {
         }
 
         if (!passwordIsValid(password)) {
-            setRegistrationError("Ingresa una contraseña válida (al menos 6 caracteres)");
+            setRegistrationError("Ingresa una contraseña válida (al menos 8 caracteres)");
             return;
         }
 

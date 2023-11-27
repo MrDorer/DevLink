@@ -1,28 +1,67 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Footer from "../Components/Footer";
 import userIcon from "../Assets/Iconoperfil.png";
 import logoMorado from "../Assets/Logomorado.png";
+import axios from 'axios';
 
-function HomeVisit() {
+const HomeVisit = () => {
+  const [userList, setUserList] = useState([]);
+  const [news, setNews] = useState([]);
+  const [currentNews, setCurrentNews] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const newsPerPage = 6;
 
-  //User List temporal
-  const userList = [
-    { id: 1, name: "ProgramaPro", avatar: userIcon },
-    { id: 2, name: "CodeMaster", avatar: userIcon },
-    { id: 3, name: "DevGenius", avatar: userIcon },
-    { id: 4, name: "CodingNinja", avatar: userIcon },
-    { id: 5, name: "CodeExplorer", avatar: userIcon },
-    { id: 6, name: "BitWiz", avatar: userIcon },
-    { id: 7, name: "CodeSavvy", avatar: userIcon },
-    { id: 8, name: "DevGuru", avatar: userIcon },
-    { id: 9, name: "CodeEnthusiast", avatar: userIcon },
-    { id: 10, name: "ScriptingPro", avatar: userIcon },
-  ];
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await fetch('http://localhost:8082/users');
+        const users = await response.json();
+        setUserList(users);
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
+    };
+
+    fetchUsers();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `https://newsapi.org/v2/everything?q=software&pageSize=${newsPerPage}&page=${currentPage}&sortBy=popularity`,
+          {
+            headers: {
+              'X-Api-Key': '0ab8e04dbe1944d79178f1f971919ec0',
+            },
+          }
+        );
+        setCurrentNews(response.data.articles);
+      } catch (error) {
+        console.error('Error fetching news:', error);
+      }
+    };
+
+    fetchData();
+  }, [currentPage]);
+
+  const showNextPage = () => {
+    setCurrentPage(currentPage + 1);
+  };
+
+  const showPreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+  
 
   return (
     <div className="min-h-screen flex flex-col">
-      <header className="bg-gray-100 py-4">
+
+<header className="bg-gray-100 py-4">
         <div className="flex items-center justify-between px-4">
           <div className="flex items-center space-x-4 px-4">
             <img src={logoMorado} alt="Logo" className="w-14" />
@@ -36,48 +75,48 @@ function HomeVisit() {
           <ul className="flex items-center space-x-4">
             <li>
               <Link to="/login">
-              <button className="bg-white hover:bg-gray-200 text-gray-700 px-2 py-1 rounded-full flex items-center">
-                <span className="mr-1">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M9 5l7 7-7 7"
-                    />
-                  </svg>
-                </span>
-                Iniciar Sesión
-              </button>
+                <button className="bg-white border hover:bg-gray-200 text-gray-700 px-2 py-1 rounded-full flex items-center">
+                  <span className="mr-1">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </span>
+                  Iniciar Sesión
+                </button>
               </Link>
             </li>
             <li>
               <Link to="/register">
-              <button className="bg-purple-500 hover:bg-purple-600 text-white px-2 py-1 rounded-full flex items-center">
-                <span className="mr-1">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                    />
-                  </svg>
-                </span>
-                Registrarse
-              </button>
+                <button className="bg-purple-500 border hover:bg-purple-600 text-white px-2 py-1 rounded-full flex items-center">
+                  <span className="mr-1">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+                      />
+                    </svg>
+                  </span>
+                  Registrarse
+                </button>
               </Link>
             </li>
           </ul>
@@ -86,14 +125,13 @@ function HomeVisit() {
 
       <main className="flex flex-1">
         <div className="w-1/4 h-full p-4">
-          <div className="p-4 border-r-2 border-gray-600">
-            <h2 className="text-lg font-semibold mb-2">Usuarios Populares</h2>
-            <ul className="space-y-2">
-              {/* TODO: Vincular a las publicaciones con mas likes del DB*/}
+          <div className="p-4 border-r-2  border-b-2 border-gray-600 rounded-2xl bg-slate-100 mb-2 py-4">
+            <h2 className="text-lg font-semibold mb-4 border-b-2 border-gray-600">Usuarios Populares</h2>
+            <ul className="space-y-2 max-h-96 overflow-y-auto">
               {userList.map((user) => (
-                <li key={user.id} className="flex items-center">
+                <li key={user.id} className="flex items-center mb-2">
                   <img
-                    src={user.avatar}
+                    src={userIcon}
                     alt={user.name}
                     className="w-8 h-8 rounded-full mr-2"
                   />
@@ -107,7 +145,6 @@ function HomeVisit() {
         <div className="w-3/4 p-4">
           <div className="p-4">
             <h2 className="text-2xl font-bold mb-2">Posts Mas Populares</h2>
-            {/*TODO: Vincular posts del DB */}
             <div
               className="flex w-2/3 bg-white mx-12 rounded-md p-7 mb-6 flex-wrap"
               style={{ height: "26rem" }}
@@ -126,9 +163,60 @@ function HomeVisit() {
         </div>
       </main>
 
-      <Footer />
+
+
+      <div className="container mx-auto p-4 bg-gray-200">
+        <h1 className="text-3xl font-bold mt-4 mb-8 text-center">Noticias de tecnología</h1>
+        <ul className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+          {currentNews.map((article) => (
+            <a
+              href={article.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-white rounded-md shadow-md overflow-hidden"
+              key={article.url}
+            >
+              <div className="h-48 overflow-hidden">
+                {article.urlToImage && (
+                  <img
+                    src={article.urlToImage}
+                    alt="Noticia"
+                    className="w-full h-full object-cover"
+                  />
+                )}
+              </div>
+              <div className="p-4">
+                <h2 className="text-lg font-semibold mb-2">
+                  {article.title}
+                </h2>
+                <p className="text-sm text-gray-600">
+                  {article.description}
+                </p>
+              </div>
+            </a>
+          ))}
+        </ul>
+      </div>      
+      {/* Botones de navegación entre noticias */}
+      <div className="flex justify-center my-6 bg-slate">
+      <div>
+        <button
+          onClick={showPreviousPage}
+          className="bg-gray-200 px-3 py-1 rounded-md focus:outline-none mr-2"
+        >
+          Anterior
+        </button>
+        <button
+          onClick={showNextPage}
+          className="bg-gray-200 px-3 py-1 rounded-md focus:outline-none"
+        >
+          Siguiente
+        </button>
+      </div>
     </div>
+    <Footer />
+  </div>
   );
-}
+};
 
 export default HomeVisit;
