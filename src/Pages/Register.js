@@ -32,7 +32,7 @@ function Register() {
         }
 
         if (!passwordIsValid(password)) {
-            setRegistrationError("Ingresa una contraseña válida (al menos 6 caracteres)");
+            setRegistrationError("Ingresa una contraseña válida (al menos 8 caracteres)");
             return;
         }
 
@@ -78,7 +78,7 @@ function Register() {
     };
 
     const passwordIsValid = (password) => {
-        return password.length >= 6;
+        return password.trim().length >= 8;
     };
     return (
         <>
