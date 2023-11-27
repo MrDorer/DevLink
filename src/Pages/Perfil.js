@@ -1,18 +1,23 @@
 import React, { useState } from "react";
-import Header from '../Components/Header';
-import Footer from '../Components/Footer';
-import perfil from '../Assets/perfil.png';
-import Followers from '../Assets/Followers.png';
-import crearpost from '../Assets/crearpost.png';
-import Puntofoll from '../Assets/Puntofoll.png';
-import wordpress from '../Assets/wordpress.png';
-import shopyfy from '../Assets/shopify.png';
-import nasa from '../Assets/nasa.png';
-
+import Header from "../Components/Header";
+import Footer from "../Components/Footer";
+import perfil from "../Assets/perfil.png";
+import Followers from "../Assets/Followers.png";
+import crearpost from "../Assets/crearpost.png";
+import Puntofoll from "../Assets/Puntofoll.png";
+import wordpress from "../Assets/wordpress.png";
+import shopyfy from "../Assets/shopify.png";
+import nasa from "../Assets/nasa.png";
 
 function Perfil() {
-
-  const [array] = useState([{titulo: 'WordPress', imagen:wordpress}, {titulo: 'Shopyfy', imagen:shopyfy}, {titulo:'Nasa', imagen: nasa},{titulo: 'WordPress', imagen:wordpress}, {titulo: 'Shopyfy', imagen:shopyfy}, {titulo:'Nasa', imagen: nasa}])
+  const [array] = useState([
+    { titulo: "WordPress", imagen: wordpress },
+    { titulo: "Shopyfy", imagen: shopyfy },
+    { titulo: "Nasa", imagen: nasa },
+    { titulo: "WordPress", imagen: wordpress },
+    { titulo: "Shopyfy", imagen: shopyfy },
+    { titulo: "Nasa", imagen: nasa },
+  ]);
   const [open, setOpen] = useState(true);
 
   const toggleSidebar = () => {
@@ -61,6 +66,7 @@ function Perfil() {
                     loading="lazy"
                     srcset="..."
                     class="aspect-[123] object-cover object-center w-[75px] stroke-[1px] stroke-zinc-400 overflow-hidden shrink-0 mt-px mb-2"
+                    alt="Seguidores"
                   />
                 </div>
                 <img
@@ -74,11 +80,14 @@ function Perfil() {
                     loading="lazy"
                     srcset="..."
                     class="aspect-[123] object-cover object-center w-[75px] stroke-[1px] stroke-zinc-400 overflow-hidden shrink-0 mt-px"
+                    alt="Siguiendo"
                   />
                 </div>
               </div>
               <p className="ml-10 text-center object-cover object-center w-[175px] stroke-[1px] stroke-zinc-400 overflow-hidden shrink-0 mt-px">
-                I am a highly competent programmer who masters a variety of technologies and programming languages, including Git, Python, Felt, React, JavaScript, C#, among others.
+                I am a highly competent programmer who masters a variety of
+                technologies and programming languages, including Git, Python,
+                Felt, React, JavaScript, C#, among others.
               </p>
             </div>
             <img
@@ -96,21 +105,18 @@ function Perfil() {
           </div>
           <div>
             <div class=" grid gap-10 my-10 w-full grid-flow-row grid-cols-2">
-
-
-              {
-                array.map((element, index) => {
-                  return (
-                    <div>
-                      <h2 className=" text-3xl">{element.titulo}</h2>
-                      <img src={element.imagen} alt="Perfil" class="image-aspect" />
-
-                    </div>
-                    
-                  )
-                })
-              }
-
+              {array.map((element, index) => {
+                return (
+                  <div>
+                    <h2 className=" text-3xl">{element.titulo}</h2>
+                    <img
+                      src={element.imagen}
+                      alt="Perfil"
+                      class="image-aspect"
+                    />
+                  </div>
+                );
+              })}
             </div>
           </div>
           <div class="text-black text-3xl leading-[206.67%] self-center -ml-2 mt-7">
