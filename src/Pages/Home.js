@@ -10,6 +10,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
 import Donitas from '../Assets/donitas.jpg';
 
+
+
 const Home = () => {
   const [news, setNews] = useState([]);
   const [publicaciones, setPublicaciones] = useState([]);
@@ -55,11 +57,23 @@ const Home = () => {
       setPublicacionError("Por favor, completa el título y la descripción para publicar.");
       return;
     }
-  
+
     try {
       const response = await axios.post('http://localhost:8082/agregarPublicaciones', datos);
       console.log(response.data);
       setPublicacionError(null);
+
+      // Vaciar los campos del formulario después de la publicación exitosa
+      setDatos({
+        titulo: '',
+        contenido: '',
+        id_usuario: datos.id_usuario,
+        likes_publicacion: 0,
+        img: ''
+      });
+
+      // Volver a obtener las publicaciones después de la publicación exitosa
+      getPublicaciones();
     } catch (error) {
       console.error('Error al publicar:', error);
       setPublicacionError("Error al publicar la publicación.");
@@ -112,34 +126,35 @@ const Home = () => {
       <Sidebar />
       <div className="flex mt-0 flex-grow justify-center">
         <div className='p-10 w-full ml-36 mt-20'>
-          <div className="w-full flex flex-wrap  mx-12 rounded-md p-4 pb-2 h-fit bg-gray-100 mb-4 mt-2" style={{
-            boxShadow: '-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)',
-          }} >
-            <h1 className='mb-1 font-semibold'>¿Que estas pensando?</h1>
+          <div className="w-full flex flex-wrap mx-12 rounded-md p-4 pb-2 h-fit bg-gray-100 mb-4 mt-2"  
+          style={{
+                    boxShadow: '-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)',
+                  }}>
+            <h1 className='mb-1 font-semibold'>¿Qué estás pensando?</h1>
 
             <form onSubmit={handleSubmitPublicaciones} className="w-full flex flex-wrap">
               <input
                 placeholder="Título"
                 name="titulo"
-                className="border border-gray-300 rounded-md px-3 py-2 mr-2 mb-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 value={datos.titulo}
                 onChange={handleChange}
+                className="border border-gray-300 rounded-md px-3 py-2 mr-2 mb-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
 
               <input
                 placeholder="Descripción"
                 name="contenido"
-                className="border border-gray-300 rounded-md px-3 py-2 mr-2 mb-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 value={datos.contenido}
                 onChange={handleChange}
+                className="border border-gray-300 rounded-md px-3 py-2 mr-2 mb-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
 
               <input
                 placeholder="Imagen URL"
                 name="img"
-                className="border border-gray-300 rounded-md px-3 py-2 mr-2 mb-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 value={datos.img}
                 onChange={handleChange}
+                className="border border-gray-300 rounded-md px-3 py-2 mr-2 mb-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
 
               <button
@@ -231,7 +246,7 @@ const Home = () => {
 
         {/*Noticias*/}
         <div className="flex">
-          <div className="flex mt-28 flex-grow justify-center">
+          <div className="flex mt-20 flex-grow justify-center">
             <div className='flex flex-wrap w-full min-w-6/12 justify-center py-8 px-4'>
               <div className="container mx-auto p-4">
                 <h1 className="text-2xl font-bold mb-4 text-center bg-gray-100 px-2 py-2 rounded-md shadow-md" >Noticias de tecnologia</h1>
