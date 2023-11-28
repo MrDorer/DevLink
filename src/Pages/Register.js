@@ -3,12 +3,15 @@ import { Link } from "react-router-dom";
 import LogoM from "../Assets/LogoM.png";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
+import { text } from "@fortawesome/fontawesome-svg-core";
 
 function Register() {
     const [name, setName] = useState("");
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [Ubicacion, setUbicacion] = useState("");
+
     const [registrationError, setRegistrationError] = useState(null);
     const navigate = useNavigate();
 
@@ -41,6 +44,7 @@ function Register() {
             username,
             email,
             password,
+            Ubicacion
         };
 
         try {
@@ -168,6 +172,23 @@ function Register() {
                                     required
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
+                                    className="block w-full rounded-md border-0 py-1.5  px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                />
+                            </div>
+                        </div>
+                        <div>
+                            <label htmlFor="Ubicacion" className="block text-sm font-medium leading-6 text-gray-900">
+                            Ubicacion
+                            </label>
+                            <div className="mt-2">
+                                <input
+                                    id="Ubicacion"
+                                    name="Ubicacion"
+                                    type="Ubicacion"
+                                    autoComplete="new-Ubicacion"
+                                    required
+                                    value={text}
+                                    onChange={(e) => setUbicacion(e.target.value)}
                                     className="block w-full rounded-md border-0 py-1.5  px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
