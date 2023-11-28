@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import Header from "../Components/Header";
 import Footer from "../Components/Footer";
-
+import Sidebar from "../Components/sidebar";
 import Followers from "../Assets/Followers.png";
 import crearpost from "../Assets/crearpost.png";
 import Puntofoll from "../Assets/Puntofoll.png";
@@ -119,17 +119,17 @@ function Perfil() {
 
   return perfil.map((usuario, index) => {
     return (
-      <>
+      <div className="flex flex-wrap flex-col">
         <Header />
+        <Sidebar />
+        <div className="mt-28 ml-20 text-center flex">
 
-        <div className="mt-28 text-center flex w-full">
           {/* perfil sidebar */}
-          <div className="flex self-start justify-center items-center mr-14 ml-10 w-1/4">
+          <div className="flex self-start justify-center items-center mx-4 ml-24 w-1/4">
             <div className="">
               <div
-                className={`flex ${
-                  open ? "flex-col justify-center items-center mt-10" : "hidden"
-                }`}
+                className={`flex ${open ? "flex-col justify-center items-center mt-10" : "hidden"
+                  }`}
               >
                 <img
                   alt="Perfil"
@@ -145,13 +145,14 @@ function Perfil() {
               <div className="flex justify-center items-center mt-5">
                 <a
                   href="/config"
-                  className="bg-violet-950 flex w-[175px] max-w-full flex-col grow shrink-0 basis-auto pt-1 pb-1.5 px-5 rounded-xl"
+                  className="bg-violet-950 flex w-[175px] max-w-full flex-col basis-auto pt-1 pb-1 px-3 rounded-xl" // Ajustando el padding horizontal
                 >
                   <div className="text-white text-2xl leading-[206.67%] self-center">
                     Edit perfil
                   </div>
                 </a>
               </div>
+
               <div>
                 <div class="flex flex-col w-[315px] max-w-full items-center justify-center gap-1 mt-4">
                   <img
@@ -192,7 +193,7 @@ function Perfil() {
           </div>
 
           {/* Contenido */}
-          <div class="flex flex-col pt-5 w-2/3 bg-gray-200">
+          <div className="flex flex-col pt-5 w-2/3 bg-gray-200">
             <div class="text-black text-4xl leading-[155%] self-center ml-0 mb-5 w-[180px]">
               Proyects
             </div>
@@ -224,175 +225,164 @@ function Perfil() {
                 </div>
               </div>
               <div className="">
-              {/*Inicio del post*/}
-              <p className="font-bold text-center text-2xl mb-5">
-                Publicaciones
-              </p>
-              {publicaciones ? (
-                publicaciones.map((publicacion) => (
-                  <div className="flex justify-center p-2 items-center">
-                    <div
-                      className="flex w-[80%] bg-white rounded-md p-7 flex-wrap h-fit"
-                      key={publicacion.id}
-                    >
-                      <div className="h-14 w-14 bg-[#724DC5] rounded-full mr-4">
-                        <img
-                          src="https://www.infobae.com/new-resizer/X28aHlsLoDl3i749c00aiQki6oc=/768x432/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/UGGM3NC5C5CVPJ7BCNSG6ALLBE.jpg"
-                          className="object-cover w-full h-full rounded-full"
-                          alt="profile"
-                        />
-                      </div>
-                      <div className="mt-2 text-left flex justify-between w-[88.5%] items-center">
-                        <div>
-                          <h2 className="text-md">{publicacion.usuario}</h2>
-                          <p className="text-sm">{publicacion.correo}</p>
-                        </div>
-
-                        <div>
-                          <button>
-                            <FontAwesomeIcon
-                              icon={faHeart}
-                              size="lg"
-                              style={{ color: "#ff0066" }}
-                            />{" "}
-                          </button>
-                        </div>
-                      </div>
-                      <div className="w-full">
-                        <p className="text-lg py-2">
-                          {publicacion.img
-                            ? publicacion.titulo
-                            : publicacion.contenido}
-                        </p>
-                      </div>
-
-                      {publicacion.img && (
-                        <div className="w-full h-96 bg-[#724DC5] rounded-md self-end">
+                {/*Inicio del post*/}
+                <p className="font-bold text-center text-2xl mb-5">Publicaciones</p>
+                {publicaciones ? (
+                  publicaciones.map((publicacion) => (
+                    <div className="flex justify-center p-2 items-center">
+                      <div
+                        className="flex w-[80%] bg-white rounded-md p-7 flex-wrap"
+                        style={{
+                          boxShadow:
+                            "-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)",
+                          height: "fit-content", // Ajuste de altura para las tarjetas
+                        }}
+                        key={publicacion.id}
+                      >
+                        <div className="h-14 w-14 bg-[#724DC5] rounded-full mr-4">
                           <img
-                            src={publicacion.img}
-                            className="object-cover w-full h-full rounded-md"
-                            alt="content"
-                          ></img>
+                            src="https://www.infobae.com/new-resizer/X28aHlsLoDl3i749c00aiQki6oc=/768x432/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/UGGM3NC5C5CVPJ7BCNSG6ALLBE.jpg"
+                            className="object-cover w-full h-full rounded-full"
+                            alt="profile"
+                          />
                         </div>
-                      )}
+                        <div className="mt-2 text-left flex justify-between w-[88.5%] items-center">
+                          <div>
+                            <h2 className="text-md">{publicacion.usuario}</h2>
+                            <p className="text-sm">{publicacion.correo}</p>
+                          </div>
 
-                      <div className="w-full">
-                        <form>
-                          <input
-                            className="border-2 rounded-md w-[91%] mt-2 px-2 text-sm"
-                            name="comentario"
-                            placeholder="Comentar..."
-                          ></input>
-
-                          <Link to="/comentar">
+                          <div>
                             <button>
                               <FontAwesomeIcon
-                                icon={faComment}
+                                icon={faHeart}
+                                size="lg"
+                                style={{ color: "#ff0066" }}
+                              />{" "}
+                            </button>
+                          </div>
+                        </div>
+                        <div className="w-full">
+                          <p className="text-lg py-2"
+                          >
+                            {publicacion.img
+                              ? publicacion.titulo
+                              : publicacion.contenido}
+                          </p>
+                        </div>
+
+                        {publicacion.img && (
+                          <div className="w-full h-96 bg-[#724DC5] rounded-md self-end">
+                            <img
+                              src={publicacion.img}
+                              className="object-cover w-full h-full rounded-md"
+                              alt="content"
+                            ></img>
+                          </div>
+                        )}
+
+                        <div className="w-full">
+                          <form>
+                            <input
+                              className="border-2 rounded-md w-[91%] mt-2 px-2 text-sm"
+
+                              name="comentario"
+                              placeholder="Comentar..."
+                            ></input>
+
+                            <button type="submit">
+                              <FontAwesomeIcon
+                                icon={faPaperPlane}
                                 className="pl-1"
                                 size="lg"
                                 style={{ color: "#5D30C1" }}
                               />
                             </button>
-                          </Link>
-                          <div className="pt-4">
-                          <button type="submit" className="border-black rounded-md bg-dark-purple text-white py-2 px-4">Subir</button>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p>Loading...</p>
+                )}
+              </div>
+              {/*Final del Publicacion*/}
+            </div>
+            <p className="font-bold text-center text-2xl mt-5 mb-5">Comentarios</p>
+            <div className="flex justify-center p-2 items-center">
+              <div className="flex w-[80%] rounded-md p-7 flex-wrap">
+                {comentarios ? (
+                  comentarios.map((comentario) => (
+                    <>
+                      <div
+                        className="flex w-full bg-white mx-12 rounded-md p-7 mb-6 flex-wrap"
+                        style={{
+                          boxShadow:
+                            "-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)",
+                          height: "fit-content", // Ajuste de altura para las tarjetas
+                        }}
+                        key={comentario.id}
+                      >
+                        <div className="h-14 w-14 bg-[#724DC5] rounded-full mr-4">
+                          <img
+                            src="https://www.infobae.com/new-resizer/X28aHlsLoDl3i749c00aiQki6oc=/768x432/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/UGGM3NC5C5CVPJ7BCNSG6ALLBE.jpg"
+                            className="object-cover w-full h-full rounded-full"
+                            alt="profile"
+                          />
+                        </div>
+                        <div className="text-left flex justify-between w-[88.5%] items-center">
+                          <div>
+                            <h2 className="text-md">{comentario.usuario}</h2>
+                            <p className="text-sm">{comentario.correo}</p>
                           </div>
-                        </form>
+
+                          <div>
+                            <button>
+                              <FontAwesomeIcon
+                                icon={faHeart}
+                                size="lg"
+                                style={{ color: "#ff0066" }}
+                              />{" "}
+                            </button>
+                          </div>
+                        </div>
+                        <div className="w-full">
+                          <p className="text-lg py-2 bg-gray-100 mt-2 rounded-md"
+                            style={{
+                              boxShadow: '-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)',
+                            }}>
+                            {comentario.img
+                              ? comentario.comentario
+                              : comentario.comentario}
+                          </p>
+                        </div>
+
+                        {comentario.img && (
+                          <div className="w-full h-96 bg-[#724DC5] rounded-md self-end">
+                            <img
+                              src={comentario.img}
+                              className="object-cover w-full h-full rounded-md"
+                              alt="content"
+                            ></img>
+                          </div>
+                        )}
+
                       </div>
-                    </div>
-                  </div>
-                ))
-              ) : (
-                <p>Loading...</p>
-              )}
+                    </>
+                  ))
+                ) : (
+                  <p>Loading...</p>
+                )}
+              </div>
             </div>
-            {/*Final del Publicacion*/}
-            </div>
-            <p className="font-bold text-center text-2xl mb-5">
-                Comentarios
-            </p>
-            <div className="w-[90%] grid py-2">
-            {comentarios ? (
-              comentarios.map((comentario) => (
-                <>
-                  <div
-                    className="flex w-full bg-white mx-12 rounded-md p-7 mb-6 flex-wrap h-fit"
-                    key={comentario.id}
-                  >
-                    <div className="h-14 w-14 bg-[#724DC5] rounded-full mr-4">
-                      <img
-                        src="https://www.infobae.com/new-resizer/X28aHlsLoDl3i749c00aiQki6oc=/768x432/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/UGGM3NC5C5CVPJ7BCNSG6ALLBE.jpg"
-                        className="object-cover w-full h-full rounded-full"
-                        alt="profile"
-                      />
-                    </div>
-                    <div className="text-left flex justify-between w-[88.5%] items-center">
-                      <div>
-                        <h2 className="text-md">{comentario.usuario}</h2>
-                        <p className="text-sm">{comentario.correo}</p>
-                      </div>
 
-                      <div>
-                        <button>
-                          <FontAwesomeIcon
-                            icon={faHeart}
-                            size="lg"
-                            style={{ color: "#ff0066" }}
-                          />{" "}
-                        </button>
-                      </div>
-                    </div>
-                    <div className="w-full">
-                      <p className="text-lg py-2">
-                        {comentario.img
-                          ? comentario.comentario
-                          : comentario.comentario}
-                      </p>
-                    </div>
-
-                    {comentario.img && (
-                      <div className="w-full h-96 bg-[#724DC5] rounded-md self-end">
-                        <img
-                          src={comentario.img}
-                          className="object-cover w-full h-full rounded-md"
-                          alt="content"
-                        ></img>
-                      </div>
-                    )}
-
-                    <div className="w-full">
-                      <form>
-                        <input
-                          className="border-2 rounded-md w-[91%] mt-2 px-2 text-sm"
-                          name="comentario"
-                          placeholder="Comentar..."
-                        ></input>
-
-                        <Link to="/comentar">
-                          <button>
-                            <FontAwesomeIcon
-                              icon={faComment}
-                              className="pl-1"
-                              size="lg"
-                              style={{ color: "#5D30C1" }}
-                            />
-                          </button>
-                        </Link>
-                        <button type="submit">submit</button>
-                      </form>
-                    </div>
-                  </div>
-                </>
-              ))
-            ) : (
-              <p>Loading...</p>
-            )}
-            </div>
             {/*Final del comentario*/}
           </div>
+
         </div>
         <Footer />
-      </>
+      </div>
     );
   });
 }
