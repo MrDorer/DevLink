@@ -1,39 +1,39 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import Sidebar from '../Components/sidebar';
-import { Link } from 'react-router-dom';
-import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
-import { faHeart } from '@fortawesome/free-regular-svg-icons';
-import { faStar } from '@fortawesome/free-regular-svg-icons';
-import { faBookmark } from '@fortawesome/free-regular-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComment } from '@fortawesome/free-regular-svg-icons';
-import Donitas from '../Assets/donitas.jpg';
-
-
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import Sidebar from "../Components/sidebar";
+import { Link } from "react-router-dom";
+import { faPaperPlane } from "@fortawesome/free-regular-svg-icons";
+import { faHeart } from "@fortawesome/free-regular-svg-icons";
+import { faStar } from "@fortawesome/free-regular-svg-icons";
+import { faBookmark } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faComment } from "@fortawesome/free-regular-svg-icons";
+import Donitas from "../Assets/donitas.jpg";
 
 const Home = () => {
   const [news, setNews] = useState([]);
   const [publicaciones, setPublicaciones] = useState([]);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
   const [publicacionError, setPublicacionError] = useState(null);
+  const [likes, setLikes] = useState({});
+  const [userLiked, setUserLiked] = useState({});
 
   const [datos, setDatos] = useState({
-    titulo: '',
-    contenido: '',
-    id_usuario: '',
+    titulo: "",
+    contenido: "",
+    id_usuario: "",
     likes_publicacion: 0,
-    img: ''
+    img: "",
   });
 
   const [comentarios, setComentarios] = useState({});
 
   const getPublicaciones = async () => {
     try {
-      const response = await axios.get('http://localhost:8082/publicaciones');
+      const response = await axios.get("http://localhost:8082/publicaciones");
       setPublicaciones(response.data);
     } catch (error) {
-      console.error('Error fetching publicaciones:', error);
+      console.error("Error fetching publicaciones:", error);
     }
   };
 
@@ -55,29 +55,51 @@ const Home = () => {
     }));
   };
 
+  const handleLike = async (publicacionId) => {
+    try {
+      // Enviar solicitud al servidor para manejar el like
+      await axios.post(`http://localhost:8082/posts/${publicacionId}/like`, {
+        userId: datos.id_usuario,
+      });
+
+      // Actualizar el estado local de likes
+      setLikes((prevLikes) => ({
+        ...prevLikes,
+        [publicacionId]: (prevLikes[publicacionId] || 0) + 1,
+      }));
+    } catch (error) {
+      console.error("Error al manejar el like:", error);
+    }
+  };
+
   const handleSubmitPublicaciones = async (e) => {
     e.preventDefault();
     if (!datos.titulo || !datos.contenido) {
-      setPublicacionError("Por favor, completa el título y la descripción para publicar.");
+      setPublicacionError(
+        "Por favor, completa el título y la descripción para publicar."
+      );
       return;
     }
 
     try {
-      const response = await axios.post('http://localhost:8082/agregarPublicaciones', datos);
+      const response = await axios.post(
+        "http://localhost:8082/agregarPublicaciones",
+        datos
+      );
       console.log(response.data);
       setPublicacionError(null);
 
       setDatos({
-        titulo: '',
-        contenido: '',
+        titulo: "",
+        contenido: "",
         id_usuario: datos.id_usuario,
         likes_publicacion: 0,
-        img: ''
+        img: "",
       });
 
       getPublicaciones();
     } catch (error) {
-      console.error('Error al publicar:', error);
+      console.error("Error al publicar:", error);
       setPublicacionError("Error al publicar la publicación.");
     }
   };
@@ -87,12 +109,13 @@ const Home = () => {
 
     // Iterate through the comentarios object and send each comment
     Object.values(comentarios).forEach((comentario) => {
-      axios.post('http://localhost:8082/agregarComentarios', comentario)
+      axios
+        .post("http://localhost:8082/agregarComentarios", comentario)
         .then((response) => {
           console.log(response.data);
         })
         .catch((error) => {
-          console.error('Error al enviar comentario:', error);
+          console.error("Error al enviar comentario:", error);
         });
     });
 
@@ -104,18 +127,18 @@ const Home = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          'https://newsapi.org/v2/everything?q=software&pageSize=6&sortBy=popularity',
+          "https://newsapi.org/v2/everything?q=software&pageSize=6&sortBy=popularity",
           {
             headers: {
-              'X-Api-Key': '0ab8e04dbe1944d79178f1f971919ec0',
+              "X-Api-Key": "0ab8e04dbe1944d79178f1f971919ec0",
             },
           }
         );
         setNews(response.data.articles);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
-      const user = JSON.parse(sessionStorage.getItem('user'));
+      const user = JSON.parse(sessionStorage.getItem("user"));
       setDatos({ ...datos, id_usuario: user.id });
       setComentarios([]);
     };
@@ -128,14 +151,20 @@ const Home = () => {
     <div className="flex flex-wrap">
       <Sidebar />
       <div className="flex mt-0 flex-grow justify-center">
-        <div className='p-10 w-full ml-36 mt-20'>
-          <div className="w-full flex flex-wrap mx-12 rounded-md p-4 pb-2 h-fit bg-gray-100 mb-4 mt-2"  
-          style={{
-                    boxShadow: '-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)',
-                  }}>
-            <h1 className='mb-1 font-semibold'>¿Qué estás pensando?</h1>
+        <div className="p-10 w-full ml-36 mt-20">
+          <div
+            className="w-full flex flex-wrap mx-12 rounded-md p-4 pb-2 h-fit bg-gray-100 mb-4 mt-2"
+            style={{
+              boxShadow:
+                "-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)",
+            }}
+          >
+            <h1 className="mb-1 font-semibold">¿Qué estás pensando?</h1>
 
-            <form onSubmit={handleSubmitPublicaciones} className="w-full flex flex-wrap">
+            <form
+              onSubmit={handleSubmitPublicaciones}
+              className="w-full flex flex-wrap"
+            >
               <input
                 placeholder="Título"
                 name="titulo"
@@ -167,7 +196,9 @@ const Home = () => {
                 Publicar
               </button>
               {publicacionError && (
-                <p className="mt-2 text-center text-red-600">{publicacionError}</p>
+                <p className="mt-2 text-center text-red-600">
+                  {publicacionError}
+                </p>
               )}
             </form>
           </div>
@@ -175,10 +206,11 @@ const Home = () => {
             publicaciones.map((publicacion) => (
               <>
                 <div
-                  className='flex w-full bg-gray-100 mx-12 rounded-md p-7 mb-6 flex-wrap h-fit'
+                  className="flex w-full bg-gray-100 mx-12 rounded-md p-7 mb-6 flex-wrap h-fit"
                   key={publicacion.id}
                   style={{
-                    boxShadow: '-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)',
+                    boxShadow:
+                      "-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)",
                   }}
                 >
                   <div className="h-14 w-14 bg-[#724DC5] rounded-full mr-4">
@@ -188,49 +220,60 @@ const Home = () => {
                       alt="profile"
                     />
                   </div>
-                  <div className='text-left flex justify-between w-[88.5%] items-center'>
+                  <div className="text-left flex justify-between w-[88.5%] items-center">
                     <div>
-                      <h2 className='text-md'>{publicacion.usuario}</h2>
-                      <p className='text-sm'>{publicacion.correo}</p>
+                      <h2 className="text-md">{publicacion.usuario}</h2>
+                      <p className="text-sm">{publicacion.correo}</p>
                     </div>
 
-              <div >
-                <button><FontAwesomeIcon icon={faHeart} size="lg" style={{ color: "#ff0066", }} /> </button>
-              </div>
-            </div>
-            <div className='w-full'>
-              <p className='text-lg py-2'>{ publicacion.img ? (publicacion.titulo) : (publicacion.contenido) }</p>
-            </div>
-            
-              { publicacion.img && (
-                <div className='w-full h-96 bg-[#724DC5] rounded-md self-end'>
-                  <img src={publicacion.img} className="object-cover w-full h-full rounded-md" alt="content"></img>
+                    <div>
+                    <button onClick={() => handleLike(publicacion.id)} disabled={userLiked[publicacion.id]}>
+                        <FontAwesomeIcon icon={faHeart} size="lg" style={{ color: "#ff0066" }} />
+                    </button>
+                    <span>{publicacion.cantidad_likes || 0} Likes</span>
                 </div>
-             )}
-            
-            <div className='w-full'>
-              <form onSubmit= {(e) => handleSubmitComentarios(e)} >
+                  </div>
+                  <div className="w-full">
+                    <p className="text-lg py-2">
+                      {publicacion.img
+                        ? publicacion.titulo
+                        : publicacion.contenido}
+                    </p>
+                  </div>
 
+                  {publicacion.img && (
+                    <div className="w-full h-96 bg-[#724DC5] rounded-md self-end">
+                      <img
+                        src={publicacion.img}
+                        className="object-cover w-full h-full rounded-md"
+                        alt="content"
+                      ></img>
+                    </div>
+                  )}
+
+                  <div className="w-full">
+                    <form onSubmit={(e) => handleSubmitComentarios(e)}>
                       <input
-                        className='border-2 rounded-md w-[91%] mt-2 px-2 text-sm'
-                        name='comentario'
-                        placeholder='Comentar...'
+                        className="border-2 rounded-md w-[91%] mt-2 px-2 text-sm"
+                        name="comentario"
+                        placeholder="Comentar..."
                         value={comentarios.comentario}
                         onChange={(e) => handleChangeCom(e, publicacion.id)}
-
                       ></input>
-
 
                       <Link to="/comentar">
                         <button>
-                          <FontAwesomeIcon icon={faComment} className='pl-1' size="lg" style={{ color: "#5D30C1" }} />
+                          <FontAwesomeIcon
+                            icon={faComment}
+                            className="pl-1"
+                            size="lg"
+                            style={{ color: "#5D30C1" }}
+                          />
                         </button>
                       </Link>
-                      <button type='submit'>submit</button>
+                      <button type="submit">submit</button>
                     </form>
                   </div>
-
-
                 </div>
               </>
             ))
@@ -242,23 +285,35 @@ const Home = () => {
         {/*Noticias*/}
         <div className="flex">
           <div className="flex mt-20 flex-grow justify-center">
-            <div className='flex flex-wrap w-full min-w-6/12 justify-center py-8 px-4'>
+            <div className="flex flex-wrap w-full min-w-6/12 justify-center py-8 px-4">
               <div className="container mx-auto p-4">
-                <h1 className="text-2xl font-bold mb-4 text-center bg-gray-100 px-2 py-2 rounded-md shadow-md" >Noticias de tecnologia</h1>
+                <h1 className="text-2xl font-bold mb-4 text-center bg-gray-100 px-2 py-2 rounded-md shadow-md">
+                  Noticias de tecnologia
+                </h1>
                 <ul>
                   {news.map((article) => (
                     <a
                       href={article.url}
                       target="_blank"
                       rel="noopener noreferrer"
-
                     >
-                      <li key={article.url} className="mb-2 bg-gray-100 p-2 rounded-md" style={{
-                        boxShadow: '-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)',
-                      }}>
-                        <h2 className="text-lg font-semibold">{article.title}</h2>
+                      <li
+                        key={article.url}
+                        className="mb-2 bg-gray-100 p-2 rounded-md"
+                        style={{
+                          boxShadow:
+                            "-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)",
+                        }}
+                      >
+                        <h2 className="text-lg font-semibold">
+                          {article.title}
+                        </h2>
                         {article.urlToImage && (
-                          <img src={article.urlToImage} alt="Noticia" className="rounded-md my-2 w-full h-48 object-cover" />
+                          <img
+                            src={article.urlToImage}
+                            alt="Noticia"
+                            className="rounded-md my-2 w-full h-48 object-cover"
+                          />
                         )}
                       </li>
                     </a>
