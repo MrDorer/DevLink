@@ -120,6 +120,24 @@ const Home = () => {
     fetchData();
   }, []);
 
+  const handleSubmitComentarios = async (e) => {
+    e.preventDefault();
+
+    // Iterate through the comentarios object and send each comment
+    Object.values(comentarios).forEach((comentario) => {
+      axios.post('http://localhost:8082/agregarComentarios', comentario)
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error('Error al enviar comentario:', error);
+        });
+    });
+
+    e.target.reset();
+    setComentarios({});
+  };
+
   return (
     <div className="flex flex-wrap">
       <Sidebar />
