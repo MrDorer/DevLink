@@ -10,32 +10,37 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faComment } from '@fortawesome/free-regular-svg-icons';
 import Donitas from '../Assets/donitas.jpg';
 
+
+
 const Home = () => {
   const [news, setNews] = useState([]);
-  const [publicaciones,setPublicaciones] = useState([])
-  const [datos,setDatos] = useState({
+  const [publicaciones, setPublicaciones] = useState([]);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [publicacionError, setPublicacionError] = useState(null);
+
+  const [datos, setDatos] = useState({
     titulo: '',
     contenido: '',
     id_usuario: '',
-    likes_publicacion:0,
-    img:''
-  })
+    likes_publicacion: 0,
+    img: ''
+  });
 
   const [comentarios, setComentarios] = useState([]);
 
   const getPublicaciones = async () => {
     try {
       const response = await axios.get('http://localhost:8082/publicaciones');
-      setPublicaciones(response.data)
+      setPublicaciones(response.data);
     } catch (error) {
       console.error('Error fetching publicaciones:', error);
     }
   };
 
   const handleChange = (e) => {
-    const {name, value} = e.target
-    setDatos({...datos, [name]:value})
-  }
+    const { name, value } = e.target;
+    setDatos({ ...datos, [name]: value });
+  };
 
   const handleChangeCom = (e, id) => {
     e.preventDefault();
@@ -44,23 +49,41 @@ const Home = () => {
       ...prevComentarios,
       { id_publicacion: id, id_usuario: datos.id_usuario, comentario: value },
     ]);
-    console.log(comentarios)
   };
 
   const handleSubmitPublicaciones = async (e) => {
-      e.preventDefault()    
-      
-    axios.post('http://localhost:8082/agregarPublicaciones',datos)
-      .then( response => {
-        console.log(response.data)
-      })
+    e.preventDefault();
+    if (!datos.titulo || !datos.contenido) {
+      setPublicacionError("Por favor, completa el título y la descripción para publicar.");
+      return;
+    }
+
+    try {
+      const response = await axios.post('http://localhost:8082/agregarPublicaciones', datos);
+      console.log(response.data);
+      setPublicacionError(null);
+
+      // Vaciar los campos del formulario después de la publicación exitosa
+      setDatos({
+        titulo: '',
+        contenido: '',
+        id_usuario: datos.id_usuario,
+        likes_publicacion: 0,
+        img: ''
+      });
+
+      // Volver a obtener las publicaciones después de la publicación exitosa
+      getPublicaciones();
+    } catch (error) {
+      console.error('Error al publicar:', error);
+      setPublicacionError("Error al publicar la publicación.");
+    }
   };
 
   const handleSubmitComentarios = async (e) => {
     e.preventDefault();
 
     comentarios.forEach((comentario) => {
-      console.log(comentario)
       axios.post('http://localhost:8082/agregarComentarios', comentario)
         .then((response) => {
           console.log(response.data);
@@ -85,48 +108,88 @@ const Home = () => {
             },
           }
         );
-        // Establecer los datos en el estado
         setNews(response.data.articles);
       } catch (error) {
         console.error('Error fetching data:', error);
       }
       const user = JSON.parse(sessionStorage.getItem('user'));
       setDatos({ ...datos, id_usuario: user.id });
-      setComentarios([]); // Initialize comentarios as an empty array
+      setComentarios([]);
     };
-  
+
     getPublicaciones();
     fetchData();
-  }, []); // La dependencia vacía asegura que se ejecute solo una vez al montar el componente
-  
+  }, []);
 
   return (
     <div className="flex flex-wrap">
-    <Sidebar />
-    {/* Sección a la izquierda */}
-    <div className="flex mt-0 flex-grow justify-center">
-      <div className=' p-10 w-full ml-36 mt-20'>
+      <Sidebar />
+      <div className="flex mt-0 flex-grow justify-center">
+        <div className='p-10 w-full ml-36 mt-20'>
+          <div className="w-full flex flex-wrap mx-12 rounded-md p-4 pb-2 h-fit bg-gray-100 mb-4 mt-2"  
+          style={{
+                    boxShadow: '-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)',
+                  }}>
+            <h1 className='mb-1 font-semibold'>¿Qué estás pensando?</h1>
 
-
-          {/*Inicio del post*/}
-
-          
-          {publicaciones ? (
-          publicaciones.map((publicacion) => (
-            <>
-              <div className='flex w-full bg-white mx-12 rounded-md p-7 mb-6 flex-wrap h-fit' key={publicacion.id}>
-            <div className="h-14 w-14 bg-[#724DC5] rounded-full mr-4">
-              <img
-                src="https://www.infobae.com/new-resizer/X28aHlsLoDl3i749c00aiQki6oc=/768x432/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/UGGM3NC5C5CVPJ7BCNSG6ALLBE.jpg"
-                className="object-cover w-full h-full rounded-full"
-                alt="profile"
+            <form onSubmit={handleSubmitPublicaciones} className="w-full flex flex-wrap">
+              <input
+                placeholder="Título"
+                name="titulo"
+                value={datos.titulo}
+                onChange={handleChange}
+                className="border border-gray-300 rounded-md px-3 py-2 mr-2 mb-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
-            </div>
-            <div className='text-left flex justify-between w-[88.5%] items-center'>
-              <div>
-                <h2 className='text-md'>{publicacion.usuario}</h2>
-                <p className='text-sm'>{publicacion.correo}</p>
-              </div>
+
+              <input
+                placeholder="Descripción"
+                name="contenido"
+                value={datos.contenido}
+                onChange={handleChange}
+                className="border border-gray-300 rounded-md px-3 py-2 mr-2 mb-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+
+              <input
+                placeholder="Imagen URL"
+                name="img"
+                value={datos.img}
+                onChange={handleChange}
+                className="border border-gray-300 rounded-md px-3 py-2 mr-2 mb-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              />
+
+              <button
+                type="submit"
+                className="bg-indigo-500 hover:bg-indigo-700 text-white rounded-md px-8 py-2 mb-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-colors duration-300"
+              >
+                Publicar
+              </button>
+              {publicacionError && (
+                <p className="mt-2 text-center text-red-600">{publicacionError}</p>
+              )}
+            </form>
+          </div>
+          {publicaciones ? (
+            publicaciones.map((publicacion) => (
+              <>
+                <div
+                  className='flex w-full bg-gray-100 mx-12 rounded-md p-7 mb-6 flex-wrap h-fit'
+                  key={publicacion.id}
+                  style={{
+                    boxShadow: '-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)',
+                  }}
+                >
+                  <div className="h-14 w-14 bg-[#724DC5] rounded-full mr-4">
+                    <img
+                      src="https://www.infobae.com/new-resizer/X28aHlsLoDl3i749c00aiQki6oc=/768x432/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/UGGM3NC5C5CVPJ7BCNSG6ALLBE.jpg"
+                      className="object-cover w-full h-full rounded-full"
+                      alt="profile"
+                    />
+                  </div>
+                  <div className='text-left flex justify-between w-[88.5%] items-center'>
+                    <div>
+                      <h2 className='text-md'>{publicacion.usuario}</h2>
+                      <p className='text-sm'>{publicacion.correo}</p>
+                    </div>
 
               <div >
                 <button><FontAwesomeIcon icon={faHeart} size="lg" style={{ color: "#ff0066", }} /> </button>
@@ -145,69 +208,33 @@ const Home = () => {
             <div className='w-full'>
               <form onSubmit= {(e) => handleSubmitComentarios(e)} >
 
-                <input 
-                className='border-2 rounded-md w-[91%] mt-2 px-2 text-sm'
-                name='comentario' 
-                placeholder='Comentar...'
-                value={comentarios.comentario}
-                onChange={(e) => handleChangeCom(e, publicacion.id)}
-                
-                ></input>
+                      <input
+                        className='border-2 rounded-md w-[91%] mt-2 px-2 text-sm'
+                        name='comentario'
+                        placeholder='Comentar...'
+                        value={comentarios.comentario}
+                        onChange={(e) => handleChangeCom(e, publicacion.id)}
+
+                      ></input>
 
 
-                <Link to="/comentar">
-                  <button>
-                    <FontAwesomeIcon icon={faComment} className='pl-1' size="lg" style={{ color: "#5D30C1" }} />
-                  </button>
-                </Link>
-                <button type='submit'>submit</button>
-              </form>
-            </div>
-            
-            
-          </div>
-            </>
-          ))
-        ) : (
-          <p>Loading...</p>
-        )}
-
-          {/*Final del post*/}
+                      <Link to="/comentar">
+                        <button>
+                          <FontAwesomeIcon icon={faComment} className='pl-1' size="lg" style={{ color: "#5D30C1" }} />
+                        </button>
+                      </Link>
+                      <button type='submit'>submit</button>
+                    </form>
+                  </div>
 
 
-      <div className='w-full flex flex-wrap'>
-        <form onSubmit={handleSubmitPublicaciones}>
-        
-        <input 
-        placeholder='titulo?'
-        name='titulo'
-        className='border border-black rounded-md px-2'
-        value={datos.titulo}
-        onChange={handleChange}
-        />
-
-        <input 
-        placeholder='contenido?'
-        name='contenido'
-        className='border border-black rounded-md px-2'
-        value={datos.contenido}
-        onChange={handleChange}
-        />
-
-        <input 
-        placeholder='imagen?'
-        name='img'
-        className='border border-black rounded-md px-2'
-        value={datos.img}
-        onChange={handleChange}
-        />
-
-
-        <button type="submit">Publicar</button>
-        </form>
-        
-      </div>
-</div>
+                </div>
+              </>
+            ))
+          ) : (
+            <p>Loading...</p>
+          )}
+        </div>
 
 
 
@@ -215,38 +242,35 @@ const Home = () => {
 
 
 
-  {/* Sección a la derecha  NO COLOCAR NADA PASADO ESTO*/}
-  <div className="flex">
-        <div className="flex mt-28 flex-grow justify-center">
-          <div className='flex flex-wrap w-full min-w-6/12 bg-[#F2F2F2] justify-center py-8 px-4'>
-         
+        {/*Noticias*/}
+        <div className="flex">
+          <div className="flex mt-20 flex-grow justify-center">
+            <div className='flex flex-wrap w-full min-w-6/12 justify-center py-8 px-4'>
               <div className="container mx-auto p-4">
-                <h1 className="text-2xl font-bold mb-4">Noticias de tecnologia</h1>
+                <h1 className="text-2xl font-bold mb-4 text-center bg-gray-100 px-2 py-2 rounded-md shadow-md" >Noticias de tecnologia</h1>
                 <ul>
                   {news.map((article) => (
                     <a
-                    href={article.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  
-                  >
-                    <li key={article.url} className="mb-2 bg-[#FAFAFA] p-2 rounded-md">
-                      <h2 className="text-lg font-semibold">{article.title}</h2>
-                      {article.urlToImage && (
-                        <img src={article.urlToImage} alt="Noticia" className="rounded-md my-2 w-full h-48 object-cover" />
-                      )}
-                        </li>
-                      </a>
-                    
+                      href={article.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+
+                    >
+                      <li key={article.url} className="mb-2 bg-gray-100 p-2 rounded-md" style={{
+                        boxShadow: '-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)',
+                      }}>
+                        <h2 className="text-lg font-semibold">{article.title}</h2>
+                        {article.urlToImage && (
+                          <img src={article.urlToImage} alt="Noticia" className="rounded-md my-2 w-full h-48 object-cover" />
+                        )}
+                      </li>
+                    </a>
                   ))}
                 </ul>
               </div>
             </div>
           </div>
         </div>
-
-  {/* Fin Sección a la derecha  NO COLOCAR NADA PASADO ESTO*/}
-
       </div>
     </div>
   );
