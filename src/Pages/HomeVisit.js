@@ -6,12 +6,22 @@ import logoMorado from "../Assets/Logomorado.png";
 import axios from 'axios';
 
 const HomeVisit = () => {
+  const backendBaseUrl = 'http://localhost:8082';
+  const [publicaciones,setPublicaciones] = useState([])
   const [userList, setUserList] = useState([]);
   const [news, setNews] = useState([]);
   const [currentNews, setCurrentNews] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const newsPerPage = 6;
 
+  const getPublicaciones = async () => {
+    try {
+      const response = await axios.get('http://localhost:8082/publicaciones');
+      setPublicaciones(response.data);
+    } catch (error) {
+      console.error('Error fetching publicaciones:', error);
+    }
+  };
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -23,7 +33,7 @@ const HomeVisit = () => {
         console.error('Error fetching users:', error);
       }
     };
-
+    getPublicaciones();
     fetchUsers();
   }, []);
 
@@ -145,20 +155,55 @@ const HomeVisit = () => {
         <div className="w-3/4 p-4">
           <div className="p-4">
             <h2 className="text-2xl font-bold mb-2">Posts Mas Populares</h2>
-            <div
-              className="flex w-2/3 bg-white mx-12 rounded-md p-7 mb-6 flex-wrap"
-              style={{ height: "26rem" }}
-            >
-              <div className="h-14 w-14 bg-[#724DC5] rounded-full mr-4"></div>
-              <div className="text-left">
-                <h2 className="text-lg">Usuario</h2>
-                <p className="text-md">@Usuario</p>
-              </div>
-              <div className="w-full">
-                <p className="text-lg">Texto del Usuario</p>
-              </div>
-              <div className="w-full h-[68%] bg-[#724DC5] rounded-sm self-end"></div>
-            </div>
+
+
+            
+            {publicaciones ? (
+            publicaciones.map((publicacion) => (
+              <>
+                <div
+                  className="flex w-full bg-gray-100 mx-12 rounded-md p-7 mb-6 flex-wrap h-fit"
+                  key={publicacion.id}
+                  style={{
+                    boxShadow:
+                      "-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)",
+                  }}
+                >
+                  <div className="h-14 w-14 bg-[#724DC5] rounded-full mr-4">
+                    <img
+                      src="https://www.infobae.com/new-resizer/X28aHlsLoDl3i749c00aiQki6oc=/768x432/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/UGGM3NC5C5CVPJ7BCNSG6ALLBE.jpg"
+                      className="object-cover w-full h-full rounded-full"
+                      alt="profile"
+                    />
+                  </div>
+                  <div className="text-left flex justify-between w-[88.5%] items-center">
+                    <div>
+                      <h2 className="text-md">{publicacion.usuario}</h2>
+                      <p className="text-sm">{publicacion.correo}</p>
+                    </div>
+
+                    <div>
+
+                    </div>
+                  </div>
+                  <div className='w-full'>
+                    <p className='text-lg py-2'>{publicacion.contenido}</p>
+                  </div>
+
+                  {publicacion.img && (
+                    <div className='w-full h-96 bg-[#724DC5] rounded-md self-end'>
+                      <img src={`${backendBaseUrl}/${publicacion.img}`} className="object-cover w-full h-full rounded-md" alt="content"></img>
+                    </div>
+                  )}
+
+                </div>
+              </>
+            ))
+          ) : (
+            <p>Loading...</p>
+          )}
+
+
           </div>
         </div>
       </main>
