@@ -236,12 +236,6 @@ const Home = () => {
           )}
         </div>
 
-
-
-
-
-
-
         {/*Noticias*/}
         <div className="flex">
           <div className="flex mt-20 flex-grow justify-center">
