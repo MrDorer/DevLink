@@ -20,7 +20,7 @@ const Home = () => {
   const [datos, setDatos] = useState({
     titulo: '',
     contenido: '',
-    id_usuario: '',
+    
     likes_publicacion: 0,
     img: ''
   });

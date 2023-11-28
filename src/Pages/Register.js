@@ -10,7 +10,11 @@ function Register() {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [lat, setLat] = useState("");
+    const [lng, setLng] = useState("");
     const [Ubicacion, setUbicacion] = useState("");
+
+
 
     const [registrationError, setRegistrationError] = useState(null);
     const navigate = useNavigate();
@@ -44,7 +48,8 @@ function Register() {
             username,
             email,
             password,
-            Ubicacion
+            lat,
+            lng
         };
 
         try {
@@ -84,6 +89,21 @@ function Register() {
     const passwordIsValid = (password) => {
         return password.trim().length >= 8;
     };
+
+    const getLocation = () => {
+        navigator.geolocation.getCurrentPosition(success, error);
+      };
+
+      const success = (position) => {
+        console.log(position.coords.latitude);
+        setLat(position.coords.latitude)
+        console.log(position.coords.longitude);
+        setLng(position.coords.longitude)
+      };
+    
+      const error = (err) => {
+        console.error(err.message);
+      };
     return (
         <>
             <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -176,22 +196,8 @@ function Register() {
                                 />
                             </div>
                         </div>
-                        <div>
-                            <label htmlFor="Ubicacion" className="block text-sm font-medium leading-6 text-gray-900">
-                            Ubicacion
-                            </label>
-                            <div className="mt-2">
-                                <input
-                                    id="Ubicacion"
-                                    name="Ubicacion"
-                                    type="Ubicacion"
-                                    autoComplete="new-Ubicacion"
-                                    required
-                                    value={text}
-                                    onChange={(e) => setUbicacion(e.target.value)}
-                                    className="block w-full rounded-md border-0 py-1.5  px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
-                            </div>
+                        <div className="bg-slate-700">
+                              <button onClick={() => getLocation()}>Ubicacion para maps</button>      
                         </div>
 
                         <div>
