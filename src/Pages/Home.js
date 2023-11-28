@@ -13,14 +13,11 @@ import Donitas from "../Assets/donitas.jpg";
 const Home = () => {
   const [news, setNews] = useState([]);
   const [publicaciones, setPublicaciones] = useState([]);
-  const [errorMessage, setErrorMessage] = useState("");
   const [publicacionError, setPublicacionError] = useState(null);
-  const [likes, setLikes] = useState({});
-  const [userLiked, setUserLiked] = useState({});
+
   const [datos, setDatos] = useState({
     titulo: '',
     contenido: '',
-    
     likes_publicacion: 0,
     img: ''
   });
@@ -60,24 +57,6 @@ const Home = () => {
       console.error('Error fetching publicaciones:', error);
     }
   };
-
-  const handleLike = async (publicacionId) => {
-    try {
-      // Enviar solicitud al servidor para manejar el like
-      await axios.post(`http://localhost:8082/posts/${publicacionId}/like`, {
-        userId: datos.id_usuario,
-      });
-
-      // Actualizar el estado local de likes
-      setLikes((prevLikes) => ({
-        ...prevLikes,
-        [publicacionId]: (prevLikes[publicacionId] || 0) + 1,
-      }));
-    } catch (error) {
-      console.error("Error al manejar el like:", error);
-    }
-  };
-
 
 
   const handleSubmitPublicaciones = async (e) => {
@@ -242,9 +221,7 @@ const Home = () => {
                     </div>
 
                     <div>
-                        <button onClick={() => handleLike(publicacion.id)} disabled={userLiked[publicacion.id]}>
-                            <FontAwesomeIcon icon={faHeart} size="lg" style={{ color: "#ff0066" }} />
-                        </button>
+                       
                         <span>{publicacion.cantidad_likes || 0} Likes</span>
                     </div>
                   </div>

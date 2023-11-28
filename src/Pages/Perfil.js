@@ -328,13 +328,6 @@ function Perfil() {
                           </div>
 
                           <div>
-                            <button>
-                              <FontAwesomeIcon
-                                icon={faHeart}
-                                size="lg"
-                                style={{ color: "#ff0066" }}
-                              />{" "}
-                            </button>
                           </div>
                         </div>
                         <div className='w-full'>

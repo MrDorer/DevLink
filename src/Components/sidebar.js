@@ -10,8 +10,7 @@ const App = () => {
   const Menus = [
     { title: "Home", path: "/home", gap: true }, // Agrega las rutas
     { title: "Perfil", path: `/perfil/${user}`, gap: true },
-    { title: "Proyectos", path: "/perfil", gap: true },
-    { title: "Explorar", path: "/", gap: true },
+  
   ];
 
   useEffect(() => {
@@ -42,7 +41,7 @@ const App = () => {
             <li
               key={index}
               className={`flex flex-col items-center rounded-md p-2 cursor-pointer hover:bg-light-white text-gray-300 text-sm transform ${
-                Menu.gap ? "mt-12" : "mt-2"
+                Menu.gap ? "mt-28" : "mt-2"
               } ${index === 0 && "bg-light-white"}`}
               style={{
                 transform: open ? "translateX(0)" : "translateX(-100%)",
@@ -66,9 +65,7 @@ const App = () => {
               ></div>
             </li>
           ))}
-          <Link to="/config">
-            <img src={Group} alt="Group" className={`absolute mt-auto right-5 w-6 h-6 duration-200 ${open ? 'visible' : 'hidden '}`} />
-          </Link>
+       
         </ul>
 
       </div>

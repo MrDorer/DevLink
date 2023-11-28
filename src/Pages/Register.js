@@ -92,18 +92,18 @@ function Register() {
 
     const getLocation = () => {
         navigator.geolocation.getCurrentPosition(success, error);
-      };
+    };
 
-      const success = (position) => {
+    const success = (position) => {
         console.log(position.coords.latitude);
         setLat(position.coords.latitude)
         console.log(position.coords.longitude);
         setLng(position.coords.longitude)
-      };
-    
-      const error = (err) => {
+    };
+
+    const error = (err) => {
         console.error(err.message);
-      };
+    };
     return (
         <>
             <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -196,8 +196,13 @@ function Register() {
                                 />
                             </div>
                         </div>
-                        <div className="bg-slate-700">
-                              <button onClick={() => getLocation()}>Ubicacion para maps</button>      
+                        <div className=" rounded-md p-2">
+                            <button
+                                onClick={() => getLocation()}
+                                className="w-full text-white bg-blue-500 hover:bg-blue-600 rounded-md py-2 px-4 font-semibold focus:outline-none focus:ring focus:ring-blue-300"
+                            >
+                                Obtener Ubicación para Mapas
+                            </button>
                         </div>
 
                         <div>
