@@ -191,24 +191,22 @@ const Home = () => {
                       <p className='text-sm'>{publicacion.correo}</p>
                     </div>
 
-                    <div >
-                      <button><FontAwesomeIcon icon={faHeart} size="lg" style={{ color: "#ff0066", }} /> </button>
-                      <button><FontAwesomeIcon className='mx-2' icon={faStar} size="lg" style={{ color: "#eeff00", }} /></button>
-                      <button><FontAwesomeIcon icon={faBookmark} size="lg" style={{ color: "#00ff7b", }} /></button>
-                    </div>
-                  </div>
-                  <div className='w-full'>
-                    <p className='text-lg py-2'>{publicacion.img ? (publicacion.titulo) : (publicacion.contenido)}</p>
-                  </div>
-
-                  {publicacion.img && (
-                    <div className='w-full h-96 bg-[#724DC5] rounded-md self-end'>
-                      <img src={publicacion.img} className="object-cover w-full h-full rounded-md" alt="content"></img>
-                    </div>
-                  )}
-
-                  <div className='w-full'>
-                    <form onSubmit={(e) => handleSubmitComentarios(e)} >
+              <div >
+                <button><FontAwesomeIcon icon={faHeart} size="lg" style={{ color: "#ff0066", }} /> </button>
+              </div>
+            </div>
+            <div className='w-full'>
+              <p className='text-lg py-2'>{ publicacion.img ? (publicacion.titulo) : (publicacion.contenido) }</p>
+            </div>
+            
+              { publicacion.img && (
+                <div className='w-full h-96 bg-[#724DC5] rounded-md self-end'>
+                  <img src={publicacion.img} className="object-cover w-full h-full rounded-md" alt="content"></img>
+                </div>
+             )}
+            
+            <div className='w-full'>
+              <form onSubmit= {(e) => handleSubmitComentarios(e)} >
 
                       <input
                         className='border-2 rounded-md w-[91%] mt-2 px-2 text-sm'

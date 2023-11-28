@@ -52,7 +52,7 @@ function Header() {
   return (
     <header className="bg-purple-500 p-4 flex items-center justify-between w-full fixed top-0 z-50" style={{ backgroundColor: 'rgb(93, 48, 193)' }}>
       <div className="container mx-auto flex items-center">
-        <Link to="/">
+        <Link to="/Home">
           <img src={LogoGris} alt="Logo" className="h-20" />
         </Link>
 
@@ -63,10 +63,8 @@ function Header() {
       <div className="container mx-auto flex justify-end items-center relative">
         {loggedInUser ? (
           <div className="flex items-center">
-            <p className="text-white font-bold font-serif text-lg mr-1">
-              Welcome,
-            </p>
-            <p className="text-white font-bold font-serif text-lg mr-2">{loggedInUser.name} </p>
+          
+            <p className="text-white font-bold text-lg mr-2">{loggedInUser.username} </p>
             <button onClick={handleLogout} className="text-black bg-white rounded-md mx-2 py-2 px-3 shadow-md border cursor-pointer font-extrabold  font-serif focus:outline-none hover:bg-slate-200">Logout</button>
           </div>
         ) : (
