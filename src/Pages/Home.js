@@ -2,46 +2,26 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Sidebar from '../Components/sidebar';
 import { Link } from 'react-router-dom';
-import { faPaperPlane } from '@fortawesome/free-regular-svg-icons';
-import { faHeart } from '@fortawesome/free-regular-svg-icons';
-import { faStar } from '@fortawesome/free-regular-svg-icons';
-import { faBookmark } from '@fortawesome/free-regular-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComment } from '@fortawesome/free-regular-svg-icons';
-import Donitas from '../Assets/donitas.jpg';
-
-
+import { faComment, faHeart } from '@fortawesome/free-regular-svg-icons';
 
 const Home = () => {
   const [news, setNews] = useState([]);
   const [publicaciones, setPublicaciones] = useState([]);
   const [errorMessage, setErrorMessage] = useState('');
   const [publicacionError, setPublicacionError] = useState(null);
-
-  const [datos, setDatos] = useState({
-    titulo: '',
-    contenido: '',
-    id_usuario: '',
-    likes_publicacion: 0,
-    img: ''
-  });
-
   const [comentarios, setComentarios] = useState({});
 
-  const getPublicaciones = async () => {
-    try {
-      const response = await axios.get('http://localhost:8082/publicaciones');
-      setPublicaciones(response.data);
-    } catch (error) {
-      console.error('Error fetching publicaciones:', error);
-    }
-  };
+  const [imagen, setImagen] = useState(null);
+  const [imageUrl, setImageUrl] = useState(null);
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setDatos({ ...datos, [name]: value });
-  };
+  const handleImagenChange = (e) => {
+    const file = e.target.files[0];
+    setImagen(file);
 
+    // Create a URL for the selected file
+    setImageUrl(URL.createObjectURL(file));
+  };
   const handleChangeCom = (e, id) => {
     e.preventDefault();
     const { name, value } = e.target;
@@ -55,15 +35,50 @@ const Home = () => {
     }));
   };
 
+  const [datos, setDatos] = useState({
+    titulo: '',
+    contenido: '',
+    id_usuario: '',
+    likes_publicacion: 0,
+  });
+
+  const backendBaseUrl = 'http://localhost:8082';
+
+  const getPublicaciones = async () => {
+    try {
+      const response = await axios.get('http://localhost:8082/publicaciones');
+      setPublicaciones(response.data);
+    } catch (error) {
+      console.error('Error fetching publicaciones:', error);
+    }
+  };
+
   const handleSubmitPublicaciones = async (e) => {
     e.preventDefault();
     if (!datos.titulo || !datos.contenido) {
-      setPublicacionError("Por favor, completa el título y la descripción para publicar.");
+      setPublicacionError(
+        'Por favor, completa el título y la descripción para publicar.'
+      );
       return;
     }
 
     try {
-      const response = await axios.post('http://localhost:8082/agregarPublicaciones', datos);
+      const formData = new FormData();
+      formData.append('titulo', datos.titulo);
+      formData.append('contenido', datos.contenido);
+      formData.append('id_usuario', datos.id_usuario);
+      formData.append('likes_publicacion', datos.likes_publicacion);
+      formData.append('img', imagen);
+
+      const response = await axios.post(
+        'http://localhost:8082/agregarPublicaciones',
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        }
+      );
       console.log(response.data);
       setPublicacionError(null);
 
@@ -72,32 +87,14 @@ const Home = () => {
         contenido: '',
         id_usuario: datos.id_usuario,
         likes_publicacion: 0,
-        img: ''
       });
 
+      setImageUrl(null);
       getPublicaciones();
     } catch (error) {
       console.error('Error al publicar:', error);
-      setPublicacionError("Error al publicar la publicación.");
+      setPublicacionError('Error al publicar la publicación.');
     }
-  };
-
-  const handleSubmitComentarios = async (e) => {
-    e.preventDefault();
-
-    // Iterate through the comentarios object and send each comment
-    Object.values(comentarios).forEach((comentario) => {
-      axios.post('http://localhost:8082/agregarComentarios', comentario)
-        .then((response) => {
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.error('Error al enviar comentario:', error);
-        });
-    });
-
-    e.target.reset();
-    setComentarios({});
   };
 
   useEffect(() => {
@@ -117,7 +114,6 @@ const Home = () => {
       }
       const user = JSON.parse(sessionStorage.getItem('user'));
       setDatos({ ...datos, id_usuario: user.id });
-      setComentarios([]);
     };
 
     getPublicaciones();
@@ -140,7 +136,7 @@ const Home = () => {
                 placeholder="Título"
                 name="titulo"
                 value={datos.titulo}
-                onChange={handleChange}
+                onChange={(e) => setDatos({ ...datos, titulo: e.target.value })}
                 className="border border-gray-300 rounded-md px-3 py-2 mr-2 mb-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
 
@@ -148,17 +144,23 @@ const Home = () => {
                 placeholder="Descripción"
                 name="contenido"
                 value={datos.contenido}
-                onChange={handleChange}
+                onChange={(e) => setDatos({ ...datos, contenido: e.target.value })}
                 className="border border-gray-300 rounded-md px-3 py-2 mr-2 mb-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
               />
 
-              <input
-                placeholder="Imagen URL"
-                name="img"
-                value={datos.img}
-                onChange={handleChange}
-                className="border border-gray-300 rounded-md px-3 py-2 mr-2 mb-2 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-              />
+                <input
+                  type="file"
+                  accept="image/*"
+                  name="img"
+                  value={datos.img}
+                  onChange={handleImagenChange}
+                />
+
+              {imageUrl && (
+                <div className="mt-2">
+                  <img src={imageUrl} alt="Selected" className="max-w-full h-auto" />
+                </div>
+              )}
 
               <button
                 type="submit"
@@ -204,7 +206,7 @@ const Home = () => {
             
               { publicacion.img && (
                 <div className='w-full h-96 bg-[#724DC5] rounded-md self-end'>
-                  <img src={publicacion.img} className="object-cover w-full h-full rounded-md" alt="content"></img>
+                  <img src={`${backendBaseUrl}/${publicacion.img}`} className="object-cover w-full h-full rounded-md" alt="content"></img>
                 </div>
              )}
             
@@ -238,7 +240,7 @@ const Home = () => {
             <p>Loading...</p>
           )}
         </div>
-
+            
 
 
 
@@ -252,12 +254,12 @@ const Home = () => {
               <div className="container mx-auto p-4">
                 <h1 className="text-2xl font-bold mb-4 text-center bg-gray-100 px-2 py-2 rounded-md shadow-md" >Noticias de tecnologia</h1>
                 <ul>
-                  {news.map((article) => (
+                  {news.map((article, index) => (
                     <a
                       href={article.url}
                       target="_blank"
                       rel="noopener noreferrer"
-
+                      key={index}
                     >
                       <li key={article.url} className="mb-2 bg-gray-100 p-2 rounded-md" style={{
                         boxShadow: '-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)',
