@@ -78,6 +78,24 @@ const Home = () => {
     }
   };
 
+  const handleSubmitComentarios = async (e) => {
+    e.preventDefault();
+
+    // Iterate through the comentarios object and send each comment
+    Object.values(comentarios).forEach((comentario) => {
+      axios.post('http://localhost:8082/agregarComentarios', comentario)
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error('Error al enviar comentario:', error);
+        });
+    });
+
+    e.target.reset();
+    setComentarios({});
+  };
+
   const handleSubmitPublicaciones = async (e) => {
     e.preventDefault();
     if (!datos.contenido) {
@@ -223,8 +241,11 @@ const Home = () => {
                       <p className="text-sm">{publicacion.correo}</p>
                     </div>
 
-                    <div >
-                      <button><FontAwesomeIcon icon={faHeart} size="lg" style={{ color: "#ff0066", }} /> </button>
+                    <div>
+                        <button onClick={() => handleLike(publicacion.id)} disabled={userLiked[publicacion.id]}>
+                            <FontAwesomeIcon icon={faHeart} size="lg" style={{ color: "#ff0066" }} />
+                        </button>
+                        <span>{publicacion.cantidad_likes || 0} Likes</span>
                     </div>
                   </div>
                   <div className='w-full'>
