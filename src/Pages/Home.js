@@ -26,7 +26,7 @@ const Home = () => {
     img: ''
   });
 
-  const [comentarios, setComentarios] = useState([]);
+  const [comentarios, setComentarios] = useState({});
 
   const getPublicaciones = async () => {
     try {
@@ -45,10 +45,14 @@ const Home = () => {
   const handleChangeCom = (e, id) => {
     e.preventDefault();
     const { name, value } = e.target;
-    setComentarios((prevComentarios) => [
+    setComentarios((prevComentarios) => ({
       ...prevComentarios,
-      { id_publicacion: id, id_usuario: datos.id_usuario, comentario: value },
-    ]);
+      [id]: {
+        id_publicacion: id,
+        id_usuario: datos.id_usuario,
+        comentario: value,
+      },
+    }));
   };
 
   const handleSubmitPublicaciones = async (e) => {
@@ -63,7 +67,6 @@ const Home = () => {
       console.log(response.data);
       setPublicacionError(null);
 
-      // Vaciar los campos del formulario después de la publicación exitosa
       setDatos({
         titulo: '',
         contenido: '',
@@ -72,7 +75,6 @@ const Home = () => {
         img: ''
       });
 
-      // Volver a obtener las publicaciones después de la publicación exitosa
       getPublicaciones();
     } catch (error) {
       console.error('Error al publicar:', error);
@@ -83,7 +85,8 @@ const Home = () => {
   const handleSubmitComentarios = async (e) => {
     e.preventDefault();
 
-    comentarios.forEach((comentario) => {
+    // Iterate through the comentarios object and send each comment
+    Object.values(comentarios).forEach((comentario) => {
       axios.post('http://localhost:8082/agregarComentarios', comentario)
         .then((response) => {
           console.log(response.data);
@@ -94,7 +97,7 @@ const Home = () => {
     });
 
     e.target.reset();
-    setComentarios([]);
+    setComentarios({});
   };
 
   useEffect(() => {
