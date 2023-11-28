@@ -1,15 +1,30 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import Sidebar from '../Components/sidebar';
-import { Link } from 'react-router-dom';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faComment, faHeart } from '@fortawesome/free-regular-svg-icons';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import Sidebar from "../Components/sidebar";
+import { Link } from "react-router-dom";
 import { faPaperPlane } from "@fortawesome/free-regular-svg-icons";
+import { faHeart } from "@fortawesome/free-regular-svg-icons";
+import { faStar } from "@fortawesome/free-regular-svg-icons";
+import { faBookmark } from "@fortawesome/free-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faComment } from "@fortawesome/free-regular-svg-icons";
+import Donitas from "../Assets/donitas.jpg";
+
 const Home = () => {
   const [news, setNews] = useState([]);
   const [publicaciones, setPublicaciones] = useState([]);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState("");
   const [publicacionError, setPublicacionError] = useState(null);
+  const [likes, setLikes] = useState({});
+  const [userLiked, setUserLiked] = useState({});
+  const [datos, setDatos] = useState({
+    titulo: '',
+    contenido: '',
+    id_usuario: '',
+    likes_publicacion: 0,
+    img: ''
+  });
+
   const [comentarios, setComentarios] = useState({});
 
   const [imagen, setImagen] = useState(null);
@@ -35,13 +50,6 @@ const Home = () => {
     }));
   };
 
-  const [datos, setDatos] = useState({
-    titulo: '',
-    contenido: '',
-    id_usuario: '',
-    likes_publicacion: 0,
-  });
-
   const backendBaseUrl = 'http://localhost:8082';
 
   const getPublicaciones = async () => {
@@ -52,6 +60,25 @@ const Home = () => {
       console.error('Error fetching publicaciones:', error);
     }
   };
+
+  const handleLike = async (publicacionId) => {
+    try {
+      // Enviar solicitud al servidor para manejar el like
+      await axios.post(`http://localhost:8082/posts/${publicacionId}/like`, {
+        userId: datos.id_usuario,
+      });
+
+      // Actualizar el estado local de likes
+      setLikes((prevLikes) => ({
+        ...prevLikes,
+        [publicacionId]: (prevLikes[publicacionId] || 0) + 1,
+      }));
+    } catch (error) {
+      console.error("Error al manejar el like:", error);
+    }
+  };
+
+
 
   const handleSubmitPublicaciones = async (e) => {
     e.preventDefault();
@@ -83,10 +110,11 @@ const Home = () => {
       setPublicacionError(null);
 
       setDatos({
-        titulo: '',
-        contenido: '',
+        titulo: "",
+        contenido: "",
         id_usuario: datos.id_usuario,
         likes_publicacion: 0,
+        img: "",
       });
 
       setImageUrl(null);
@@ -120,15 +148,15 @@ const Home = () => {
           'https://newsapi.org/v2/everything?q=software&pageSize=20&sortBy=popularity',
           {
             headers: {
-              'X-Api-Key': '0ab8e04dbe1944d79178f1f971919ec0',
+              "X-Api-Key": "0ab8e04dbe1944d79178f1f971919ec0",
             },
           }
         );
         setNews(response.data.articles);
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
       }
-      const user = JSON.parse(sessionStorage.getItem('user'));
+      const user = JSON.parse(sessionStorage.getItem("user"));
       setDatos({ ...datos, id_usuario: user.id });
     };
 
@@ -193,10 +221,11 @@ const Home = () => {
             publicaciones.map((publicacion) => (
               <>
                 <div
-                  className='flex w-full bg-gray-100 mx-12 rounded-md p-7 mb-6 flex-wrap h-fit'
+                  className="flex w-full bg-gray-100 mx-12 rounded-md p-7 mb-6 flex-wrap h-fit"
                   key={publicacion.id}
                   style={{
-                    boxShadow: '-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)',
+                    boxShadow:
+                      "-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)",
                   }}
                 >
                   <div className="h-14 w-14 bg-[#724DC5] rounded-full mr-4">
@@ -206,14 +235,17 @@ const Home = () => {
                       alt="profile"
                     />
                   </div>
-                  <div className='text-left flex justify-between w-[88.5%] items-center'>
+                  <div className="text-left flex justify-between w-[88.5%] items-center">
                     <div>
-                      <h2 className='text-md'>{publicacion.usuario}</h2>
-                      <p className='text-sm'>{publicacion.correo}</p>
+                      <h2 className="text-md">{publicacion.usuario}</h2>
+                      <p className="text-sm">{publicacion.correo}</p>
                     </div>
 
-                    <div >
-                      <button><FontAwesomeIcon icon={faHeart} size="lg" style={{ color: "#ff0066", }} /> </button>
+                    <div>
+                        <button onClick={() => handleLike(publicacion.id)} disabled={userLiked[publicacion.id]}>
+                            <FontAwesomeIcon icon={faHeart} size="lg" style={{ color: "#ff0066" }} />
+                        </button>
+                        <span>{publicacion.cantidad_likes || 0} Likes</span>
                     </div>
                   </div>
                   <div className='w-full'>
@@ -230,12 +262,11 @@ const Home = () => {
                     <form onSubmit={(e) => handleSubmitComentarios(e)} >
 
                       <input
-                        className='border-2 rounded-md w-[91%] mt-2 px-2 text-sm'
-                        name='comentario'
-                        placeholder='Comentar...'
+                        className="border-2 rounded-md w-[91%] mt-2 px-2 text-sm"
+                        name="comentario"
+                        placeholder="Comentar..."
                         value={comentarios.comentario}
                         onChange={(e) => handleChangeCom(e, publicacion.id)}
-
                       ></input>
 
 
@@ -245,8 +276,6 @@ const Home = () => {
   
                     </form>
                   </div>
-
-
                 </div>
               </>
             ))
@@ -255,18 +284,14 @@ const Home = () => {
           )}
         </div>
 
-
-
-
-
-
-
         {/*Noticias*/}
         <div className="flex">
           <div className="flex mt-20 flex-grow justify-center">
-            <div className='flex flex-wrap w-full min-w-6/12 justify-center py-8 px-4'>
+            <div className="flex flex-wrap w-full min-w-6/12 justify-center py-8 px-4">
               <div className="container mx-auto p-4">
-                <h1 className="text-2xl font-bold mb-4 text-center bg-gray-100 px-2 py-2 rounded-md shadow-md" >Noticias de tecnologia</h1>
+                <h1 className="text-2xl font-bold mb-4 text-center bg-gray-100 px-2 py-2 rounded-md shadow-md">
+                  Noticias de tecnologia
+                </h1>
                 <ul>
                   {news.map((article, index) => (
                     <a
@@ -275,12 +300,23 @@ const Home = () => {
                       rel="noopener noreferrer"
                       key={index}
                     >
-                      <li key={article.url} className="mb-2 bg-gray-100 p-2 rounded-md" style={{
-                        boxShadow: '-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)',
-                      }}>
-                        <h2 className="text-lg font-semibold">{article.title}</h2>
+                      <li
+                        key={article.url}
+                        className="mb-2 bg-gray-100 p-2 rounded-md"
+                        style={{
+                          boxShadow:
+                            "-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)",
+                        }}
+                      >
+                        <h2 className="text-lg font-semibold">
+                          {article.title}
+                        </h2>
                         {article.urlToImage && (
-                          <img src={article.urlToImage} alt="Noticia" className="rounded-md my-2 w-full h-48 object-cover" />
+                          <img
+                            src={article.urlToImage}
+                            alt="Noticia"
+                            className="rounded-md my-2 w-full h-48 object-cover"
+                          />
                         )}
                       </li>
                     </a>

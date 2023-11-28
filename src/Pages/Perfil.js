@@ -11,6 +11,7 @@ import shopyfy from "../Assets/shopify.png";
 import nasa from "../Assets/nasa.png";
 import axios from "axios";
 import MyMap from "../Components/Map";
+import { GoogleMap, Marker, LoadScript } from '@react-google-maps/api';
 
 import { faPaperPlane } from "@fortawesome/free-regular-svg-icons";
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
@@ -36,9 +37,23 @@ function Perfil() {
   const [github, setGithub] = useState([]);
   const [perfil, setPerfil] = useState([]);
   const [user, setUser] = useState();
+  
+  const [datos, setDatos] = useState({
+    titulo: '',
+    contenido: '',
+    id_usuario: '',
+    likes_publicacion: 0,
+  });
 
   const [publicaciones, setPublicaciones] = useState();
   const [comentarios, setComentarios] = useState();
+
+  const [mapCenter, setMapCenter] = useState('');
+
+  const zoom = 14;
+
+
+  const [comentarios2, setComentarios2] = useState({});
 
   const toggleSidebar = () => {
     setOpen(!open);
@@ -52,9 +67,7 @@ function Perfil() {
     axios
       .get(`http://localhost:8082/perfil/${params.user}`)
       .then((response) => {
-        console.log(response.data);
         setUser(response.data[0].username);
-        console.log(response.data.username);
         setPerfil(response.data);
       })
       .catch((error) => {
@@ -66,7 +79,6 @@ function Perfil() {
     axios
       .get(`https://api.github.com/users/${user}/repos`)
       .then((response) => {
-        console.log("Repositorios:", response.data);
         setGithub(response.data);
       })
       .catch((error) => {
@@ -78,7 +90,6 @@ function Perfil() {
     axios
       .get(`http://localhost:8082/publicaciones/${user}`)
       .then((response) => {
-        console.log("Publicaciones:", response.data);
         setPublicaciones(response.data);
       })
       .catch((error) => {
@@ -90,11 +101,9 @@ function Perfil() {
     axios
       .get(`http://localhost:8082/comentarios/${user}`)
       .then((response) => {
-        console.log("Comentarios:", response.data);
         setComentarios(response.data);
       })
       .catch((error) => {
-        console.error("Error:", error.message);
       });
   };
 
@@ -107,8 +116,26 @@ function Perfil() {
       getLocation();
     };
 
-    fetchData();
+    fetchData()
+
+    if (perfil.length > 0) {
+      const userLat = perfil[0].lat;
+      const userLng = perfil[0].lng;
+  
+      if (userLat !== null && userLng !== null) {
+        const lat = parseFloat(userLat);
+        const lng = parseFloat(userLng);
+        setMapCenter({ lat, lng });
+      }
+    }
+
+    const userId = JSON.parse(sessionStorage.getItem('user'));
+    setDatos({ ...datos, id_usuario: userId.id});
+
+    console.log('Centro: ', mapCenter)
   }, [user]);
+
+  
 
   const success = (position) => {
     console.log(position);
@@ -118,9 +145,41 @@ function Perfil() {
     console.error(err.message);
   };
 
+
+  const handleChangeCom = (e, id) => {
+    e.preventDefault();
+    const { name, value } = e.target;
+    setComentarios2((prevComentarios) => ({
+      ...prevComentarios,
+      [id]: {
+        id_publicacion: id,
+        id_usuario: datos.id_usuario,
+        comentario: value,
+      },
+    }));
+  };
+
+  const handleSubmitComentarios = async (e) => {
+    e.preventDefault();
+
+    // Iterate through the comentarios object and send each comment
+    Object.values(comentarios2).forEach((comentario) => {
+      axios.post('http://localhost:8082/agregarComentarios', comentario)
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error('Error al enviar comentario:', error);
+        });
+    });
+
+    e.target.reset();
+    setComentarios2({});
+  };
+
   return perfil.map((usuario, index) => {
     return (
-      <div className="flex flex-wrap flex-col">
+      <div className="flex flex-wrap flex-col" key={index}>
         <Header />
         <Sidebar />
         <div className="mt-28 ml-20 text-center flex">
@@ -178,7 +237,32 @@ function Perfil() {
                 <p className="flex justify-center items-center text-center object-cover object-center my-3 px-10 stroke-[1px] stroke-zinc-400 overflow-hidden shrink-0 mt-px">
                   {usuario.description}
                 </p>
-                <MyMap />
+
+
+                {/*Inicio mapa*/}
+
+
+                {
+                  mapCenter && (
+                    <LoadScript
+                  googleMapsApiKey="AIzaSyB9UpVf1nGiO7BMAYZTt6-e1LqahO12XFE"
+                  
+                >
+                  <GoogleMap
+                    mapContainerStyle={{ height: '35vh', width: '100%' }}
+                    center={mapCenter}
+                    zoom={zoom}
+                  >
+
+                  </GoogleMap>
+                </LoadScript>
+                  )
+                }
+
+
+                {/*Fin mapa*/}
+
+
               </div>
             </div>
           </div>
@@ -264,12 +348,13 @@ function Perfil() {
                         )}
 
                         <div className="w-full">
-                          <form>
+                          <form onSubmit= {(e) => handleSubmitComentarios(e)}>
                             <input
-                              className="border-2 rounded-md w-[91%] mt-2 px-2 text-sm"
-
-                              name="comentario"
-                              placeholder="Comentar..."
+                              className='border-2 rounded-md w-[91%] mt-2 px-2 text-sm'
+                              name='comentario'
+                              placeholder='Comentar...'
+                              value={comentarios2.comentario}
+                              onChange={(e) => handleChangeCom(e, publicacion.id)}
                             ></input>
 
                             <button type="submit">

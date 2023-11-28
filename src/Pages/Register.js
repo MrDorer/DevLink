@@ -107,7 +107,7 @@ function Register() {
                         )}
                         <div>
                             <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
-                                Name
+                                Nombre
                             </label>
                             <div className="mt-2">
                                 <input
@@ -125,7 +125,7 @@ function Register() {
 
                         <div>
                             <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
-                                Username
+                                Username de github
                             </label>
                             <div className="mt-2">
                                 <input
@@ -161,7 +161,7 @@ function Register() {
 
                         <div>
                             <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
-                                Password
+                                Contraseña
                             </label>
                             <div className="mt-2">
                                 <input
@@ -199,15 +199,15 @@ function Register() {
                                 type="submit" // Cambia el tipo de botón a "submit" para que el formulario se envíe como POST
                                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                             >
-                                Sign up
+                                Registrarse
                             </button>
                         </div>
                     </form>
 
                     <p className="mt-10 text-center text-sm text-gray-500">
-                        Do you already have an account?{" "}
+                        Ya tienes una cuenta?{" "}
                         <Link to="/Login" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-                            Sign in here
+                            Inicia sesión aqui
                         </Link>
                     </p>
                 </div>
