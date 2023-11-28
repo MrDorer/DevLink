@@ -37,15 +37,15 @@ const Home = () => {
     setDatos({...datos, [name]:value})
   }
 
- const handleChangeCom = (e, id) => {
-  e.preventDefault();
-  const { name, value } = e.target;
-  // Encuentra el comentario correspondiente por su id y actualiza solo ese comentario
-  setComentarios((prevComentarios) => [
-    ...prevComentarios,
-    { id_publicacion: id, id_usuario: datos.id_usuario, comentario: value },
-  ]);
-};
+  const handleChangeCom = (e, id) => {
+    e.preventDefault();
+    const { name, value } = e.target;
+    setComentarios((prevComentarios) => [
+      ...prevComentarios,
+      { id_publicacion: id, id_usuario: datos.id_usuario, comentario: value },
+    ]);
+    console.log(comentarios)
+  };
 
   const handleSubmitPublicaciones = async (e) => {
       e.preventDefault()    
@@ -58,13 +58,18 @@ const Home = () => {
 
   const handleSubmitComentarios = async (e) => {
     e.preventDefault();
-  
-    // Iterar sobre los comentarios y enviar cada uno
+
     comentarios.forEach((comentario) => {
-      axios.post('http://localhost:8082/agregarComentarios', comentario).then((response) => {
-        console.log(response.data);
-      });
+      console.log(comentario)
+      axios.post('http://localhost:8082/agregarComentarios', comentario)
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error('Error al enviar comentario:', error);
+        });
     });
+
     e.target.reset();
     setComentarios([]);
   };
@@ -125,8 +130,6 @@ const Home = () => {
 
               <div >
                 <button><FontAwesomeIcon icon={faHeart} size="lg" style={{ color: "#ff0066", }} /> </button>
-                <button><FontAwesomeIcon className='mx-2' icon={faStar} size="lg" style={{ color: "#eeff00", }} /></button>
-                <button><FontAwesomeIcon icon={faBookmark} size="lg" style={{ color: "#00ff7b", }} /></button>
               </div>
             </div>
             <div className='w-full'>

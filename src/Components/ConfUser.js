@@ -52,8 +52,8 @@ function Comentarios() {
 
          <div className="flex justify-between w-full items-center">
             <div>
-                <h3 className="text-lg">Editar nombre de usuario</h3>
-                <p className="text-sm font-light">Elige el apodo y el nombre del usuario</p>
+                <h3 className="text-lg">Usuario de GitHub</h3>
+                <p className="text-sm font-light">Editar usuario de GitHub</p>
             </div>
             <button className="border-2 px-6 py-0.5 text-sm font-light h-fit rounded-full text-[#351778] border-[#351778]">Cambiar</button>
         </div>
@@ -68,14 +68,12 @@ function Comentarios() {
 
         <div className="flex justify-between w-full items-center mt-8">
             <div>
-                <h3 className="text-lg">Visualización de perfil</h3>
-                <p className="text-sm font-light">Cambia quienes pueden verte</p>
+                <h3 className="text-lg">Cambiar ubicacion</h3>
+                <p className="text-sm font-light">Elige tu nueva ubicación</p>
             </div>
-            <button className="border-2 px-4 py-0.5 text-sm font-light h-fit rounded-full text-[#351778] border-[#351778]">
-                <FontAwesomeIcon icon={faEye} className="mr-2" style={{ color: "#23114e" }} />
-                    Publico
+            <button className="border-2 px-6 py-0.5 text-sm font-light h-fit rounded-full text-[#351778] border-[#351778]">
+                Cambiar
             </button>
-
         </div>
 
 
