@@ -154,7 +154,7 @@ function Perfil() {
               </div>
 
               <div>
-                <div class="flex flex-col w-[315px] max-w-full items-center justify-center gap-1 mt-4">
+                <div class="flex flex-col w-[315px] max-w-full items-center mx-5 justify-center gap-1 mt-4">
                   <img
                     src={Followers}
                     alt="Followers"
@@ -162,12 +162,7 @@ function Perfil() {
                   />
                   <div class="flex flex-col">
                     <div class="text-zinc-400 text-1xl">Followers</div>
-                    <img
-                      loading="lazy"
-                      srcset="..."
-                      class="aspect-[123] object-cover object-center w-[75px] stroke-[1px] stroke-zinc-400 overflow-hidden shrink-0 mt-px mb-2"
-                      alt="Seguidores"
-                    />
+               
                   </div>
                   <img
                     src={Puntofoll}
@@ -176,15 +171,10 @@ function Perfil() {
                   />
                   <div class="flex flex-col">
                     <div class="text-zinc-400 text-1xl">Following</div>
-                    <img
-                      loading="lazy"
-                      srcset="..."
-                      class="aspect-[123] object-cover object-center w-[75px] stroke-[1px] stroke-zinc-400 overflow-hidden shrink-0 mt-px"
-                      alt="Siguiendo"
-                    />
+                
                   </div>
                 </div>
-                <p className="flex justify-center items-center text-center object-cover object-center my-3 stroke-[1px] stroke-zinc-400 overflow-hidden shrink-0 mt-px">
+                <p className="flex justify-center items-center text-center object-cover object-center my-3 px-10 stroke-[1px] stroke-zinc-400 overflow-hidden shrink-0 mt-px">
                   {usuario.description}
                 </p>
                 <MyMap />
