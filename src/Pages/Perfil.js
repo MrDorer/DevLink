@@ -342,7 +342,7 @@ function Perfil() {
                         </div>
 
                         {publicacion.img && (
-                          <div className='w-full h-96 bg-[#724DC5] rounded-md self-end'>
+                          <div className='w-full h-96 bg-slate-50 rounded-md self-end'>
                             <img src={`${backendBaseUrl}/${publicacion.img}`} className="object-cover w-full h-full rounded-md" alt="content"></img>
                           </div>
                         )}
