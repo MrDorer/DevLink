@@ -9,6 +9,7 @@ import { faBookmark } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment } from "@fortawesome/free-regular-svg-icons";
 import Donitas from "../Assets/donitas.jpg";
+import Swal from 'sweetalert2';
 
 const Home = () => {
   const [news, setNews] = useState([]);
@@ -85,16 +86,18 @@ const Home = () => {
   };
 
 
-
   const handleSubmitPublicaciones = async (e) => {
     e.preventDefault();
     if (!datos.contenido) {
-      setPublicacionError(
-        'Por favor, completa el campo para publicar.'
-      );
+      // Mostrar alerta de error con SweetAlert si el campo está vacío
+      Swal.fire({
+        icon: 'error',
+        title: 'Campo incompleto',
+        text: 'Por favor, completa el campo para publicar.',
+      });
       return;
     }
-
+  
     try {
       const formData = new FormData();
       formData.append('titulo', datos.titulo);
@@ -102,7 +105,7 @@ const Home = () => {
       formData.append('id_usuario', datos.id_usuario);
       formData.append('likes_publicacion', datos.likes_publicacion);
       formData.append('img', imagen);
-
+  
       const response = await axios.post(
         'http://localhost:8082/agregarPublicaciones',
         formData,
@@ -113,8 +116,17 @@ const Home = () => {
         }
       );
       console.log(response.data);
+  
+      // Mostrar la alerta de publicación exitosa con SweetAlert
+      Swal.fire({
+        icon: 'success',
+        title: 'Publicado correctamente',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+  
       setPublicacionError(null);
-
+  
       setDatos({
         titulo: "",
         contenido: "",
@@ -122,7 +134,7 @@ const Home = () => {
         likes_publicacion: 0,
         img: "",
       });
-
+  
       setImageUrl(null);
       getPublicaciones();
     } catch (error) {
@@ -130,23 +142,46 @@ const Home = () => {
       setPublicacionError('Error al publicar la publicación.');
     }
   };
+
+  
   const handleSubmitComentarios = async (e) => {
     e.preventDefault();
-
-    // Iterate through the comentarios object and send each comment
-    Object.values(comentarios).forEach((comentario) => {
-      axios.post('http://localhost:8082/agregarComentarios', comentario)
-        .then((response) => {
-          console.log(response.data);
-        })
-        .catch((error) => {
-          console.error('Error al enviar comentario:', error);
-        });
-    });
-
-    e.target.reset();
-    setComentarios({});
+  
+    // Verificar si no hay comentarios para enviar
+    if (Object.keys(comentarios).length === 0) {
+      // Mostrar alerta de error con SweetAlert si no hay comentarios
+      Swal.fire({
+        icon: 'error',
+        title: 'Ingresa un comentario',
+        text: 'Por favor, ingresa un comentario antes de enviar.',
+      });
+      return;
+    }
+  
+    try {
+      // Enviar cada comentario del objeto 'comentarios'
+      await Promise.all(
+        Object.values(comentarios).map((comentario) =>
+          axios.post('http://localhost:8082/agregarComentarios', comentario)
+        )
+      );
+  
+      // Mostrar la alerta de comentario enviado después de enviar todos los comentarios
+      Swal.fire({
+        icon: 'success',
+        title: 'Comentario enviado',
+        showConfirmButton: false,
+        timer: 1000,e
+      });
+  
+      e.target.reset();
+      setComentarios({});
+    } catch (error) {
+      console.error('Error al enviar comentario:', error);
+    }
   };
+  
+  
   useEffect(() => {
     const fetchData = async () => {
       try {

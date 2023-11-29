@@ -33,7 +33,7 @@ function Perfil() {
     { titulo: "Nasa", imagen: nasa },
   ]);
   const [open, setOpen] = useState(true);
-
+  const [seccionActiva, setSeccionActiva] = useState('proyectos');
   const [github, setGithub] = useState([]);
   const [perfil, setPerfil] = useState([]);
   const [user, setUser] = useState();
@@ -47,13 +47,14 @@ function Perfil() {
 
   const [publicaciones, setPublicaciones] = useState();
   const [comentarios, setComentarios] = useState();
-
+  const [comentarios2, setComentarios2] = useState({});
   const [mapCenter, setMapCenter] = useState('');
+  const [hasPublications, setHasPublications] = useState(false);
+  const [hasComments, setHasComments] = useState(false);
 
   const zoom = 14;
 
 
-  const [comentarios2, setComentarios2] = useState({});
 
   const toggleSidebar = () => {
     setOpen(!open);
@@ -91,6 +92,7 @@ function Perfil() {
       .get(`http://localhost:8082/publicaciones/${user}`)
       .then((response) => {
         setPublicaciones(response.data);
+        setHasPublications(response.data.length > 0);
       })
       .catch((error) => {
         console.error("Error:", error.message);
@@ -102,10 +104,13 @@ function Perfil() {
       .get(`http://localhost:8082/comentarios/${user}`)
       .then((response) => {
         setComentarios(response.data);
+        setHasComments(response.data.length > 0);
       })
       .catch((error) => {
+        console.error("Error:", error.message);
       });
   };
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -182,6 +187,7 @@ function Perfil() {
       <div className="flex flex-wrap flex-col" key={index}>
         <Header />
         <Sidebar />
+
         <div className="mt-28 ml-20 text-center flex">
 
           {/* perfil sidebar */}
@@ -268,30 +274,58 @@ function Perfil() {
           </div>
 
           {/* Contenido */}
-          <div className="flex flex-col pt-5 w-2/3 bg-gray-200">
-            <div class="font-bold text-center text-4xl leading-[155%] self-center ml-0 mb-5 w-[180px]">
-              Proyectos
+          
+
+          <div className="flex flex-col pt-5 w-2/3 bg-gray-200 min-h-[calc(100vh-200px)]">
+            <div className="w-full py-3 flex justify-center items-center bg-gray-200 sticky top-28">
+              <button
+                onClick={() => setSeccionActiva('proyectos')}
+                className={`mx-4 px-3 py-1 bg-white rounded-md border-2 border-purple-800 hover:bg-purple-50 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg text-black ${seccionActiva === 'proyectos' && 'bg-purple-50'}`}
+              >
+                Proyectos
+              </button>
+              <button
+                onClick={() => setSeccionActiva('publicaciones')}
+                className={`mx-4 px-3 py-1 bg-white rounded-md border-2 border-purple-800 hover:bg-purple-50 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg text-black ${seccionActiva === 'publicaciones' && 'bg-purple-50'}`}
+              >
+                Publicaciones
+              </button>
+              <button
+                onClick={() => setSeccionActiva('comentarios')}
+                className={`mx-4 px-3 py-1 bg-white rounded-md border-2 border-purple-800 hover:bg-purple-50 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg text-black ${seccionActiva === 'comentarios' && 'bg-purple-50'}`}
+              >
+                Comentarios
+              </button>
             </div>
-            <div>
-              <div className="flex justify-center mb-5">
-                <div className="grid grid-cols-3 gap-8">
-                  {github.map((repositorio, index) => (
-                    <a
-                      key={repositorio.id}
-                      href={repositorio.html_url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <div className="bg-white rounded-md border-2 border-purple-800 hover:bg-purple-50 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
-                        <div className="p-4">
-                          <h2 className="text-lg font-semibold">{repositorio.name}</h2>
+
+
+            {seccionActiva === 'proyectos' && (
+              <div className="font-bold text-center text-4xl leading-[155%] self-center ml-0 mb-5">
+                Proyectos
+                <div className="flex justify-center mb-5">
+                  <div className="grid grid-cols-3 gap-8">
+                    {github.map((repositorio, index) => (
+                      <a
+                        key={repositorio.id}
+                        href={repositorio.html_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <div className="bg-white rounded-md border-2 border-purple-500 hover:bg-purple-50 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
+                          <div className="p-4">
+                            <h2 className="text-lg font-semibold">{repositorio.name}</h2>
+                          </div>
                         </div>
-                      </div>
-                    </a>
-                  ))}
+                      </a>
+                    ))}
+                  </div>
                 </div>
               </div>
+            )}
 
+          
+
+            {seccionActiva === 'publicaciones' && (
               <div className="">
                 {/*Inicio del post*/}
                 <p className="font-bold text-center text-4xl mb-5">Publicaciones</p>
@@ -366,85 +400,87 @@ function Perfil() {
                 ) : (
                   <p>Loading...</p>
                 )}
-              </div>
-              {/*Final del Publicacion*/}
-            </div>
-            <p className="font-bold text-center text-4xl mt-5 mb-5">Comentarios</p>
-            <div className="flex justify-center p-2 items-center">
-              <div className="flex w-[80%] rounded-md p-7 flex-wrap">
-                {comentarios ? (
-                  comentarios.map((comentario) => (
-                    <>
-                      <div
-                        className="flex w-full bg-white mx-12 rounded-md p-7 mb-6 flex-wrap"
-                        style={{
-                          boxShadow:
-                            "-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)",
-                          height: "fit-content", // Ajuste de altura para las tarjetas
-                        }}
-                        key={comentario.id}
-                      >
-                        <div className="h-14 w-14 bg-[#724DC5] rounded-full mr-4">
-                          <img
-                            src="https://www.infobae.com/new-resizer/X28aHlsLoDl3i749c00aiQki6oc=/768x432/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/UGGM3NC5C5CVPJ7BCNSG6ALLBE.jpg"
-                            className="object-cover w-full h-full rounded-full"
-                            alt="profile"
-                          />
-                        </div>
-                        <div className="text-left flex justify-between w-[88.5%] items-center">
-                          <div>
-                            <h2 className="text-md">{comentario.usuario}</h2>
-                            <p className="text-sm">{comentario.correo}</p>
-                          </div>
 
-                          <div>
-                            <button>
-                              <FontAwesomeIcon
-                                icon={faHeart}
-                                size="lg"
-                                style={{ color: "#ff0066" }}
-                              />{" "}
-                            </button>
-                          </div>
-                        </div>
-                        <div className="w-full">
-                          <p className="text-lg py-2 bg-gray-100 mt-2 rounded-md"
+              </div>
+            )}
+
+            {/*Final del Publicacion*/}
+            {seccionActiva === 'comentarios' && (
+              <div className=" mt-5 mb-5">
+                <p className="font-bold text-center text-4xl">Comentarios</p>
+                <div className="flex justify-center p-2 items-center">
+                  <div className="flex w-[80%] rounded-md p-7 flex-wrap">
+                    {comentarios ? (
+                      comentarios.map((comentario) => (
+                        <>
+                          <div
+                            className="flex w-full bg-white mx-12 rounded-md p-7 mb-6 flex-wrap"
                             style={{
-                              boxShadow: '-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)',
-                            }}>
-                            {comentario.img
-                              ? comentario.comentario
-                              : comentario.comentario}
-                          </p>
-                        </div>
+                              boxShadow:
+                                "-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)",
+                              height: "fit-content", // Ajuste de altura para las tarjetas
+                            }}
+                            key={comentario.id}
+                          >
+                            <div className="h-14 w-14 bg-[#724DC5] rounded-full mr-4">
+                              <img
+                                src="https://www.infobae.com/new-resizer/X28aHlsLoDl3i749c00aiQki6oc=/768x432/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/UGGM3NC5C5CVPJ7BCNSG6ALLBE.jpg"
+                                className="object-cover w-full h-full rounded-full"
+                                alt="profile"
+                              />
+                            </div>
+                            <div className="text-left flex justify-between w-[88.5%] items-center">
+                              <div>
+                                <h2 className="text-md">{comentario.usuario}</h2>
+                                <p className="text-sm">{comentario.correo}</p>
+                              </div>
 
-                        {comentario.img && (
-                          <div className="w-full h-96 bg-[#724DC5] rounded-md self-end">
-                            <img
-                              src={comentario.img}
-                              className="object-cover w-full h-full rounded-md"
-                              alt="content"
-                            ></img>
+                              <div>
+                                <button>
+                                  <FontAwesomeIcon
+                                    icon={faHeart}
+                                    size="lg"
+                                    style={{ color: "#ff0066" }}
+                                  />{" "}
+                                </button>
+                              </div>
+                            </div>
+                            <div className="w-full">
+                              <p className="text-lg py-2 bg-gray-100 mt-2 rounded-md"
+                                style={{
+                                  boxShadow: '-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)',
+                                }}>
+                                {comentario.img
+                                  ? comentario.comentario
+                                  : comentario.comentario}
+                              </p>
+                            </div>
+
+                            {comentario.img && (
+                              <div className="w-full h-96 bg-[#724DC5] rounded-md self-end">
+                                <img
+                                  src={comentario.img}
+                                  className="object-cover w-full h-full rounded-md"
+                                  alt="content"
+                                ></img>
+                              </div>
+                            )}
+
                           </div>
-                        )}
-
-                      </div>
-                    </>
-                  ))
-                ) : (
-                  <p>Loading...</p>
-                )}
+                        </>
+                      ))
+                    ) : (
+                      <p>Loading...</p>
+                    )}
+                  </div>
+                </div>
               </div>
-            </div>
-
-            {/*Final del comentario*/}
-          </div>
-
-        </div>
+            )}
+          </div>    </div >
         <Footer />
       </div>
+
     );
   });
 }
-
 export default Perfil;
