@@ -328,6 +328,13 @@ function Perfil() {
                           </div>
 
                           <div>
+                            <button>
+                              <FontAwesomeIcon
+                                icon={faHeart}
+                                size="lg"
+                                style={{ color: "#ff0066" }}
+                              />{" "}
+                            </button>
                           </div>
                         </div>
                         <div className='w-full'>
@@ -343,8 +350,8 @@ function Perfil() {
                         <div className="w-full">
                           <form onSubmit= {(e) => handleSubmitComentarios(e)}>
                             <input
-                              className='border-2 rounded-md w-[91%] mt-2 px-2 text-sm'
-                              name='comentario'
+                        className="border-2 rounded-md w-[96%] mt-2 py-2 px-2 text-sm"
+                        name='comentario'
                               placeholder='Comentar...'
                               value={comentarios2.comentario}
                               onChange={(e) => handleChangeCom(e, publicacion.id)}

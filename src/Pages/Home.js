@@ -13,11 +13,14 @@ import Donitas from "../Assets/donitas.jpg";
 const Home = () => {
   const [news, setNews] = useState([]);
   const [publicaciones, setPublicaciones] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
   const [publicacionError, setPublicacionError] = useState(null);
-
+  const [likes, setLikes] = useState({});
+  const [userLiked, setUserLiked] = useState({});
   const [datos, setDatos] = useState({
     titulo: '',
     contenido: '',
+    
     likes_publicacion: 0,
     img: ''
   });
@@ -26,13 +29,19 @@ const Home = () => {
 
   const [imagen, setImagen] = useState(null);
   const [imageUrl, setImageUrl] = useState(null);
+  const allowedImageTypes = ["image/jpeg", "image/png"]; // Tipos de archivo permitidos (JPEG y PNG)
+
 
   const handleImagenChange = (e) => {
     const file = e.target.files[0];
-    setImagen(file);
-
-    // Create a URL for the selected file
-    setImageUrl(URL.createObjectURL(file));
+  
+    if (file && allowedImageTypes.includes(file.type)) {
+      setImagen(file);
+      setImageUrl(URL.createObjectURL(file));
+    } else {
+      // Archivo no válido, puedes mostrar un mensaje al usuario o realizar alguna acción
+      console.error("Tipo de archivo no admitido. Por favor, selecciona una imagen válida (JPEG, PNG).");
+    }
   };
   const handleChangeCom = (e, id) => {
     e.preventDefault();
@@ -57,6 +66,24 @@ const Home = () => {
       console.error('Error fetching publicaciones:', error);
     }
   };
+
+  const handleLike = async (publicacionId) => {
+    try {
+      // Enviar solicitud al servidor para manejar el like
+      await axios.post(`http://localhost:8082/posts/${publicacionId}/like`, {
+        userId: datos.id_usuario,
+      });
+
+      // Actualizar el estado local de likes
+      setLikes((prevLikes) => ({
+        ...prevLikes,
+        [publicacionId]: (prevLikes[publicacionId] || 0) + 1,
+      }));
+    } catch (error) {
+      console.error("Error al manejar el like:", error);
+    }
+  };
+
 
 
   const handleSubmitPublicaciones = async (e) => {
@@ -207,7 +234,7 @@ const Home = () => {
                       "-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)",
                   }}
                 >
-                  <div className="h-14 w-14 bg-[#724DC5] rounded-full mr-4">
+                  <div className="h-14 w-14 bg-white rounded-full mr-4">
                     <img
                       src="https://www.infobae.com/new-resizer/X28aHlsLoDl3i749c00aiQki6oc=/768x432/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/UGGM3NC5C5CVPJ7BCNSG6ALLBE.jpg"
                       className="object-cover w-full h-full rounded-full"
@@ -221,7 +248,9 @@ const Home = () => {
                     </div>
 
                     <div>
-                       
+                        <button onClick={() => handleLike(publicacion.id)} disabled={userLiked[publicacion.id]}>
+                            <FontAwesomeIcon icon={faHeart} size="lg" style={{ color: "#ff0066" }} />
+                        </button>
                         <span>{publicacion.cantidad_likes || 0} Likes</span>
                     </div>
                   </div>
@@ -230,7 +259,7 @@ const Home = () => {
                   </div>
 
                   {publicacion.img && (
-                    <div className='w-full h-96 bg-[#724DC5] rounded-md self-end'>
+                    <div className='w-full h-96 bg-white rounded-md self-end'>
                       <img src={`${backendBaseUrl}/${publicacion.img}`} className="object-cover w-full h-full rounded-md" alt="content"></img>
                     </div>
                   )}
@@ -239,7 +268,7 @@ const Home = () => {
                     <form onSubmit={(e) => handleSubmitComentarios(e)} >
 
                       <input
-                        className="border-2 rounded-md w-[91%] mt-2 px-2 text-sm"
+                        className="border-2 rounded-md w-[96%] mt-2 py-2 px-2 text-sm"
                         name="comentario"
                         placeholder="Comentar..."
                         value={comentarios.comentario}

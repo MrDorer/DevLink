@@ -71,7 +71,7 @@ const HomeVisit = () => {
   return (
     <div className="min-h-screen flex flex-col">
 
-<header className="bg-gray-100 py-4">
+<header className="bg-gray-100 py-4 sticky top-0 z-50">
         <div className="flex items-center justify-between px-4">
           <div className="flex items-center space-x-4 px-4">
             <img src={logoMorado} alt="Logo" className="w-14" />
@@ -134,7 +134,7 @@ const HomeVisit = () => {
       </header>
 
       <main className="flex flex-1">
-        <div className="w-1/4 h-full p-4">
+      <div className="w-1/4 h-full p-4 sticky top-24">
           <div className="p-4 border-r-2  border-b-2 border-gray-600 rounded-2xl bg-slate-100 mb-2 py-4">
             <h2 className="text-lg font-semibold mb-4 border-b-2 border-gray-600">Usuarios Populares</h2>
             <ul className="space-y-2 max-h-96 overflow-y-auto">
@@ -154,15 +154,12 @@ const HomeVisit = () => {
 
         <div className="w-3/4 p-4">
           <div className="p-4">
-            <h2 className="text-2xl font-bold mb-2">Posts Mas Populares</h2>
-
-
-            
+            <h2 className="text-2xl font-bold mb-2">Publicaciones Mas Populares</h2>
             {publicaciones ? (
             publicaciones.map((publicacion) => (
               <>
                 <div
-                  className="flex w-full bg-gray-100 mx-12 rounded-md p-7 mb-6 flex-wrap h-fit"
+                  className="flex w-full bg-gray-100 rounded-md p-7 mb-6 flex-wrap h-fit"
                   key={publicacion.id}
                   style={{
                     boxShadow:
@@ -191,7 +188,7 @@ const HomeVisit = () => {
                   </div>
 
                   {publicacion.img && (
-                    <div className='w-full h-96 bg-[#724DC5] rounded-md self-end'>
+                    <div className='w-full h-96 bg-white rounded-md self-end'>
                       <img src={`${backendBaseUrl}/${publicacion.img}`} className="object-cover w-full h-full rounded-md" alt="content"></img>
                     </div>
                   )}
@@ -241,23 +238,24 @@ const HomeVisit = () => {
             </a>
           ))}
         </ul>
-      </div>      
-      {/* Botones de navegación entre noticias */}
-      <div className="flex justify-center my-6 bg-slate">
+        <div className="flex justify-center my-6 bg-slate">
       <div>
         <button
           onClick={showPreviousPage}
-          className="bg-gray-200 px-3 py-1 rounded-md focus:outline-none mr-2"
+          className="bg-white border border-gray-700 px-3 py-1 rounded-md focus:outline-none mr-2 hover:bg-slate-400"
         >
           Anterior
         </button>
         <button
           onClick={showNextPage}
-          className="bg-gray-200 px-3 py-1 rounded-md focus:outline-none"
+          className="bg-white border border-gray-700 px-3 py-1 rounded-md focus:outline-none hover:bg-slate-400"
         >
           Siguiente
         </button>
       </div>
+      </div>      
+      {/* Botones de navegación entre noticias */}
+     
     </div>
     <Footer />
   </div>
