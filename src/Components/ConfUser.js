@@ -40,10 +40,10 @@ function Comentarios() {
     const handleCloseProfileImageModal = () => setIsProfileImageModalOpen(false);
 
     return (
-        <div className="flex">
+        <div className="flex bg-[#F2F2F2]">
             <Sidebar />
-            <div className="flex mt-28 flex-grow justify-center">
-                <div className='flex flex-wrap h-fit w-8/12 min-w-6/12 bg-[#F2F2F2] justify-center p-12'>
+            <div className="flex mt-28 flex-grow ml-20 justify-center">
+                <div className='flex flex-wrap h-fit w-8/12 min-w-6/12  justify-center p-12'>
 
                     {/*Inicio del post*/}
                     <div className='flex w-full bg-white mx-12 rounded-md p-7 mb-6 flex-wrap h-fit' >

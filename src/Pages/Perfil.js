@@ -37,7 +37,7 @@ function Perfil() {
   const [github, setGithub] = useState([]);
   const [perfil, setPerfil] = useState([]);
   const [user, setUser] = useState();
-  
+
   const [datos, setDatos] = useState({
     titulo: '',
     contenido: '',
@@ -121,7 +121,7 @@ function Perfil() {
     if (perfil.length > 0) {
       const userLat = perfil[0].lat;
       const userLng = perfil[0].lng;
-  
+
       if (userLat !== null && userLng !== null) {
         const lat = parseFloat(userLat);
         const lng = parseFloat(userLng);
@@ -130,12 +130,12 @@ function Perfil() {
     }
 
     const userId = JSON.parse(sessionStorage.getItem('user'));
-    setDatos({ ...datos, id_usuario: userId.id});
+    setDatos({ ...datos, id_usuario: userId.id });
 
     console.log('Centro: ', mapCenter)
   }, [user]);
 
-  
+
 
   const success = (position) => {
     console.log(position);
@@ -186,7 +186,7 @@ function Perfil() {
 
           {/* perfil sidebar */}
           <div className="flex self-start justify-center items-center mx-4 ml-24 w-1/4">
-            <div className="">
+            <div className="fixed mt-96">
               <div
                 className={`flex ${open ? "flex-col justify-center items-center mt-10" : "hidden"
                   }`}
@@ -245,17 +245,17 @@ function Perfil() {
                 {
                   mapCenter && (
                     <LoadScript
-                  googleMapsApiKey="AIzaSyB9UpVf1nGiO7BMAYZTt6-e1LqahO12XFE"
-                  
-                >
-                  <GoogleMap
-                    mapContainerStyle={{ height: '35vh', width: '100%' }}
-                    center={mapCenter}
-                    zoom={zoom}
-                  >
+                      googleMapsApiKey="AIzaSyB9UpVf1nGiO7BMAYZTt6-e1LqahO12XFE"
 
-                  </GoogleMap>
-                </LoadScript>
+                    >
+                      <GoogleMap
+                        mapContainerStyle={{ height: '35vh', width: '100%' }}
+                        center={mapCenter}
+                        zoom={zoom}
+                      >
+
+                      </GoogleMap>
+                    </LoadScript>
                   )
                 }
 
@@ -269,39 +269,32 @@ function Perfil() {
 
           {/* Contenido */}
           <div className="flex flex-col pt-5 w-2/3 bg-gray-200">
-            <div class="text-black text-4xl leading-[155%] self-center ml-0 mb-5 w-[180px]">
-              Proyects
+            <div class="font-bold text-center text-4xl leading-[155%] self-center ml-0 mb-5 w-[180px]">
+              Proyectos
             </div>
             <div>
               <div className="flex justify-center mb-5">
-                <div class="grid-cols-3 grid gap-8">
-                  {github.map((repositorio, index) => {
-                    return (
-                      <a
-                        key={repositorio.id}
-                        href={repositorio.html_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <div
-                          className="bg-white rounded-md w-60 h-14 border-2 font-mono flex flex-wrap p-2 text-center"
-                          style={{
-                            boxShadow:
-                              "-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)",
-                          }}
-                        >
-                          <h2 className=" text-xl w-full">
-                            {repositorio.name}
-                          </h2>
+                <div className="grid grid-cols-3 gap-8">
+                  {github.map((repositorio, index) => (
+                    <a
+                      key={repositorio.id}
+                      href={repositorio.html_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <div className="bg-white rounded-md border-2 border-purple-800 hover:bg-purple-50 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
+                        <div className="p-4">
+                          <h2 className="text-lg font-semibold">{repositorio.name}</h2>
                         </div>
-                      </a>
-                    );
-                  })}
+                      </div>
+                    </a>
+                  ))}
                 </div>
               </div>
+
               <div className="">
                 {/*Inicio del post*/}
-                <p className="font-bold text-center text-2xl mb-5">Publicaciones</p>
+                <p className="font-bold text-center text-4xl mb-5">Publicaciones</p>
                 {publicaciones ? (
                   publicaciones.map((publicacion) => (
                     <div className="flex justify-center p-2 items-center">
@@ -348,10 +341,10 @@ function Perfil() {
                         )}
 
                         <div className="w-full">
-                          <form onSubmit= {(e) => handleSubmitComentarios(e)}>
+                          <form onSubmit={(e) => handleSubmitComentarios(e)}>
                             <input
-                        className="border-2 rounded-md w-[96%] mt-2 py-2 px-2 text-sm"
-                        name='comentario'
+                              className="border-2 rounded-md w-[96%] mt-2 py-2 px-2 text-sm"
+                              name='comentario'
                               placeholder='Comentar...'
                               value={comentarios2.comentario}
                               onChange={(e) => handleChangeCom(e, publicacion.id)}
@@ -376,7 +369,7 @@ function Perfil() {
               </div>
               {/*Final del Publicacion*/}
             </div>
-            <p className="font-bold text-center text-2xl mt-5 mb-5">Comentarios</p>
+            <p className="font-bold text-center text-4xl mt-5 mb-5">Comentarios</p>
             <div className="flex justify-center p-2 items-center">
               <div className="flex w-[80%] rounded-md p-7 flex-wrap">
                 {comentarios ? (
