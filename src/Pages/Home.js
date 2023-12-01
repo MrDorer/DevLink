@@ -364,7 +364,7 @@ const Home = () => {
                     </div>
                   )}
                   <button className="mt-6 bg-gray-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300 transition-colors duration-300"
-                    onClick={() => handleOpenModal(publicacion)}>Abrir Modal</button>
+                    onClick={() => handleOpenModal(publicacion)}>Abrir publicacion</button>
                   <Modal
                     isOpen={isModalOpen}
                     onRequestClose={() => {
@@ -377,7 +377,7 @@ const Home = () => {
                     overlayClassName="fixed inset-0 flex items-center justify-center bg-opacity-20 bg-gray-800"
                   >
                     <div className="border border-gray-400 bg-white p-6 rounded-lg w-full max-w-3xl relative shadow-lg">
-                      <h1 className="text-3xl font-bold mb-4 text-gray-800">Modal</h1>
+                      <h1 className="text-3xl font-bold mb-4 text-gray-800">Publicacion</h1>
                       <div className="flex items-center mb-4">
                         <div className="h-14 w-14 rounded-full overflow-hidden flex-shrink-0">
                           <img
@@ -391,12 +391,11 @@ const Home = () => {
                           <p className="text-sm text-gray-600">{publicacion.correo}</p>
                         </div>
                       </div>
-                      <div className="flex justify-between items-center">
+                      <div className="flex justify-end items-center mt-4">
                         <div className="flex items-center">
                           <button
                             onClick={() => handleLike(publicacion.id)}
-                            className={`text-lg ${liked[publicacion.id] ? 'text-red-500' : 'text-gray-600'
-                              }`}
+                            className={`text-lg ${liked[publicacion.id] ? 'text-red-500' : 'text-gray-600'}`}
                           >
                             <FontAwesomeIcon icon={faHeart} size="lg" />
                           </button>
@@ -420,6 +419,27 @@ const Home = () => {
                           )}
                         </>
                       )}
+
+                      <div className="w-full">
+                        <form onSubmit={(e) => handleSubmitComentarios(e)}>
+                          <input
+                            className="border-2 rounded-md w-[96%] mt-2 py-2 px-2 text-sm"
+                            name="comentario"
+                            placeholder="Comentar..."
+                            value={comentarios.comentario}
+                            onChange={(e) => handleChangeCom(e, publicacion.id)}
+                          ></input>
+
+                          <button>
+                            <FontAwesomeIcon
+                              icon={faPaperPlane}
+                              className="pl-1"
+                              size="lg"
+                              style={{ color: "#5D30C1" }}
+                            />
+                          </button>
+                        </form>
+                      </div>
                       <button
                         onClick={() => {
                           handleCloseModal();
@@ -427,7 +447,7 @@ const Home = () => {
                         }}
                         className="mt-6 bg-gray-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300 transition-colors duration-300"
                       >
-                        Cerrar Modal
+                        Cerrar
                       </button>
                     </div>
                   </Modal>
