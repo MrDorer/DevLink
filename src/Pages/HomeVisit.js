@@ -71,7 +71,7 @@ const HomeVisit = () => {
   return (
     <div className="min-h-screen flex flex-col">
 
-<header className="bg-gray-100 py-4 sticky top-0 z-50">
+<header className="bg-gray-100 py-4 sticky top-0 z-50 shadow-md">
         <div className="flex items-center justify-between px-4">
           <div className="flex items-center space-x-4 px-4">
             <img src={logoMorado} alt="Logo" className="w-14" />
@@ -135,7 +135,7 @@ const HomeVisit = () => {
 
       <main className="flex flex-1">
       <div className="w-1/4 h-full p-4 sticky top-24">
-          <div className="p-4 border-r-2  border-b-2 border-gray-600 rounded-2xl bg-slate-100 mb-2 py-4">
+          <div className="p-4 border-r-2  border-b-2 border-gray-600 rounded-2xl bg-slate-100 mb-2 py-4 shadow-md">
             <h2 className="text-lg font-semibold mb-4 border-b-2 border-gray-600">Usuarios Populares</h2>
             <ul className="space-y-2 max-h-96 overflow-y-auto">
               {userList.map((user) => (
@@ -188,7 +188,7 @@ const HomeVisit = () => {
                   </div>
 
                   {publicacion.img && (
-                    <div className='w-full h-96 bg-white rounded-md self-end'>
+                    <div className='w-full h-96 bg-slate-50 rounded-md self-end'>
                       <img src={`${backendBaseUrl}/${publicacion.img}`} className="object-cover w-full h-full rounded-md" alt="content"></img>
                     </div>
                   )}

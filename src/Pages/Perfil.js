@@ -302,7 +302,7 @@ function Perfil() {
 
 
             {seccionActiva === 'proyectos' && (
-              <div className="font-bold text-center text-4xl leading-[155%] self-center ml-0 mb-5">
+              <div className="font-bold text-center text-4xl leading-[155%] self-center mb-5">
                 Proyectos
                 <div className="flex justify-center mb-5">
                   <div className="grid grid-cols-3 gap-8">
