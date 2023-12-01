@@ -36,7 +36,7 @@ function Header() {
     // Por ejemplo, limpiar la información del usuario en el estado y la sesión
     setLoggedInUser(null);
     sessionStorage.removeItem('user');
-
+    localStorage.clear()
     // Muestra la alerta de cierre de sesión exitoso
     Swal.fire({
       icon: 'success',
