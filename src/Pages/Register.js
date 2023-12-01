@@ -3,33 +3,31 @@ import { Link } from "react-router-dom";
 import LogoM from "../Assets/LogoM.png";
 import { useNavigate } from "react-router-dom";
 import Swal from 'sweetalert2';
+import Github from "../Assets/github.svg"
 import { text } from "@fortawesome/fontawesome-svg-core";
 
+const CLIENT_ID = 'eb65046c0d5c4f4b9c06'
+
 function Register() {
-    const [name, setName] = useState("");
+
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
+
     const [password, setPassword] = useState("");
-    const [lat, setLat] = useState("");
-    const [lng, setLng] = useState("");
-    const [Ubicacion, setUbicacion] = useState("");
-
-
 
     const [registrationError, setRegistrationError] = useState(null);
     const navigate = useNavigate();
+
+    function loginGH(){
+        window.location.assign("https://github.com/login/oauth/authorize?client_id=" + CLIENT_ID + "&scope=ghUser:email")
+      }
 
     const handleRegister = async (e) => {
         e.preventDefault();
 
         // Validaciones de nombre, usuario, email y contraseña
-        if (name.trim() === "") {
-            setRegistrationError("Por favor, ingresa tu nombre.");
-            return;
-        }
-
         if (username.trim() === "") {
-            setRegistrationError("Por favor, ingresa un nombre de usuario.");
+            setRegistrationError("Por favor, ingresa tu nombre.");
             return;
         }
 
@@ -43,14 +41,15 @@ function Register() {
             return;
         }
 
+        const finalEmail = email.toLowerCase()
+
         const userData = {
-            name,
             username,
-            email,
+            finalEmail,
             password,
-            lat,
-            lng
         };
+
+        console.log(userData)
 
         try {
             const response = await fetch("http://localhost:8082/Register", {
@@ -90,16 +89,6 @@ function Register() {
         return password.trim().length >= 8;
     };
 
-    const getLocation = () => {
-        navigator.geolocation.getCurrentPosition(success, error);
-    };
-
-    const success = (position) => {
-        console.log(position.coords.latitude);
-        setLat(position.coords.latitude)
-        console.log(position.coords.longitude);
-        setLng(position.coords.longitude)
-    };
 
     const error = (err) => {
         console.error(err.message);
@@ -136,27 +125,9 @@ function Register() {
                                     type="text"
                                     autoComplete="name"
                                     required
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                    className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                                />
-                            </div>
-                        </div>
-
-                        <div>
-                            <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
-                                Username de github
-                            </label>
-                            <div className="mt-2">
-                                <input
-                                    id="username"
-                                    name="username"
-                                    type="text"
-                                    autoComplete="username"
-                                    required
                                     value={username}
                                     onChange={(e) => setUsername(e.target.value)}
-                                    className="block w-full rounded-md border-0 py-1.5  px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                    className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
@@ -196,21 +167,18 @@ function Register() {
                                 />
                             </div>
                         </div>
-                        <div className=" rounded-md p-2">
-                            <button
-                                onClick={() => getLocation()}
-                                className="w-full text-white bg-blue-500 hover:bg-blue-600 rounded-md py-2 px-4 font-semibold focus:outline-none focus:ring focus:ring-blue-300"
-                            >
-                                Obtener Ubicación para Mapas
-                            </button>
-                        </div>
+
 
                         <div>
                             <button
                                 type="submit" // Cambia el tipo de botón a "submit" para que el formulario se envíe como POST
-                                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                className="mb-2 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                             >
                                 Registrarse
+                            </button>
+                            <button onClick={loginGH} type="button" className="bg-black text-white rounded-md px-4 py-1 w-full flex flex-wrap justify-center">
+                                <img src={Github} className="mx-2"></img>
+                                    Iniciar sesion con Github
                             </button>
                         </div>
                     </form>

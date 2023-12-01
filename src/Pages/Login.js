@@ -1,26 +1,112 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import Github from "../Assets/github.svg"
 import LogoM from "../Assets/LogoM.png";
 import Swal from 'sweetalert2';
+import axios from 'axios'
+
+const CLIENT_ID = 'eb65046c0d5c4f4b9c06'
 
 function Login() {
+  const [user, setUser] = useState(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loginError, setLoginError] = useState(null);
+
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
+
+  const [rerender, setRerender] = useState(false)
+  const [itsAllGood, setItsAllGood] = useState(false)
+  const [ghUser, setGhUser] = useState('')
+
+  const [userId, setUserId] = useState('')
+
+  async function getUserData(){
+    console.log('Its been triggered')
+    await fetch("http://localhost:8082/getUserData", {
+        method: "GET",
+        headers: {
+            "Authorization" : "Bearer " + localStorage.getItem("accessToken") 
+        }
+    }).then((response) => {
+        return response.json()
+    }).then(async (data) => {
+        console.log(data.login)
+        setGhUser(data.login)
+    })
+    
+}
+
+function loginGH(){
+    window.location.assign("https://github.com/login/oauth/authorize?client_id=" + CLIENT_ID + "&scope=ghUser:email")
+  }
 
   useEffect(() => {
-    // Verificar si hay información del usuario almacenada en la sesión
-    const storedUser = JSON.parse(sessionStorage.getItem('user'));
-    if (storedUser) {
-      setUser(storedUser);
+    
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const codeParam = urlParams.get("code");
+    console.log(codeParam)
+
+    if(sessionStorage.getItem("user")){
+      console
+      setUserId(JSON.parse(sessionStorage.getItem("user")).id)
     }
-  }, []);
+
+    if((localStorage.getItem("accessToken") !== null) && itsAllGood === false){
+      localStorage.clear()
+    }
+
+    if(codeParam && (localStorage.getItem("accessToken") === null)){
+         async function getAccessToken(){
+            await fetch("http://localhost:8082/getAccessToken?code=" + codeParam, {
+                method: "GET"
+            }).then((response) => {
+                return response.json()
+            }).then((data) => {
+                console.log(data)
+                if(data.access_token){
+                    localStorage.setItem("accessToken", data.access_token)
+                    setRerender(!rerender)
+                    setItsAllGood(true)
+                    
+                }
+            })
+         }
+         getAccessToken()
+    }
+    if(itsAllGood === true){
+        console.log("Everything is all right")
+        getUserData()
+    }
+    if(ghUser.length > 0){
+      console.log(sessionStorage.getItem("loggedIn"))
+
+      if(sessionStorage.getItem("loggedIn")){
+        axios.post(`http://localhost:8082/add/github/${userId}`, {ghUser})
+        .then((response) => {
+          console.log(response.data)
+          sessionStorage.setItem('user', JSON.stringify(response.data));
+          navigate('/home')
+        })
+      }
+      else{
+        axios.post('http://localhost:8082/register/github', {ghUser})
+        .then((response) => {
+          console.log(response.data)
+          sessionStorage.setItem('user', JSON.stringify(response.data));
+          navigate('/home')
+        })
+      }
+        
+    }  
+  }, [rerender, ghUser]);
+
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
+    const finalEmail = email.toLowerCase()
     // Validaciones de email y contraseña
     if (!emailIsValid(email)) {
       setLoginError("Ingresa un Email válido");
@@ -38,7 +124,7 @@ function Login() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ finalEmail, password }),
       });
 
       const data = await response.json();
@@ -68,9 +154,9 @@ function Login() {
     }
   };
 
-  const emailIsValid = (email) => {
+  const emailIsValid = (finalEmail) => {
     const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-    return emailPattern.test(email);
+    return emailPattern.test(finalEmail);
   };
 
   const passwordIsValid = (password) => {
@@ -134,8 +220,12 @@ function Login() {
             </div>
 
             <div>
-              <button type="submit" className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+              <button type="submit" className="mb-2 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                 Iniciar sesión
+              </button>
+              <button onClick={loginGH} type="button" className="bg-black text-white rounded-md px-4 py-1 w-full flex flex-wrap justify-center">
+              <img src={Github} className="mx-2"></img>
+                Iniciar sesion con Github
               </button>
             </div>
             {loginError && (
@@ -143,12 +233,13 @@ function Login() {
             )}
           </form>
 
-          <p className="mt-10 text-center text-sm text-gray-500">
+          <p className="mt-8 text-center text-sm text-gray-500">
             ¿No tienes una cuenta?{" "}
             <Link to="/Register" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
               Regístrate aquí
             </Link>
           </p>
+              
         </div>
       </div>
       {user && (

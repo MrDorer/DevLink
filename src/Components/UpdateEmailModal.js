@@ -1,10 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
+import axios from 'axios'
+import { useSnackbar } from 'notistack';
 
 const UpdateEmailModal = ({ isOpen, onClose }) => {
+  const { enqueueSnackbar } = useSnackbar();
   const [email, setEmail] = useState('');
+  const [id, setId] = useState('')
+
+  const cerrar = () => {
+    setEmail('')
+    onClose()
+  }
 
   useEffect(() => {
+    setId(JSON.parse(sessionStorage.getItem('user')).id)
     // Al abrir el modal, aplicar estilos al body para ocultar la scrollbar y fijar la posición
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -20,12 +30,25 @@ const UpdateEmailModal = ({ isOpen, onClose }) => {
       document.body.style.overflow = 'auto';
       document.body.style.position = 'static';
     };
-  }, [isOpen]);
+  }, []);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Email actualizado:', email);
-    onClose();
+    const finalEmail = email.toLowerCase().trim()
+  try {
+        const response = await axios.put(`http://localhost:8082/editar/email/${id}`, {finalEmail});
+        if(response.status === 200){
+          enqueueSnackbar('Cambiado correctamente a: ' + finalEmail, { variant: 'success' });
+        } else{
+          enqueueSnackbar('Email ya registrado', { variant: 'error' });
+        }
+      } catch (error) {
+        console.error('Error cambiando el correo:', error);
+        enqueueSnackbar('Fallo al cambiar correo', { variant: 'error' });
+      }
+    
+    
+    cerrar();
   };
 
   return (
@@ -57,7 +80,7 @@ const UpdateEmailModal = ({ isOpen, onClose }) => {
           </button>
         </form>
         <button
-          onClick={onClose}
+          onClick={cerrar}
           className="mt-4 bg-gray-300 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400 transition-colors duration-300"
         >
           Cerrar
