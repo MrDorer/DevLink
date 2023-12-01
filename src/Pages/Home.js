@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment } from "@fortawesome/free-regular-svg-icons";
 import Donitas from "../Assets/donitas.jpg";
 import Swal from "sweetalert2";
-
+import Modal from 'react-modal';
 const Home = () => {
   const [news, setNews] = useState([]);
   const [publicaciones, setPublicaciones] = useState([]);
@@ -18,6 +18,18 @@ const Home = () => {
   const [publicacionError, setPublicacionError] = useState(null);
   const [likes, setLikes] = useState({});
   const [liked, setLiked] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPublication, setSelectedPublication] = useState(null);
+
+  const handleOpenModal = (publication) => {
+    setSelectedPublication(publication);
+    setIsModalOpen(true);
+  };
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+
   const [datos, setDatos] = useState({
     titulo: "",
     contenido: "",
@@ -198,12 +210,12 @@ const Home = () => {
   };
 
   useEffect(() => {
-  
+
     const fetchPublicaciones = async () => {
       try {
         const response = await axios.get("http://localhost:8082/publicaciones");
         setPublicaciones(response.data);
-  
+
         response.data.forEach((publicacion) => {
           fetchLikes(publicacion.id);
           setLiked((prevLiked) => ({ ...prevLiked, [publicacion.id]: false }));
@@ -212,25 +224,25 @@ const Home = () => {
         console.error("Error al obtener publicaciones:", error);
       }
     };
-  
+
     fetchPublicaciones();
   }, []);
-  
+
   const handleLike = async (postId) => {
     try {
       // Obtener el ID del usuario del sessionStorage
       const user = JSON.parse(sessionStorage.getItem("user"));
       const userId = user.id;
-  
+
       const response = await axios.post("http://localhost:8082/like", {
         postId,
         userId,
       });
-  
+
       console.log(response.data);
-  
+
       fetchLikes(postId);
-  
+
       setLiked((prevLiked) => ({ ...prevLiked, [postId]: !prevLiked[postId] }));
     } catch (error) {
       console.error("Error al manejar el like:", error);
@@ -351,6 +363,76 @@ const Home = () => {
                       ></img>
                     </div>
                   )}
+                  <button className="mt-6 bg-gray-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300 transition-colors duration-300"
+                    onClick={() => handleOpenModal(publicacion)}>Abrir Modal</button>
+                  <Modal
+                    isOpen={isModalOpen}
+                    onRequestClose={() => {
+                      handleCloseModal();
+                      setSelectedPublication(null);
+                    }}
+                    contentLabel="Example Modal"
+                    className={`fixed inset-0 flex items-center justify-center z-50 mt-24 overflow-y-auto ${isModalOpen ? 'overflow-hidden' : ''
+                      }`}
+                    overlayClassName="fixed inset-0 flex items-center justify-center bg-opacity-20 bg-gray-800"
+                  >
+                    <div className="border border-gray-400 bg-white p-6 rounded-lg w-full max-w-3xl relative shadow-lg">
+                      <h1 className="text-3xl font-bold mb-4 text-gray-800">Modal</h1>
+                      <div className="flex items-center mb-4">
+                        <div className="h-14 w-14 rounded-full overflow-hidden flex-shrink-0">
+                          <img
+                            src="https://www.infobae.com/new-resizer/X28aHlsLoDl3i749c00aiQki6oc=/768x432/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/UGGM3NC5C5CVPJ7BCNSG6ALLBE.jpg"
+                            className="object-cover w-full h-full rounded-full"
+                            alt="profile"
+                          />
+                        </div>
+                        <div className="ml-4">
+                          <h2 className="text-lg font-semibold">{publicacion.usuario}</h2>
+                          <p className="text-sm text-gray-600">{publicacion.correo}</p>
+                        </div>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <div className="flex items-center">
+                          <button
+                            onClick={() => handleLike(publicacion.id)}
+                            className={`text-lg ${liked[publicacion.id] ? 'text-red-500' : 'text-gray-600'
+                              }`}
+                          >
+                            <FontAwesomeIcon icon={faHeart} size="lg" />
+                          </button>
+                          <span className="ml-2 text-sm">{likes[publicacion.id] || 0} Likes</span>
+                        </div>
+                      </div>
+
+                      {selectedPublication && (
+                        <>
+                          <p className="text-base text-gray-700 mt-4">
+                            {selectedPublication.contenido}
+                          </p>
+                          {selectedPublication.img && (
+                            <div className="w-full h-72 mt-4 rounded-md overflow-hidden">
+                              <img
+                                src={`${backendBaseUrl}/${selectedPublication.img}`}
+                                className="object-cover w-full h-full"
+                                alt="content"
+                              />
+                            </div>
+                          )}
+                        </>
+                      )}
+                      <button
+                        onClick={() => {
+                          handleCloseModal();
+                          setSelectedPublication(null);
+                        }}
+                        className="mt-6 bg-gray-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300 transition-colors duration-300"
+                      >
+                        Cerrar Modal
+                      </button>
+                    </div>
+                  </Modal>
+
+
 
                   <div className="w-full">
                     <form onSubmit={(e) => handleSubmitComentarios(e)}>
