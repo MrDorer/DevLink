@@ -87,7 +87,9 @@ function loginGH(){
         .then((response) => {
           console.log(response.data)
           sessionStorage.setItem('user', JSON.stringify(response.data));
-          navigate('/home')
+          
+
+          navigate('/config')
         })
       }
       else{
