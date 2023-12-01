@@ -9,7 +9,7 @@ import { faBookmark } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment } from "@fortawesome/free-regular-svg-icons";
 import Donitas from "../Assets/donitas.jpg";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 const Home = () => {
   const [news, setNews] = useState([]);
@@ -17,13 +17,13 @@ const Home = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [publicacionError, setPublicacionError] = useState(null);
   const [likes, setLikes] = useState({});
-  const [userLiked, setUserLiked] = useState({});
+  const [liked, setLiked] = useState({});
   const [datos, setDatos] = useState({
-    titulo: '',
-    contenido: '',
-    
+    titulo: "",
+    contenido: "",
+
     likes_publicacion: 0,
-    img: ''
+    img: "",
   });
 
   const [comentarios, setComentarios] = useState({});
@@ -32,16 +32,17 @@ const Home = () => {
   const [imageUrl, setImageUrl] = useState(null);
   const allowedImageTypes = ["image/jpeg", "image/png"]; // Tipos de archivo permitidos (JPEG y PNG)
 
-
   const handleImagenChange = (e) => {
     const file = e.target.files[0];
-  
+
     if (file && allowedImageTypes.includes(file.type)) {
       setImagen(file);
       setImageUrl(URL.createObjectURL(file));
     } else {
       // Archivo no válido, puedes mostrar un mensaje al usuario o realizar alguna acción
-      console.error("Tipo de archivo no admitido. Por favor, selecciona una imagen válida (JPEG, PNG).");
+      console.error(
+        "Tipo de archivo no admitido. Por favor, selecciona una imagen válida (JPEG, PNG)."
+      );
     }
   };
   const handleChangeCom = (e, id) => {
@@ -57,76 +58,58 @@ const Home = () => {
     }));
   };
 
-  const backendBaseUrl = 'http://localhost:8082';
+  const backendBaseUrl = "http://localhost:8082";
 
   const getPublicaciones = async () => {
     try {
-      const response = await axios.get('http://localhost:8082/publicaciones');
+      const response = await axios.get("http://localhost:8082/publicaciones");
       setPublicaciones(response.data);
     } catch (error) {
-      console.error('Error fetching publicaciones:', error);
+      console.error("Error fetching publicaciones:", error);
     }
   };
-
-  const handleLike = async (publicacionId) => {
-    try {
-      // Enviar solicitud al servidor para manejar el like
-      await axios.post(`http://localhost:8082/posts/${publicacionId}/like`, {
-        userId: datos.id_usuario,
-      });
-
-      // Actualizar el estado local de likes
-      setLikes((prevLikes) => ({
-        ...prevLikes,
-        [publicacionId]: (prevLikes[publicacionId] || 0) + 1,
-      }));
-    } catch (error) {
-      console.error("Error al manejar el like:", error);
-    }
-  };
-
 
   const handleSubmitPublicaciones = async (e) => {
     e.preventDefault();
     if (!datos.contenido) {
       // Mostrar alerta de error con SweetAlert si el campo está vacío
       Swal.fire({
-        icon: 'error',
-        title: 'Campo incompleto',
-        text: 'Por favor, completa el campo para publicar.',
+        icon: "error",
+        title: "Campo incompleto",
+        text: "Por favor, completa el campo para publicar.",
       });
       return;
     }
-  
+
     try {
       const formData = new FormData();
-      formData.append('titulo', datos.titulo);
-      formData.append('contenido', datos.contenido);
-      formData.append('id_usuario', datos.id_usuario);
-      formData.append('likes_publicacion', datos.likes_publicacion);
-      formData.append('img', imagen);
-  
+      formData.append("titulo", datos.titulo);
+      formData.append("contenido", datos.contenido);
+      formData.append("id_usuario", datos.id_usuario);
+      formData.append("likes_publicacion", datos.likes_publicacion);
+      formData.append("img", imagen);
+
       const response = await axios.post(
-        'http://localhost:8082/agregarPublicaciones',
+        "http://localhost:8082/agregarPublicaciones",
         formData,
         {
           headers: {
-            'Content-Type': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
           },
         }
       );
       console.log(response.data);
-  
+
       // Mostrar la alerta de publicación exitosa con SweetAlert
       Swal.fire({
-        icon: 'success',
-        title: 'Publicado correctamente',
+        icon: "success",
+        title: "Publicado correctamente",
         showConfirmButton: false,
         timer: 1500,
       });
-  
+
       setPublicacionError(null);
-  
+
       setDatos({
         titulo: "",
         contenido: "",
@@ -134,59 +117,58 @@ const Home = () => {
         likes_publicacion: 0,
         img: "",
       });
-  
+
       setImageUrl(null);
       getPublicaciones();
     } catch (error) {
-      console.error('Error al publicar:', error);
-      setPublicacionError('Error al publicar la publicación.');
+      console.error("Error al publicar:", error);
+      setPublicacionError("Error al publicar la publicación.");
     }
   };
 
-  
   const handleSubmitComentarios = async (e) => {
     e.preventDefault();
-  
+
     // Verificar si no hay comentarios para enviar
     if (Object.keys(comentarios).length === 0) {
       // Mostrar alerta de error con SweetAlert si no hay comentarios
       Swal.fire({
-        icon: 'error',
-        title: 'Ingresa un comentario',
-        text: 'Por favor, ingresa un comentario antes de enviar.',
+        icon: "error",
+        title: "Ingresa un comentario",
+        text: "Por favor, ingresa un comentario antes de enviar.",
       });
       return;
     }
-  
+
     try {
       // Enviar cada comentario del objeto 'comentarios'
       await Promise.all(
         Object.values(comentarios).map((comentario) =>
-          axios.post('http://localhost:8082/agregarComentarios', comentario)
+          axios.post("http://localhost:8082/agregarComentarios", comentario)
         )
       );
-  
+
       // Mostrar la alerta de comentario enviado después de enviar todos los comentarios
       Swal.fire({
-        icon: 'success',
-        title: 'Comentario enviado',
+        icon: "success",
+        title: "Comentario enviado",
         showConfirmButton: false,
-        timer: 1000,e
+        timer: 1000,
+        e,
       });
-  
+
       e.target.reset();
       setComentarios({});
     } catch (error) {
-      console.error('Error al enviar comentario:', error);
+      console.error("Error al enviar comentario:", error);
     }
   };
-  
-  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          'https://newsapi.org/v2/everything?q=software&pageSize=20&sortBy=popularity',
+          "https://newsapi.org/v2/everything?q=software&pageSize=20&sortBy=popularity",
           {
             headers: {
               "X-Api-Key": "0ab8e04dbe1944d79178f1f971919ec0",
@@ -205,25 +187,82 @@ const Home = () => {
     fetchData();
   }, []);
 
+  const fetchLikes = async (postId) => {
+    try {
+      const response = await fetch(`http://localhost:8082/likes/${postId}`);
+      const data = await response.json();
+      setLikes((prevLikes) => ({ ...prevLikes, [postId]: data.likesCount }));
+    } catch (error) {
+      console.error("Error al obtener likes:", error);
+    }
+  };
+
+  useEffect(() => {
+  
+    const fetchPublicaciones = async () => {
+      try {
+        const response = await axios.get("http://localhost:8082/publicaciones");
+        setPublicaciones(response.data);
+  
+        response.data.forEach((publicacion) => {
+          fetchLikes(publicacion.id);
+          setLiked((prevLiked) => ({ ...prevLiked, [publicacion.id]: false }));
+        });
+      } catch (error) {
+        console.error("Error al obtener publicaciones:", error);
+      }
+    };
+  
+    fetchPublicaciones();
+  }, []);
+  
+  const handleLike = async (postId) => {
+    try {
+      // Obtener el ID del usuario del sessionStorage
+      const user = JSON.parse(sessionStorage.getItem("user"));
+      const userId = user.id;
+  
+      const response = await axios.post("http://localhost:8082/like", {
+        postId,
+        userId,
+      });
+  
+      console.log(response.data);
+  
+      fetchLikes(postId);
+  
+      setLiked((prevLiked) => ({ ...prevLiked, [postId]: !prevLiked[postId] }));
+    } catch (error) {
+      console.error("Error al manejar el like:", error);
+    }
+  };
+
   return (
     <div className="flex flex-wrap">
       <Sidebar />
       <div className="flex mt-0 flex-grow justify-center">
-        <div className='p-10 w-full ml-36 mt-20'>
-          <div className="w-full flex flex-wrap mx-12 rounded-md p-4 pb-2 h-fit bg-gray-100 mb-4 mt-2"
+        <div className="p-10 w-full ml-36 mt-20">
+          <div
+            className="w-full flex flex-wrap mx-12 rounded-md p-4 pb-2 h-fit bg-gray-100 mb-4 mt-2"
             style={{
-              boxShadow: '-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)',
-            }}>
-            <h1 className='mb-1 font-semibold'>¿Qué estás pensando?</h1>
+              boxShadow:
+                "-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)",
+            }}
+          >
+            <h1 className="mb-1 font-semibold">¿Qué estás codeando?</h1>
 
-            <form onSubmit={handleSubmitPublicaciones} className="w-full flex flex-wrap items-start">
-
+            <form
+              onSubmit={handleSubmitPublicaciones}
+              className="w-full flex flex-wrap items-start"
+            >
               <div className="w-full flex flex-wrap items-start mb-2">
                 <input
-                  placeholder="¿Qué estás pensando?"
+                  placeholder="¿Qué estás codeando?"
                   name="contenido"
                   value={datos.contenido}
-                  onChange={(e) => setDatos({ ...datos, contenido: e.target.value })}
+                  onChange={(e) =>
+                    setDatos({ ...datos, contenido: e.target.value })
+                  }
                   className="border border-gray-300 rounded-md w-full px-3 py-2 mr-4 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
                 <label className="relative overflow-hidden">
@@ -240,7 +279,12 @@ const Home = () => {
                   />
                   {imageUrl && (
                     <div className="mt-2">
-                      <img src={imageUrl} alt="Selected" className="max-w-full h-auto mr-4" /> {/* Clases para la imagen */}
+                      <img
+                        src={imageUrl}
+                        alt="Selected"
+                        className="max-w-full h-auto mr-4"
+                      />{" "}
+                      {/* Clases para la imagen */}
                     </div>
                   )}
                 </label>
@@ -283,25 +327,33 @@ const Home = () => {
                     </div>
 
                     <div>
-                        <button onClick={() => handleLike(publicacion.id)} disabled={userLiked[publicacion.id]}>
-                            <FontAwesomeIcon icon={faHeart} size="lg" style={{ color: "#ff0066" }} />
-                        </button>
-                        <span>{publicacion.cantidad_likes || 0} Likes</span>
+                      <button
+                        onClick={() => handleLike(publicacion.id)}
+                        style={{
+                          color: liked[publicacion.id] ? "#ff0066" : "black",
+                        }}
+                      >
+                        <FontAwesomeIcon icon={faHeart} size="lg" />
+                      </button>
+                      <span>{likes[publicacion.id] || 0} Likes</span>
                     </div>
                   </div>
-                  <div className='w-full'>
-                    <p className='text-lg py-2'>{publicacion.contenido}</p>
+                  <div className="w-full">
+                    <p className="text-lg py-2">{publicacion.contenido}</p>
                   </div>
 
                   {publicacion.img && (
-                    <div className='w-full h-96 bg-white rounded-md self-end'>
-                      <img src={`${backendBaseUrl}/${publicacion.img}`} className="object-cover w-full h-full rounded-md" alt="content"></img>
+                    <div className="w-full h-96 bg-white rounded-md self-end">
+                      <img
+                        src={`${backendBaseUrl}/${publicacion.img}`}
+                        className="object-cover w-full h-full rounded-md"
+                        alt="content"
+                      ></img>
                     </div>
                   )}
 
-                  <div className='w-full'>
-                    <form onSubmit={(e) => handleSubmitComentarios(e)} >
-
+                  <div className="w-full">
+                    <form onSubmit={(e) => handleSubmitComentarios(e)}>
                       <input
                         className="border-2 rounded-md w-[96%] mt-2 py-2 px-2 text-sm"
                         name="comentario"
@@ -310,11 +362,14 @@ const Home = () => {
                         onChange={(e) => handleChangeCom(e, publicacion.id)}
                       ></input>
 
-
-                        <button>
-                          <FontAwesomeIcon icon={faPaperPlane} className='pl-1' size="lg" style={{ color: "#5D30C1" }} />
-                        </button>
-  
+                      <button>
+                        <FontAwesomeIcon
+                          icon={faPaperPlane}
+                          className="pl-1"
+                          size="lg"
+                          style={{ color: "#5D30C1" }}
+                        />
+                      </button>
                     </form>
                   </div>
                 </div>
