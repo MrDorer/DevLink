@@ -21,13 +21,19 @@ const Home = () => {
   const [liked, setLiked] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPublication, setSelectedPublication] = useState(null);
+  const [modalOpen, setModalOpen] = useState({});
 
   const handleOpenModal = (publication) => {
     setSelectedPublication(publication);
-    setIsModalOpen(true);
+    setModalOpen({ ...modalOpen, [publication.id]: true });
   };
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+
+  const handleCloseModal = (publicationId) => {
+    setModalOpen({ ...modalOpen, [publicationId]: false });
+    setIsModalOpen(false); // Establece el estado del fondo oscurecido
+    if (selectedPublication && selectedPublication.id === publicationId) {
+      setSelectedPublication(null);
+    }
   };
 
 
@@ -367,11 +373,8 @@ const Home = () => {
                   <button className="mt-6 bg-gray-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300 transition-colors duration-300"
                     onClick={() => handleOpenModal(publicacion)}>Abrir publicacion</button>
                   <Modal
-                    isOpen={isModalOpen}
-                    onRequestClose={() => {
-                      handleCloseModal();
-                      setSelectedPublication(null);
-                    }}
+                    isOpen={modalOpen[publicacion.id]}
+                    onRequestClose={() => handleCloseModal(publicacion.id)}
                     contentLabel="publicaciones Modal"
                     className={`fixed inset-0 flex items-center justify-center z-50 mt-24 -ml-44 overflow-y-auto ${isModalOpen ? 'overflow-hidden' : ''
                       }`}
@@ -388,13 +391,14 @@ const Home = () => {
 
                           <button
                             onClick={() => {
-                              handleCloseModal();
+                              handleCloseModal(publicacion.id);
                               setSelectedPublication(null);
                             }}
                             className="bg-gray-200 text-gray-800 py-1 px-2 rounded-md hover:bg-purple-300 transition-colors duration-300 mb-2 -mt-4 ml-auto"
                           >
                             <FontAwesomeIcon icon={faTimes} style={{ color: "#351778" }} />
                           </button>
+
 
                           <div className="border border-gray-400 bg-white p-6 rounded-lg w-full max-w-3xl relative shadow-lg">
 
