@@ -9,6 +9,7 @@ import { faBookmark } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faComment } from "@fortawesome/free-regular-svg-icons";
 import Donitas from "../Assets/donitas.jpg";
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import Swal from "sweetalert2";
 import Modal from 'react-modal';
 const Home = () => {
@@ -371,87 +372,103 @@ const Home = () => {
                       handleCloseModal();
                       setSelectedPublication(null);
                     }}
-                    contentLabel="Example Modal"
-                    className={`fixed inset-0 flex items-center justify-center z-50 mt-24 overflow-y-auto ${isModalOpen ? 'overflow-hidden' : ''
+                    contentLabel="publicaciones Modal"
+                    className={`fixed inset-0 flex items-center justify-center z-50 mt-24 -ml-44 overflow-y-auto ${isModalOpen ? 'overflow-hidden' : ''
                       }`}
                     overlayClassName="fixed inset-0 flex items-center justify-center bg-opacity-20 bg-gray-800"
                   >
-                    <div className="border border-gray-400 bg-white p-6 rounded-lg w-full max-w-3xl relative shadow-lg">
-                      <h1 className="text-3xl font-bold mb-4 text-gray-800">Publicacion</h1>
-                      <div className="flex items-center mb-4">
-                        <div className="h-14 w-14 rounded-full overflow-hidden flex-shrink-0">
-                          <img
-                            src="https://www.infobae.com/new-resizer/X28aHlsLoDl3i749c00aiQki6oc=/768x432/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/UGGM3NC5C5CVPJ7BCNSG6ALLBE.jpg"
-                            className="object-cover w-full h-full rounded-full"
-                            alt="profile"
-                          />
-                        </div>
-                        <div className="ml-4">
-                          <h2 className="text-lg font-semibold">{publicacion.usuario}</h2>
-                          <p className="text-sm text-gray-600">{publicacion.correo}</p>
-                        </div>
-                      </div>
-                      <div className="flex justify-end items-center mt-4">
-                        <div className="flex items-center">
-                          <button
-                            onClick={() => handleLike(publicacion.id)}
-                            className={`text-lg ${liked[publicacion.id] ? 'text-red-500' : 'text-gray-600'}`}
-                          >
-                            <FontAwesomeIcon icon={faHeart} size="lg" />
-                          </button>
-                          <span className="ml-2 text-sm">{likes[publicacion.id] || 0} Likes</span>
-                        </div>
-                      </div>
-
+                    <div>
                       {selectedPublication && (
-                        <>
-                          <p className="text-base text-gray-700 mt-4">
-                            {selectedPublication.contenido}
-                          </p>
-                          {selectedPublication.img && (
-                            <div className="w-full h-72 mt-4 rounded-md overflow-hidden">
-                              <img
-                                src={`${backendBaseUrl}/${selectedPublication.img}`}
-                                className="object-cover w-full h-full"
-                                alt="content"
-                              />
-                            </div>
-                          )}
-                        </>
-                      )}
+                        <div className="flex  mt-10 bg-gray-100 w-full rounded-md p-7 mb-6 flex-wrap mx-28 justify-end"
+                          style={{
+                            boxShadow:
+                              "-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)",
+                          }}
+                        >
 
-                      <div className="w-full">
-                        <form onSubmit={(e) => handleSubmitComentarios(e)}>
-                          <input
-                            className="border-2 rounded-md w-[96%] mt-2 py-2 px-2 text-sm"
-                            name="comentario"
-                            placeholder="Comentar..."
-                            value={comentarios.comentario}
-                            onChange={(e) => handleChangeCom(e, publicacion.id)}
-                          ></input>
-
-                          <button>
-                            <FontAwesomeIcon
-                              icon={faPaperPlane}
-                              className="pl-1"
-                              size="lg"
-                              style={{ color: "#5D30C1" }}
-                            />
+                          <button
+                            onClick={() => {
+                              handleCloseModal();
+                              setSelectedPublication(null);
+                            }}
+                            className="bg-gray-200 text-gray-800 py-1 px-2 rounded-md hover:bg-purple-300 transition-colors duration-300 mb-2 -mt-4 ml-auto"
+                          >
+                            <FontAwesomeIcon icon={faTimes} style={{ color: "#351778" }} />
                           </button>
-                        </form>
-                      </div>
-                      <button
-                        onClick={() => {
-                          handleCloseModal();
-                          setSelectedPublication(null);
-                        }}
-                        className="mt-6 bg-gray-200 text-gray-800 py-2 px-4 rounded-md hover:bg-gray-300 transition-colors duration-300"
-                      >
-                        Cerrar
-                      </button>
+
+                          <div className="border border-gray-400 bg-white p-6 rounded-lg w-full max-w-3xl relative shadow-lg">
+
+                            <div className="flex items-center mb-4">
+                              <div className="h-14 w-14 bg-white rounded-full mr-4">
+                                <img
+                                  src="https://www.infobae.com/new-resizer/X28aHlsLoDl3i749c00aiQki6oc=/768x432/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/UGGM3NC5C5CVPJ7BCNSG6ALLBE.jpg"
+                                  className="object-cover w-full h-full rounded-full"
+                                  alt="profile"
+                                />
+                              </div>
+                              <div className="text-left flex justify-between w-[88.5%] items-center">
+                                <div>
+                                  <h2 className="text-md">{publicacion.usuario}</h2>
+                                  <p className="text-sm">{publicacion.correo}</p>
+                                </div>
+
+                                <div>
+                                  <button
+                                    onClick={() => handleLike(publicacion.id)}
+                                    style={{
+                                      color: liked[publicacion.id] ? "#ff0066" : "black",
+                                    }}
+                                  >
+                                    <FontAwesomeIcon icon={faHeart} size="lg" />
+                                  </button>
+                                  <span>{likes[publicacion.id] || 0} Likes</span>
+                                </div>
+                              </div>
+                            </div>
+
+                            {selectedPublication && (
+                              <>
+                                <p className="text-base text-gray-700 mt-4">
+                                  {selectedPublication.contenido}
+                                </p>
+                                {selectedPublication.img && (
+                                  <div className="w-full h-72 mt-4 rounded-md overflow-hidden">
+                                    <img
+                                      src={`${backendBaseUrl}/${selectedPublication.img}`}
+                                      className="object-cover w-full h-full"
+                                      alt="content"
+                                    />
+                                  </div>
+                                )}
+                              </>
+                            )}
+
+                            <div className="w-full">
+                              <form onSubmit={(e) => handleSubmitComentarios(e)}>
+                                <input
+                                  className="border-2 rounded-md w-[94%] mt-2 py-2 px-2 text-sm"
+                                  name="comentario"
+                                  placeholder="Comentar..."
+                                  value={comentarios.comentario}
+                                  onChange={(e) => handleChangeCom(e, publicacion.id)}
+                                ></input>
+
+                                <button>
+                                  <FontAwesomeIcon
+                                    icon={faPaperPlane}
+                                    className="pl-1"
+                                    size="lg"
+                                    style={{ color: "#5D30C1" }}
+                                  />
+                                </button>
+                              </form>
+                            </div>
+
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </Modal>
-
 
 
                   <div className="w-full">
