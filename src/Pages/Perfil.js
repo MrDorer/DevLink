@@ -184,7 +184,11 @@ function Perfil() {
     setComentarios2({});
   };
 
-  return perfil.map((usuario, index) => {
+   return perfil.map((usuario, index) => {
+    const isUserProfile = usuario.id == datos.id_usuario;
+    const githubLoad = usuario.origen !== "DevLink"
+    console.log(githubLoad)
+    console.log(isUserProfile)
     return (
       <div className="flex flex-wrap flex-col" key={index}>
         <Header />
@@ -210,16 +214,20 @@ function Perfil() {
                   </div>
                 </div>
               </div>
-              <div className="flex justify-center items-center mt-5">
-                <a
-                  href="/config"
-                  className="bg-violet-950 flex w-[175px] max-w-full flex-col basis-auto pt-1 pb-1 px-3 rounded-xl" // Ajustando el padding horizontal
-                >
-                  <div className="text-white text-2xl leading-[206.67%] self-center">
-                    Edit perfil
-                  </div>
-                </a>
-              </div>
+              {
+                isUserProfile &&  (
+                  <div className="flex justify-center items-center mt-5">
+                  <a
+                    href="/config"
+                    className="bg-violet-950 flex flex-col basis-auto  px-6 rounded-xl" // Ajustando el padding horizontal
+                  >
+                    <div className="text-white text-l leading-[206.67%] self-center">
+                      Edit perfil
+                    </div>
+                  </a>
+                </div>
+                )
+              }
 
               <div>
                 <div class="flex flex-col w-[315px] max-w-full items-center mx-5 justify-center gap-1 mt-4">
@@ -264,7 +272,7 @@ function Perfil() {
 
                       </GoogleMap>
                     </LoadScript>
-                  )
+                  ) 
                 }
 
 
@@ -306,7 +314,9 @@ function Perfil() {
                 Proyectos
                 <div className="flex justify-center mb-5">
                   <div className="grid grid-cols-3 gap-8">
-                    {github.map((repositorio, index) => (
+                  {
+                    githubLoad ?
+                    github.map((repositorio, index) => (
                       <a
                         key={repositorio.id}
                         href={repositorio.html_url}
@@ -319,7 +329,10 @@ function Perfil() {
                           </div>
                         </div>
                       </a>
-                    ))}
+                    )):(
+                      <p className="m-auto p-auto"> No se ha vinculado una cuenta de github </p>
+                    )}
+                  
                   </div>
                 </div>
               </div>
@@ -331,7 +344,7 @@ function Perfil() {
               <div className="">
                 {/*Inicio del post*/}
                 <p className="font-bold text-center text-4xl mb-5">Publicaciones</p>
-                {publicaciones ? (
+                {publicaciones.length !== 0 ? (
                   publicaciones.map((publicacion) => (
                     <div className="flex justify-center p-2 items-center">
                       <div
@@ -400,7 +413,7 @@ function Perfil() {
                     </div>
                   ))
                 ) : (
-                  <p>Loading...</p>
+                  <p>Nada que ver aqui aun</p>
                 )}
 
               </div>
@@ -412,7 +425,7 @@ function Perfil() {
                 <p className="font-bold text-center text-4xl">Comentarios</p>
                 <div className="flex justify-center p-2 items-center">
                   <div className="flex w-[80%] rounded-md p-7 flex-wrap">
-                    {comentarios ? (
+                    {comentarios.length != 0 ? (
                       comentarios.map((comentario) => (
                         <>
                           <div
@@ -472,7 +485,7 @@ function Perfil() {
                         </>
                       ))
                     ) : (
-                      <p>Loading...</p>
+                      <p>Nada que ver aqui aun</p>
                     )}
                   </div>
                 </div>
