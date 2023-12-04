@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import CRUDSidebar from "../Components/CRUDSidebar";
 
-const PopupModal = ({ user, onClose, onDelete }) => {
+const PopupModal = ({ comment, onClose, onDelete }) => {
   const [isModalOpen, setModalOpen] = useState(false);
 
   const toggleModal = () => {
@@ -13,8 +13,21 @@ const PopupModal = ({ user, onClose, onDelete }) => {
     setModalOpen(false);
   };
 
-  const handleDelete = (userId) => {
-    console.log(`Eliminar usuario con ID: ${userId}`);
+  const handleDelete = async (commentId) => {
+    try {
+      // Enviar una solicitud DELETE al backend para eliminar el comentario
+      await axios.delete(`http://localhost:8082/comentarios/${commentId}`);
+      console.log(`Comentario con ID ${commentId} eliminado con éxito`);
+
+      // Cierra el modal después de la eliminación exitosa
+      closeModal();
+
+      // Actualiza la lista de comentarios después de la eliminación
+      onDelete(commentId);
+    } catch (error) {
+      console.error("Error al eliminar el comentario:", error);
+      // Manejar errores aquí
+    }
   };
 
   return (
@@ -82,7 +95,7 @@ const PopupModal = ({ user, onClose, onDelete }) => {
                 <button
                   onClick={() => {
                     closeModal();
-                    handleDelete(user.id);
+                    handleDelete(comment.id);
                   }}
                   type="button"
                   className="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center me-2 shadow-md"
@@ -107,18 +120,27 @@ const PopupModal = ({ user, onClose, onDelete }) => {
 };
 
 const CRUDComment = () => {
-  const [users, setUsers] = useState([]);
+  const [comments, setComments] = useState([]);
 
   useEffect(() => {
-    fetchUsers();
+    fetchComments();
   }, []);
 
-  const fetchUsers = async () => {
+  const fetchComments = async () => {
     try {
-      const response = await axios.get("http://localhost:8082/users");
-      setUsers(response.data);
+      const response = await axios.get("http://localhost:8082/comentarios");
+      setComments(response.data);
     } catch (error) {
-      console.error("Error fetching users:", error);
+      console.error("Error fetching comments:", error);
+    }
+  };
+
+  const handleDelete = async (commentId) => {
+    try {
+      await axios.delete(`http://localhost:8082/comments/${commentId}`);
+      fetchComments();
+    } catch (error) {
+      console.error("Error deleting comment:", error);
     }
   };
 
@@ -128,28 +150,39 @@ const CRUDComment = () => {
         <CRUDSidebar />
       </div>
       <div className="flex flex-col pl-8 pt-10 ml-96 mt-16">
-      <div className="overflow-x-auto">
-      <table className="table-auto min-w-full border-collapse border border-gray-300 rounded-lg">
-          <thead>
-          <tr className="bg-gray-200">
-              <th className="border border-gray-300 px-4 py-2">Usuario</th>
-              <th className="border border-gray-300 px-4 py-2">Contenido</th>
-              <th className="border border-gray-300 px-4 py-2">Likes</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr key={user.id}>
-                <td className="border border-gray-300 px-4 py-2">{user.name}</td>
-                <td className="border border-gray-300 px-4 py-2">{user.username}</td>
-                <td className="border border-gray-300 px-4 py-2">
-                  <PopupModal user={user} />
-                </td>
+        <div className="overflow-x-auto">
+          <table className="table-auto min-w-full border-collapse border border-gray-300 rounded-lg">
+            <thead>
+              <tr className="bg-gray-200">
+                <th className="border border-gray-300 px-4 py-2">Usuario</th>
+                <th className="border border-gray-300 px-4 py-2">Contenido</th>
+                <th className="border border-gray-300 px-4 py-2">Likes</th>
+                <th className="border border-gray-300 px-4 py-2">Acciones</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {comments.map((comment) => (
+                <tr key={comment.id}>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {comment.id_usuario}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {comment.comentario}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {comment.likes_comentarios}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    <PopupModal
+                      comment={comment}
+                      onDelete={() => handleDelete(comment.id)}
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
