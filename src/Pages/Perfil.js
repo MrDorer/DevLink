@@ -184,7 +184,7 @@ function Perfil() {
     setComentarios2({});
   };
 
-   return perfil.map((usuario, index) => {
+  return perfil.map((usuario, index) => {
     const isUserProfile = usuario.id == datos.id_usuario;
     const githubLoad = usuario.origen !== "DevLink"
     console.log(githubLoad)
@@ -215,17 +215,17 @@ function Perfil() {
                 </div>
               </div>
               {
-                isUserProfile &&  (
+                isUserProfile && (
                   <div className="flex justify-center items-center mt-5">
-                  <a
-                    href="/config"
-                    className="bg-violet-950 flex flex-col basis-auto  px-6 rounded-xl" // Ajustando el padding horizontal
-                  >
-                    <div className="text-white text-l leading-[206.67%] self-center">
-                      Edit perfil
-                    </div>
-                  </a>
-                </div>
+                    <a
+                      href="/config"
+                      className="bg-violet-950 flex flex-col basis-auto  px-6 rounded-xl" // Ajustando el padding horizontal
+                    >
+                      <div className="text-white text-l leading-[206.67%] self-center">
+                        Edit perfil
+                      </div>
+                    </a>
+                  </div>
                 )
               }
 
@@ -272,7 +272,7 @@ function Perfil() {
 
                       </GoogleMap>
                     </LoadScript>
-                  ) 
+                  )
                 }
 
 
@@ -284,7 +284,7 @@ function Perfil() {
           </div>
 
           {/* Contenido */}
-          
+
 
           <div className="flex flex-col pt-5 w-2/3 bg-gray-200 min-h-[calc(100vh-200px)]">
             <div className="w-full py-3 flex justify-center items-center bg-gray-200 sticky top-28">
@@ -308,40 +308,36 @@ function Perfil() {
               </button>
             </div>
 
-
             {seccionActiva === 'proyectos' && (
-              <div className="font-bold text-center text-4xl leading-[155%] self-center mb-5">
-                Proyectos
-                <div className="flex justify-center mb-5">
-                  <div className="grid grid-cols-3 gap-8">
-                  {
-                    githubLoad ?
-                    github.map((repositorio, index) => (
-                      <a
-                        key={repositorio.id}
-                        href={repositorio.html_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <div className="bg-white rounded-md border-2 border-purple-500 hover:bg-purple-50 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
-                          <div className="p-4">
-                            <h2 className="text-lg font-semibold">{repositorio.name}</h2>
+              <div className="p-5">
+                <p className="font-bold text-center text-4xl mb-12">Proyectos</p>
+                    {githubLoad ? (
+                      github.map((repositorio, index) => (
+                        <a
+                          key={repositorio.id}
+                          href={repositorio.html_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <div className="bg-white rounded-md border-2 border-purple-500 hover:bg-purple-50 transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg">
+                            <div className="p-4">
+                              <h2 className="text-lg font-semibold">{repositorio.name}</h2>
+                            </div>
                           </div>
-                        </div>
-                      </a>
-                    )):(
-                      <p className="m-auto p-auto"> No se ha vinculado una cuenta de github </p>
+                        </a>
+                      ))
+                    ) : (
+                      <div className="flex items-center justify-center w-full">
+                        <p className="text-gray-500 text-xl">No se ha vinculado una cuenta de GitHub</p>
+                      </div>
                     )}
-                  
-                  </div>
-                </div>
               </div>
             )}
 
-          
+
 
             {seccionActiva === 'publicaciones' && (
-              <div className="">
+              <div className="p-5">
                 {/*Inicio del post*/}
                 <p className="font-bold text-center text-4xl mb-5">Publicaciones</p>
                 {publicaciones.length !== 0 ? (
@@ -413,7 +409,9 @@ function Perfil() {
                     </div>
                   ))
                 ) : (
-                  <p>Nada que ver aqui aun</p>
+                  <div className="flex items-center justify-center h-full">
+                    <p className="text-gray-500 text-xl">Nada que ver aquí aún</p>
+                  </div>
                 )}
 
               </div>
@@ -421,73 +419,73 @@ function Perfil() {
 
             {/*Final del Publicacion*/}
             {seccionActiva === 'comentarios' && (
-              <div className=" mt-5 mb-5">
-                <p className="font-bold text-center text-4xl">Comentarios</p>
-                <div className="flex justify-center p-2 items-center">
-                  <div className="flex w-[80%] rounded-md p-7 flex-wrap">
-                    {comentarios.length != 0 ? (
-                      comentarios.map((comentario) => (
-                        <>
-                          <div
-                            className="flex w-full bg-white mx-12 rounded-md p-7 mb-6 flex-wrap"
-                            style={{
-                              boxShadow:
-                                "-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)",
-                              height: "fit-content", // Ajuste de altura para las tarjetas
-                            }}
-                            key={comentario.id}
-                          >
-                            <div className="h-14 w-14 bg-[#724DC5] rounded-full mr-4">
-                              <img
-                                src="https://www.infobae.com/new-resizer/X28aHlsLoDl3i749c00aiQki6oc=/768x432/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/UGGM3NC5C5CVPJ7BCNSG6ALLBE.jpg"
-                                className="object-cover w-full h-full rounded-full"
-                                alt="profile"
-                              />
-                            </div>
-                            <div className="text-left flex justify-between w-[88.5%] items-center">
-                              <div>
-                                <h2 className="text-md">{comentario.usuario}</h2>
-                                <p className="text-sm">{comentario.correo}</p>
-                              </div>
-
-                              <div>
-                                <button>
-                                  <FontAwesomeIcon
-                                    icon={faHeart}
-                                    size="lg"
-                                    style={{ color: "#ff0066" }}
-                                  />{" "}
-                                </button>
-                              </div>
-                            </div>
-                            <div className="w-full">
-                              <p className="text-lg py-2 bg-gray-100 mt-2 rounded-md"
-                                style={{
-                                  boxShadow: '-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)',
-                                }}>
-                                {comentario.img
-                                  ? comentario.comentario
-                                  : comentario.comentario}
-                              </p>
-                            </div>
-
-                            {comentario.img && (
-                              <div className="w-full h-96 bg-[#724DC5] rounded-md self-end">
-                                <img
-                                  src={comentario.img}
-                                  className="object-cover w-full h-full rounded-md"
-                                  alt="content"
-                                ></img>
-                              </div>
-                            )}
-
+              <div className="p-5">
+                <p className="font-bold text-center text-4xl mb-5">Comentarios</p>
+                <div className="flex items-center justify-center h-full">
+                  {comentarios.length !== 0 ? (
+                    comentarios.map((comentario) => (
+                      <>
+                        <div
+                          className="flex w-full bg-white mx-12 rounded-md p-7 mb-6 flex-wrap"
+                          style={{
+                            boxShadow:
+                              "-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)",
+                            height: "fit-content", // Ajuste de altura para las tarjetas
+                          }}
+                          key={comentario.id}
+                        >
+                          <div className="h-14 w-14 bg-[#724DC5] rounded-full mr-4">
+                            <img
+                              src="https://www.infobae.com/new-resizer/X28aHlsLoDl3i749c00aiQki6oc=/768x432/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/UGGM3NC5C5CVPJ7BCNSG6ALLBE.jpg"
+                              className="object-cover w-full h-full rounded-full"
+                              alt="profile"
+                            />
                           </div>
-                        </>
-                      ))
-                    ) : (
-                      <p>Nada que ver aqui aun</p>
-                    )}
-                  </div>
+                          <div className="text-left flex justify-between w-[88.5%] items-center">
+                            <div>
+                              <h2 className="text-md">{comentario.usuario}</h2>
+                              <p className="text-sm">{comentario.correo}</p>
+                            </div>
+
+                            <div>
+                              <button>
+                                <FontAwesomeIcon
+                                  icon={faHeart}
+                                  size="lg"
+                                  style={{ color: "#ff0066" }}
+                                />{" "}
+                              </button>
+                            </div>
+                          </div>
+                          <div className="w-full">
+                            <p className="text-lg py-2 bg-gray-100 mt-2 rounded-md"
+                              style={{
+                                boxShadow: '-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)',
+                              }}>
+                              {comentario.img
+                                ? comentario.comentario
+                                : comentario.comentario}
+                            </p>
+                          </div>
+
+                          {comentario.img && (
+                            <div className="w-full h-96 bg-[#724DC5] rounded-md self-end">
+                              <img
+                                src={comentario.img}
+                                className="object-cover w-full h-full rounded-md"
+                                alt="content"
+                              ></img>
+                            </div>
+                          )}
+
+                        </div>
+                      </>
+                    ))
+                  ) : (
+                    <div className="flex items-center justify-center h-full">
+                      <p className="text-gray-500 text-xl ">Nada que ver aquí aún</p>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
