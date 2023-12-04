@@ -137,9 +137,9 @@ function Post() {
     fetchPublicaciones();
   }, []);
 
-  const handleLike = async (postId) => {
+  const handleLike = async (postId, e) => {
     try {
-      // Obtener el ID del usuario del sessionStorage
+      e.stopPropagation();
       const user = JSON.parse(sessionStorage.getItem("user"));
       const userId = user.id;
 
@@ -187,13 +187,14 @@ function Post() {
 
                 <div>
                   <button
-                    onClick={() => handleLike(publicacion.id)}
+                    onClick={(e) => handleLike(publicacion.id, e)}
                     style={{
                       color: liked[publicacion.id] ? "#ff0066" : "black",
                     }}
                   >
                     <FontAwesomeIcon icon={faHeart} size="lg" />
                   </button>
+
                   <span className="ml-1">{likes[publicacion.id] || 0}</span>
                 </div>
               </div>
@@ -245,7 +246,7 @@ function Post() {
                           >
                             <FontAwesomeIcon icon={faHeart} size="lg" />
                           </button>
-                          <span>{likes[publicacion.id] || 0} Likes</span>
+                          <span className="ml-1">{likes[publicacion.id] || 0}</span>
                         </div>
                       </div>
                     </div>
