@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import LogoM from "../Assets/LogoM.png";
 import { useNavigate } from "react-router-dom";
-import Swal from 'sweetalert2';
+import { useSnackbar } from 'notistack';
 import Github from "../Assets/github.svg"
 import { text } from "@fortawesome/fontawesome-svg-core";
 
 const CLIENT_ID = 'eb65046c0d5c4f4b9c06'
 
 function Register() {
-
+    const { enqueueSnackbar } = useSnackbar();
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
 
@@ -62,13 +62,7 @@ function Register() {
 
             if (response.status === 200) {
                 // Registro exitoso
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Registro exitoso',
-                    text: '¡Bienvenido a DevLink!',
-                    showConfirmButton: true,
-                    timer: 1200,
-                });
+                enqueueSnackbar('Registro exitoso, bienvenido a DevLink :)', { variant: 'success' });
                 navigate("/Login");
             } else {
                 const errorText = await response.text();

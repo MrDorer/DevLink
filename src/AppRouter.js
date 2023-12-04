@@ -10,24 +10,27 @@ import CRUDUser from './Pages/CRUDUser';
 import CRUDComment from './Pages/CRUDComment';
 import CRUDPost from './Pages/CRUDPost';
 import Map from './Components/Map';
+import { TriggerContextProvider } from './context/TriggerContext';
 
 function AppRouter() {
   return (
     <>
-      <Routes>
-        <Route path ="/home" element={<Inicio />} />
-        <Route path ="/login" element={<Login />} />
-        <Route path ="/register" element={<Register />} />
-        <Route path ="/perfil/:user" element={<Perfil />} />
-        <Route path ='/config' element={<Config/>}/>
-        <Route path ='/comentar' element={<Comentarios/>}/>
-        <Route path ='/' element={<HomeVisit/>}/>
-        <Route path ='/cruduser' element={<CRUDUser/>}/>
-        <Route path ='/crudcomment' element={<CRUDComment/>}/>
-        <Route path ='/crudpost' element={<CRUDPost/>}/>
+      <TriggerContextProvider>
+        <Routes>
+          <Route path ="/home" element={<Inicio />} />
+          <Route path ="/login" element={<Login />} />
+          <Route path ="/register" element={<Register />} />
+          <Route path ="/perfil/:user" element={<Perfil />} />
+          <Route path ='/config' element={<Config/>}/>
+          <Route path ='/comentar' element={<Comentarios/>}/>
+          <Route path ='/' element={<HomeVisit/>}/>
+          <Route path ='/cruduser' element={<CRUDUser/>}/>
+          <Route path ='/crudcomment' element={<CRUDComment/>}/>
+          <Route path ='/crudpost' element={<CRUDPost/>}/>
 
-        <Route path ='/jit' element={<Map/>}/>
-      </Routes>
+          <Route path ='/jit' element={<Map/>}/>
+        </Routes>
+      </TriggerContextProvider>
     </>
   );
 }

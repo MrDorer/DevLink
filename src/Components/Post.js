@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from "react";
+import { useTrigger } from "../context/TriggerContext";
 import axios from "axios";
 import Modal from 'react-modal';
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import Swal from "sweetalert2";
+
+
 import CommentForm from "./CommentForm";
 
+
 function Post() {
+  
+  const { trigger, setTrigger } = useTrigger()
 
   const [postComments, setPostComments] = useState({});
   const [publicaciones, setPublicaciones] = useState([]);
@@ -106,7 +111,7 @@ function Post() {
     setDatos({ ...datos, id_usuario: user.id });
     getPublicaciones(user.id);
     console.log(datos.id_usuario)
-  }, []);
+  }, [trigger]);
 
   const fetchLikes = async (postId) => {
     try {
@@ -174,7 +179,7 @@ function Post() {
             >
               <div className="h-14 w-14 bg-white rounded-full mr-4">
                 <img
-                  src="https://www.infobae.com/new-resizer/X28aHlsLoDl3i749c00aiQki6oc=/768x432/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/UGGM3NC5C5CVPJ7BCNSG6ALLBE.jpg"
+                  src={`${backendBaseUrl}/${publicacion.UserImg}`}
                   className="object-cover w-full h-full rounded-full"
                   alt="profile"
                 />
@@ -229,7 +234,7 @@ function Post() {
                     <div className="flex items-center mb-4">
                       <div className="h-14 w-14 bg-white rounded-full mr-4">
                         <img
-                          src="https://www.infobae.com/new-resizer/X28aHlsLoDl3i749c00aiQki6oc=/768x432/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/UGGM3NC5C5CVPJ7BCNSG6ALLBE.jpg"
+                          src={`${backendBaseUrl}/${publicacion.UserImg}`}
                           className="object-cover w-full h-full rounded-full"
                           alt="profile"
                         />
@@ -277,7 +282,7 @@ function Post() {
                     >
                       <div className="h-14 w-14 bg-[#724DC5] rounded-full mr-4">
                         <img
-                          src="https://www.infobae.com/new-resizer/X28aHlsLoDl3i749c00aiQki6oc=/768x432/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/UGGM3NC5C5CVPJ7BCNSG6ALLBE.jpg"
+                          src={`${backendBaseUrl}/${comment.img}`}
                           className="object-cover w-full h-full rounded-full"
                           alt="profile"
                         />
@@ -288,9 +293,11 @@ function Post() {
                           <p className="text-sm">{comment.correo}</p>
                         </div>
                         <div>
+                        {/*
                           <button>
                             <FontAwesomeIcon icon={faHeart} size="lg" style={{ color: "#ff0066" }} />
                           </button>
+                        */}
                         </div>
                       </div>
                       <div className="w-full">
@@ -317,7 +324,7 @@ function Post() {
                 >
                   <div className="h-14 w-14 bg-[#724DC5] rounded-full mr-4">
                     <img
-                      src="https://www.infobae.com/new-resizer/X28aHlsLoDl3i749c00aiQki6oc=/768x432/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/UGGM3NC5C5CVPJ7BCNSG6ALLBE.jpg"
+                      src={`${backendBaseUrl}/${comment.img}`}
                       className="object-cover w-full h-full rounded-full"
                       alt="profile"
                     />
@@ -328,6 +335,7 @@ function Post() {
                       <p className="text-sm">{comment.correo}</p>
                     </div>
 
+                  {/* 
                     <div>
                       <button>
                         <FontAwesomeIcon
@@ -337,6 +345,7 @@ function Post() {
                         />{" "}
                       </button>
                     </div>
+                  */}
                   </div>
                   <div className="w-full">
                     <p className="text-lg py-2 bg-gray-100 mt-2 rounded-md px-2"

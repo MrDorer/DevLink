@@ -19,7 +19,7 @@ function Comentarios() {
 
 
     useEffect( () => {
-        sessionStorage.setItem("loggedIn", "yes")
+        sessionStorage.setItem("loggedIn", true)
     },[])
 
     const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);

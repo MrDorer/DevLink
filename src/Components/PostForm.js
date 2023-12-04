@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import Swal from "sweetalert2";
+import { useTrigger } from "../context/TriggerContext";
+import { useSnackbar } from 'notistack';
 
 function PostForm({userId}) {
+const { enqueueSnackbar } = useSnackbar()
+const {trigger, setTrigger} = useTrigger()
 
 const [publicacionError, setPublicacionError] = useState(null);
 const [errorMessage, setErrorMessage] = useState("");
@@ -25,26 +28,27 @@ const [imageUrl, setImageUrl] = useState(null);
         }
       };
 
-    const handleSubmitPublicaciones = async (e) => {
+      const handleSubmitPublicaciones = async (e) => {
         e.preventDefault();
-        if (!datos.contenido) {
+      
+        if (!datos.contenido.trim()) {
           // Mostrar alerta de error con SweetAlert si el campo está vacío
-          Swal.fire({
-            icon: "error",
-            title: "Campo incompleto",
-            text: "Por favor, completa el campo para publicar.",
-          });
+          enqueueSnackbar('Por favor rellena los campos', { variant: 'warning' });
           return;
         }
-    
+      
         try {
           const formData = new FormData();
           formData.append("titulo", datos.titulo);
           formData.append("contenido", datos.contenido);
           formData.append("id_usuario", userId);
           formData.append("likes_publicacion", datos.likes_publicacion);
-          formData.append("img", imagen);
-    
+      
+          // Check if imagen is present before appending to formData
+          if (imagen) {
+            formData.append("img", imagen);
+          }
+      
           const response = await axios.post(
             "http://localhost:8082/agregarPublicaciones",
             formData,
@@ -54,18 +58,14 @@ const [imageUrl, setImageUrl] = useState(null);
               },
             }
           );
+      
           console.log(response.data);
-    
+      
           // Mostrar la alerta de publicación exitosa con SweetAlert
-          Swal.fire({
-            icon: "success",
-            title: "Publicado correctamente",
-            showConfirmButton: false,
-            timer: 1500,
-          });
-    
+          enqueueSnackbar('Publicado correctamente', { variant: 'success' });
+      
           setPublicacionError(null);
-    
+      
           setDatos({
             titulo: "",
             contenido: "",
@@ -73,13 +73,16 @@ const [imageUrl, setImageUrl] = useState(null);
             likes_publicacion: 0,
             img: "",
           });
-    
+      
           setImageUrl(null);
         } catch (error) {
           console.error("Error al publicar:", error);
           setPublicacionError("Error al publicar la publicación.");
         }
+
+        setTrigger(!trigger)
       };
+      
 
     const [datos, setDatos] = useState({
         titulo: "",

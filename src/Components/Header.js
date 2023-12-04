@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import Swal from 'sweetalert2'; // Importa sweetalert2
+
 import LogoGris from '../Assets/LogoGris.png';
 import IconoBuscar from '../Assets/IconoBuscar.png';
 import Iconoperfil from '../Assets/Iconoperfil.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 
 function Header() {
+  const { enqueueSnackbar } = useSnackbar();
   const location = useLocation();
   const navigate = useNavigate();
   const user = location.state && location.state.user;
@@ -38,12 +40,7 @@ function Header() {
     sessionStorage.clear();
     localStorage.clear()
     // Muestra la alerta de cierre de sesión exitoso
-    Swal.fire({
-      icon: 'success',
-      title: 'Sesión cerrada con exito!',
-      showConfirmButton: true,
-      timer: 1200,
-    });
+    enqueueSnackbar('Sesión cerrada con exito!!!', { variant: 'success' });
 
     // Redirigir a la página de inicio o a donde sea apropiado después de cerrar sesión
     navigate("/");

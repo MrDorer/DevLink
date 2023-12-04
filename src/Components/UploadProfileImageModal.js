@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import axios from 'axios';
-import Swal from 'sweetalert2';
+import { useSnackbar } from 'notistack';
 
 const UploadProfileImageModal = ({ isOpen, onClose }) => {
+  const { enqueueSnackbar } = useSnackbar();
   const [image, setImage] = useState(null);
+  const [id, setId] = useState('')
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -23,7 +25,7 @@ const UploadProfileImageModal = ({ isOpen, onClose }) => {
       const formData = new FormData();
       formData.append('img', image);
 
-      const response = await axios.put('http://localhost:8082/editar/foto', formData, {
+      const response = await axios.put(`http://localhost:8082/editar/foto/${id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -31,24 +33,19 @@ const UploadProfileImageModal = ({ isOpen, onClose }) => {
 
       console.log(response.data);
 
-      Swal.fire({
-        icon: 'success',
-        title: 'Image uploaded successfully',
-        showConfirmButton: false,
-        timer: 1500,
-      });
+      enqueueSnackbar('Imagen subida con exito', { variant: 'success' });
 
       setImage(null);
       onClose(); // Close the modal after successful upload
     } catch (error) {
       console.error('Error uploading image:', error);
-      Swal.fire({
-        icon: 'error',
-        title: 'Error uploading image',
-        text: 'Please try again later.',
-      });
+      enqueueSnackbar('Fallo al subir la imagen :(', { variant: 'warning' });
     }
   };
+
+  useEffect(()=>{
+    setId(JSON.parse(sessionStorage.getItem('user')).id)
+  }, [])
 
   return (
     <Modal

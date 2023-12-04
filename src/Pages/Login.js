@@ -3,13 +3,15 @@ import { Link, useNavigate } from "react-router-dom";
 import { useSnackbar } from 'notistack';
 import Github from "../Assets/github.svg"
 import LogoM from "../Assets/LogoM.png";
-import Swal from 'sweetalert2';
+
 import axios from 'axios'
+import Redireccion from '../Components/Redireccion'
 
 const CLIENT_ID = 'eb65046c0d5c4f4b9c06'
 
 function Login() {
   const { enqueueSnackbar } = useSnackbar();
+  const [logged, setLogged] = useState()
   const [user, setUser] = useState(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -44,7 +46,7 @@ function loginGH(){
   }
 
   useEffect(() => {
-    
+    setLogged(localStorage.getItem("accessToken"))
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const codeParam = urlParams.get("code");
@@ -91,7 +93,7 @@ function loginGH(){
             if (response.status === 200) {
               console.log(response.data);
               sessionStorage.setItem('user', JSON.stringify(response.data));
-              enqueueSnackbar('Cuenta vinculada exitosamente :)', { variant: 'error' });
+              enqueueSnackbar('Cuenta vinculada exitosamente :)', { variant: 'success' });
               
             } 
           })
@@ -154,20 +156,15 @@ function loginGH(){
       const data = await response.json();
 
       if (response.status === 200) {
-        // Inicio de sesión exitoso
-        Swal.fire({
-          icon: 'success',
-          title: 'Inicio de sesión exitoso',
-          showConfirmButton: true,
-          timer: 1200,
-        });
-        // Almacena la información del usuario en el estado y en sessionStorage
+
+        enqueueSnackbar('Se inicio sesion correctamente :)', { variant: 'success' });
+
         setUser(data);
         sessionStorage.setItem('user', JSON.stringify(data));
-        // Redirige al usuario a la página principal
+
         navigate("/home");
       } else {
-        // Credenciales inválidas
+
         setLoginError("Credenciales inválidas");
       }
       console.log(response.data[0])
@@ -190,85 +187,92 @@ function loginGH(){
 
   return (
     <>
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img
-            className="mx-auto h-28 w-auto"
-            src={LogoM}
-            alt="DevLink"
-          />
-          <h1 className="text-center text-3xl font-serif">DevLink</h1>
-          <h2 className="mt-4 text-center text-2xl font-semibold leading-9 tracking-tight text-gray-900">
-            Inicia sesión en tu cuenta
-          </h2>
-        </div>
-
-        <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" onSubmit={handleLogin}>
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-                Cuenta de correo
-              </label>
-              <div className="mt-2">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autoComplete="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-
-            <div>
-              <div className="flex items-center justify between">
-                <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
-                  Contraseña
-                </label>
-              </div>
-              <div className="mt-2">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  autoComplete="current-password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                />
-              </div>
-            </div>
-
-            <div>
-              <button type="submit" className="mb-2 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
-                Iniciar sesión
-              </button>
-              <button onClick={loginGH} type="button" className="bg-black text-white rounded-md px-4 py-1 w-full flex flex-wrap justify-center">
-              <img src={Github} className="mx-2"></img>
-                Iniciar sesion con Github
-              </button>
-            </div>
-            {loginError && (
-              <p className="mt-2 text-center text-red-600">{loginError}</p>
-            )}
-          </form>
-
-          <p className="mt-8 text-center text-sm text-gray-500">
-            ¿No tienes una cuenta?{" "}
-            <Link to="/Register" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-              Regístrate aquí
-            </Link>
-          </p>
-              
-        </div>
-      </div>
+    {}
+     
       {user && (
         <p className="mt-2 text-center text-green-600">{`Bienvenido, ${user.name}!`}</p>
       )}
+
+{sessionStorage.getItem("loggedIn") ? (
+  <Redireccion/>
+) : 
+<div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+<div className="sm:mx-auto sm:w-full sm:max-w-sm">
+  <img
+    className="mx-auto h-28 w-auto"
+    src={LogoM}
+    alt="DevLink"
+  />
+  <h1 className="text-center text-3xl font-serif">DevLink</h1>
+  <h2 className="mt-4 text-center text-2xl font-semibold leading-9 tracking-tight text-gray-900">
+    Inicia sesión en tu cuenta
+  </h2>
+</div>
+
+<div className="mt-2 sm:mx-auto sm:w-full sm:max-w-sm">
+  <form className="space-y-6" onSubmit={handleLogin}>
+    <div>
+      <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
+        Cuenta de correo
+      </label>
+      <div className="mt-2">
+        <input
+          id="email"
+          name="email"
+          type="email"
+          autoComplete="email"
+          required
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+        />
+      </div>
+    </div>
+
+    <div>
+      <div className="flex items-center justify between">
+        <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
+          Contraseña
+        </label>
+      </div>
+      <div className="mt-2">
+        <input
+          id="password"
+          name="password"
+          type="password"
+          autoComplete="current-password"
+          required
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+        />
+      </div>
+    </div>
+
+    <div>
+      <button type="submit" className="mb-2 flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+        Iniciar sesión
+      </button>
+      <button onClick={loginGH} type="button" className="bg-black text-white rounded-md px-4 py-1 w-full flex flex-wrap justify-center">
+      <img src={Github} className="mx-2"></img>
+        Iniciar sesion con Github
+      </button>
+    </div>
+    {loginError && (
+      <p className="mt-2 text-center text-red-600">{loginError}</p>
+    )}
+  </form>
+
+  <p className="mt-8 text-center text-sm text-gray-500">
+    ¿No tienes una cuenta?{" "}
+    <Link to="/Register" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+      Regístrate aquí
+    </Link>
+  </p>
+      
+</div>
+</div>
+}
     </>
   );
 }
