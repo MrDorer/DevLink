@@ -9,6 +9,8 @@ import HomeVisit from './Pages/HomeVisit';
 import CRUDUser from './Pages/CRUDUser';
 import CRUDComment from './Pages/CRUDComment';
 import CRUDPost from './Pages/CRUDPost';
+import Map from './Components/Map';
+
 function AppRouter() {
   return (
     <>
@@ -24,6 +26,7 @@ function AppRouter() {
         <Route path ='/crudcomment' element={<CRUDComment/>}/>
         <Route path ='/crudpost' element={<CRUDPost/>}/>
 
+        <Route path ='/jit' element={<Map/>}/>
       </Routes>
     </>
   );

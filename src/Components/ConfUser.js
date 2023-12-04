@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Sidebar from '../Components/sidebar';
 import UpdateEmailModal from './UpdateEmailModal';
 import ChangePasswordModal from './ChangePasswordModal';
@@ -7,9 +7,21 @@ import EditGitHubUsernameModal from './EditGitHubUsernameModal';
 import EditProfileDescriptionModal from './EditProfileDescriptionModal';
 import EditProfileLocationModal from './EditProfileLocationModal';
 import UploadProfileImageModal from './UploadProfileImageModal';
+import Github from "../Assets/github.svg"
 
+const CLIENT_ID = 'eb65046c0d5c4f4b9c06'
 
 function Comentarios() {
+
+    function loginGH(){
+        window.location.assign("https://github.com/login/oauth/authorize?client_id=" + CLIENT_ID + "&scope=user:email")
+      }
+
+
+    useEffect( () => {
+        sessionStorage.setItem("loggedIn", "yes")
+    },[])
+
     const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
     const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
     const [isDeactivateModalOpen, setIsDeactivateModalOpen] = useState(false);
@@ -96,8 +108,12 @@ function Comentarios() {
                                 <h3 className="text-lg">Usuario de GitHub</h3>
                                 <p className="text-sm font-light">Editar usuario de GitHub</p>
                             </div>
-                            <button onClick={handleOpenGitHubUsernameModal}
-                                className="border-2 px-6 py-0.5 text-sm font-light h-fit rounded-full text-[#351778] border-[#351778]">Cambiar</button>
+                            <button
+                                onClick={loginGH} 
+                                className="border-2 px-7 py-0.5 text-sm font-light h-fit rounded-full bg-black border-slate-300">
+                                    <img src={Github} className="mx-2"></img>
+                            </button>
+
                         </div>
                         <EditGitHubUsernameModal isOpen={isGitHubUsernameModalOpen} onClose={handleCloseGitHubUsernameModal} />
 

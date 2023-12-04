@@ -101,14 +101,16 @@ function Perfil() {
 
   const renderComentarios = (user) => {
     axios
-      .get(`http://localhost:8082/comentarios/${user}`)
+      .get(`http://localhost:8082/comentariosRender/${user}`)
       .then((response) => {
+        console.log(response.data)
         setComentarios(response.data);
         setHasComments(response.data.length > 0);
       })
       .catch((error) => {
         console.error("Error:", error.message);
       });
+
   };
 
 
@@ -200,7 +202,7 @@ function Perfil() {
                 <img
                   alt="Perfil"
                   className="flex object-cover items-center justify-center w-40 h-40 overflow-hidden float-left rounded-full"
-                  src="https://www.infobae.com/new-resizer/X28aHlsLoDl3i749c00aiQki6oc=/768x432/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/UGGM3NC5C5CVPJ7BCNSG6ALLBE.jpg"
+                  src={`${backendBaseUrl}/${usuario.img}`}
                 />
                 <div className="">
                   <div className="text-black text-3xl text-center">
@@ -255,7 +257,7 @@ function Perfil() {
 
                     >
                       <GoogleMap
-                        mapContainerStyle={{ height: '35vh', width: '100%' }}
+                        mapContainerStyle={{ height: '40vh', width: '40vh' }}
                         center={mapCenter}
                         zoom={zoom}
                       >
@@ -300,7 +302,7 @@ function Perfil() {
 
 
             {seccionActiva === 'proyectos' && (
-              <div className="font-bold text-center text-4xl leading-[155%] self-center ml-0 mb-5">
+              <div className="font-bold text-center text-4xl leading-[155%] self-center mb-5">
                 Proyectos
                 <div className="flex justify-center mb-5">
                   <div className="grid grid-cols-3 gap-8">

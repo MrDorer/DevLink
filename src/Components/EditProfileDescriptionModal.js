@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
+import axios from 'axios'
+import { useSnackbar } from 'notistack';
 
 const EditProfileDescriptionModal = ({ isOpen, onClose }) => {
+  const { enqueueSnackbar } = useSnackbar()
+  const [id, setId] = useState('')
   const [newDescription, setNewDescription] = useState('');
 
   useEffect(() => {
+    setId(JSON.parse(sessionStorage.getItem('user')).id)
     if (isOpen) {
       document.body.style.overflow = 'hidden';
       document.body.style.position = 'fixed';
@@ -19,12 +24,28 @@ const EditProfileDescriptionModal = ({ isOpen, onClose }) => {
     };
   }, [isOpen]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Simulando el cambio de la descripción del perfil
-    console.log('Descripción del perfil actualizada:', newDescription);
-    onClose();
+    
+    const description = newDescription.trim()
+
+    try {
+      const response = await axios.put(`http://localhost:8082/editar/description/${id}`, {description});
+      if(response.status === 200){
+        enqueueSnackbar('Descripción cambiada correctamente', { variant: 'success' });
+      } else{
+        enqueueSnackbar('Algo salio mal', { variant: 'error' });
+      }
+    } catch (error) {
+      enqueueSnackbar('Algo salio mal', { variant: 'error' });
+    }
+
+    cerrar();
   };
+  const cerrar = () => {
+    setNewDescription('')
+    onClose()
+  }
 
   return (
     <Modal
@@ -54,7 +75,7 @@ const EditProfileDescriptionModal = ({ isOpen, onClose }) => {
           </button>
         </form>
         <button
-          onClick={onClose}
+          onClick={cerrar}
           className="mt-4 bg-gray-300 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400 transition-colors duration-300"
         >
           Cancelar

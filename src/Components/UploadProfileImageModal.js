@@ -1,42 +1,53 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Modal from 'react-modal';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const UploadProfileImageModal = ({ isOpen, onClose }) => {
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [imageUrl, setImageUrl] = useState('');
-
-  useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-      document.body.style.position = 'fixed';
-    } else {
-      document.body.style.overflow = 'auto';
-      document.body.style.position = 'static';
-    }
-
-    return () => {
-      document.body.style.overflow = 'auto';
-      document.body.style.position = 'static';
-    };
-  }, [isOpen]);
+  const [image, setImage] = useState(null);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      setSelectedImage(file);
-      const reader = new FileReader();
-      reader.onload = () => {
-        setImageUrl(reader.result);
-      };
-      reader.readAsDataURL(file);
+
+    if (file && file.type.includes('image')) {
+      setImage(file);
+    } else {
+      console.error('Invalid file. Please select a valid image (JPEG, PNG).');
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Aquí puedes enviar la imagen a un servidor, almacenarla y actualizar el perfil del usuario
-    console.log('Imagen subida:', selectedImage);
-    onClose();
+
+    try {
+      const formData = new FormData();
+      formData.append('img', image);
+
+      const response = await axios.put('http://localhost:8082/editar/foto', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      console.log(response.data);
+
+      Swal.fire({
+        icon: 'success',
+        title: 'Image uploaded successfully',
+        showConfirmButton: false,
+        timer: 1500,
+      });
+
+      setImage(null);
+      onClose(); // Close the modal after successful upload
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      Swal.fire({
+        icon: 'error',
+        title: 'Error uploading image',
+        text: 'Please try again later.',
+      });
+    }
   };
 
   return (
@@ -61,9 +72,9 @@ const UploadProfileImageModal = ({ isOpen, onClose }) => {
               onChange={handleImageChange}
               className="absolute inset-0 opacity-0 cursor-pointer"
             />
-            {imageUrl && (
+            {image && (
               <div className="mt-2">
-                <img src={imageUrl} alt="Selected" className="max-w-full h-auto mr-4" />
+                <img src={URL.createObjectURL(image)} alt="Selected" className="max-w-full h-auto mr-4" />
               </div>
             )}
           </label>

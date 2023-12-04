@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import Modal from 'react-modal';
+import axios from 'axios'
+import { useSnackbar } from 'notistack';
 
 const ChangePasswordModal = ({ isOpen, onClose }) => {
-  const [currentPassword, setCurrentPassword] = useState('');
+  const [id, setId] = useState('')
+  const { enqueueSnackbar } = useSnackbar();
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
   useEffect(() => {
+    setId(JSON.parse(sessionStorage.getItem('user')).id)
     if (isOpen) {
       document.body.style.overflow = 'hidden';
       document.body.style.position = 'fixed';
@@ -21,15 +25,40 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
     };
   }, [isOpen]);
 
-  const handleSubmit = (e) => {
+  const cerrar = () => {
+    setNewPassword('')
+    setConfirmPassword('')
+
+    onClose()
+  }
+
+  const handleSubmit = async (e) => {
+    const trimmed = newPassword.trim()
     e.preventDefault();
-    if (newPassword !== confirmPassword) {
-      console.log("Las contraseñas no coinciden");
+    if (newPassword.trim().length < 8 ) {
+      enqueueSnackbar('Las contraseñas no tienen al menos 8 caracteres', { variant: 'warning' });
       return;
     }
-    console.log('Contraseña actual:', currentPassword);
-    console.log('Nueva contraseña:', newPassword);
-    onClose();
+
+    if (newPassword !== confirmPassword) {
+      enqueueSnackbar('Las contraseñas no coinciden', { variant: 'warning' });
+      return;
+    }
+    try {
+      
+      const response = await axios.put(`http://localhost:8082/editar/password/${id}`, {trimmed});
+      if(response.status === 200){
+        enqueueSnackbar('Contraseña cambiada correctamente', { variant: 'success' });
+      } else{
+        enqueueSnackbar('Fallo al cambiar contraseña', { variant: 'error' });
+      }
+    } catch (error) {
+      console.error('Fallo al cambiar contraseña:', error);
+      enqueueSnackbar('Fallo al cambiar contraseña', { variant: 'error' });
+    }
+
+
+    cerrar();
   };
 
   return (
@@ -43,34 +72,31 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
       <div className="border border-black bg-white p-8 rounded-lg w-96 relative">
         <h2 className="text-2xl font-bold mb-6">Cambiar Contraseña</h2>
         <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
-          <label className="flex flex-col">
-            <span className="text-sm font-semibold mb-1">Contraseña Actual:</span>
-            <input
-              type="password"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              className="border border-gray-300 rounded-md py-2 px-3"
-              required
-            />
-          </label>
+
           <label className="flex flex-col">
             <span className="text-sm font-semibold mb-1">Nueva Contraseña:</span>
             <input
-              type="password"
+              placeholder='Contraseña'
+              type='password'
+              name='password'
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               className="border border-gray-300 rounded-md py-2 px-3"
               required
+              autoComplete="new-password"
             />
           </label>
           <label className="flex flex-col">
             <span className="text-sm font-semibold mb-1">Confirmar Nueva Contraseña:</span>
             <input
+              placeholder='Contraseña (De nuevo)'
+              name='confirmPassword'
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               className="border border-gray-300 rounded-md py-2 px-3"
               required
+              autoComplete="new-password"
             />
           </label>
           <button
@@ -81,7 +107,7 @@ const ChangePasswordModal = ({ isOpen, onClose }) => {
           </button>
         </form>
         <button
-          onClick={onClose}
+          onClick={cerrar}
           className="mt-4 bg-gray-300 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400 transition-colors duration-300"
         >
           Cerrar
