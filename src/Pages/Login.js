@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useSnackbar } from 'notistack';
 import Github from "../Assets/github.svg"
 import LogoM from "../Assets/LogoM.png";
 import Swal from 'sweetalert2';
@@ -8,6 +9,7 @@ import axios from 'axios'
 const CLIENT_ID = 'eb65046c0d5c4f4b9c06'
 
 function Login() {
+  const { enqueueSnackbar } = useSnackbar();
   const [user, setUser] = useState(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,7 +24,7 @@ function Login() {
   const [userId, setUserId] = useState('')
 
   async function getUserData(){
-    console.log('Its been triggered')
+    
     await fetch("http://localhost:8082/getUserData", {
         method: "GET",
         headers: {
@@ -31,7 +33,7 @@ function Login() {
     }).then((response) => {
         return response.json()
     }).then(async (data) => {
-        console.log(data.login)
+        
         setGhUser(data.login)
     })
     
@@ -46,10 +48,10 @@ function loginGH(){
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const codeParam = urlParams.get("code");
-    console.log(codeParam)
+    
 
     if(sessionStorage.getItem("user")){
-      console
+      
       setUserId(JSON.parse(sessionStorage.getItem("user")).id)
     }
 
@@ -64,7 +66,7 @@ function loginGH(){
             }).then((response) => {
                 return response.json()
             }).then((data) => {
-                console.log(data)
+                
                 if(data.access_token){
                     localStorage.setItem("accessToken", data.access_token)
                     setRerender(!rerender)
@@ -76,46 +78,49 @@ function loginGH(){
          getAccessToken()
     }
     if(itsAllGood === true){
-        console.log("Everything is all right")
+       
         getUserData()
     }
     if(ghUser.length > 0){
-      console.log(sessionStorage.getItem("loggedIn"))
-      if(sessionStorage.getItem("loggedIn")){
-        console.log('Condiciones cumplidas')
-        axios.post(`http://localhost:8082/add/github/${userId}`, {ghUser})
-        .then((response) => {
-          console.log(response.status)
-          if (response.status === 200) {
+      
+
+      if (sessionStorage.getItem("loggedIn")) {
+        axios.post(`http://localhost:8082/add/github/${userId}`, { ghUser })
+          .then((response) => {
+            
+            if (response.status === 200) {
+              console.log(response.data);
+              sessionStorage.setItem('user', JSON.stringify(response.data));
+              enqueueSnackbar('Cuenta vinculada exitosamente :)', { variant: 'error' });
+              
+            } 
+          })
+          .catch((error) => {
+            if(error.response.status === 409){
+              console.log('Cuenta de Github ya vinculada')
+              enqueueSnackbar('Cuenta de Github ya vinculada', { variant: 'error' });
+
+            } else {
+              console.log('Error desconocido')
+              enqueueSnackbar('Error desconocido', { variant: 'error' });
+            }
+            
+            navigate('/home');
+
+          });
+      } else {
+        
+        axios.post('http://localhost:8082/register/github', { ghUser })
+          .then((response) => {
             console.log(response.data);
             sessionStorage.setItem('user', JSON.stringify(response.data));
-            Swal.fire({
-              icon: 'success',
-              title: 'Cuenta vinculada exitosamente',
-              showConfirmButton: true,
-              timer: 1200,
-            });
             navigate('/home');
-          } else {
-            
-            navigate('/home')
-            Swal.fire({
-              icon: 'error',
-              title: 'Cuenta ya vinculada',
-              showConfirmButton: true,
-              timer: 1200,
-            });
-          } 
-        
-        })
-      }
-      else{
-        axios.post('http://localhost:8082/register/github', {ghUser})
-        .then((response) => {
-          console.log(response.data)
-          sessionStorage.setItem('user', JSON.stringify(response.data));
-          navigate('/home')
-        })
+          })
+          .catch((error) => {
+            // Handle network errors
+            console.error('Network error:', error.message);
+            // Add additional handling as needed
+          });
       }
         
     }  
