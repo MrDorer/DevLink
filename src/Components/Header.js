@@ -50,7 +50,7 @@ function Header() {
   };
 
   return (
-    <header className="bg-purple-500 p-4 flex items-center justify-between w-full fixed top-0 z-50" style={{ backgroundColor: 'rgb(93, 48, 193)' }}>
+    <header className="bg-purple-500 p-4 flex items-center justify-between w-full fixed top-0 z-10" style={{ backgroundColor: 'rgb(93, 48, 193)' }}>
       <div className="container mx-auto flex items-center">
         <Link to="/Home">
           <img src={LogoGris} alt="Logo" className="h-20" />
