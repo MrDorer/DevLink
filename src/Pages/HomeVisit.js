@@ -142,10 +142,10 @@ const HomeVisit = () => {
                 <li key={user.id} className="flex items-center mb-2">
                   <img
                     src={userIcon}
-                    alt={user.name}
+                    alt={user.username}
                     className="w-8 h-8 rounded-full mr-2"
                   />
-                  {user.name}
+                  {user.username}
                 </li>
               ))}
             </ul>

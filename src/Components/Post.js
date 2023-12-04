@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Modal from 'react-modal';
 import { faHeart } from "@fortawesome/free-regular-svg-icons";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Swal from "sweetalert2";
 import CommentForm from "./CommentForm";
 
 function Post() {
 
+  const [postComments, setPostComments] = useState({});
   const [publicaciones, setPublicaciones] = useState([]);
   const [likes, setLikes] = useState({});
   const [liked, setLiked] = useState({});
@@ -16,7 +18,45 @@ function Post() {
   const [modalOpen, setModalOpen] = useState({});
   const [comments, setComments] = useState([]);
 
+  const handlePostClick = (publicacion) => {
+    if (modalOpen[publicacion.id]) {
+      handleCloseModal(publicacion.id);
+      setSelectedPublication(null);
+    } else {
+      handleOpenModal(publicacion);
+    }
+  };
 
+  const handleOpenModal = async (publicacion) => {
+    setSelectedPublication(publicacion);
+    setModalOpen((prevModalOpen) => ({
+      ...prevModalOpen,
+      [publicacion.id]: true,
+    }));
+    setIsModalOpen(true);
+  
+    // Fetch comments for the selected post
+    try {
+      const response = await axios.get(`http://localhost:8082/comment/${publicacion.id}`);
+      setPostComments((prevComments) => ({
+        ...prevComments,
+        [publicacion.id]: response.data,
+      }));
+    } catch (error) {
+      console.error("Error fetching comments for post:", error);
+    }
+  };
+  const handleCloseModal = (postId) => {
+    setModalOpen((prevModalOpen) => ({
+      ...prevModalOpen,
+      [postId]: false,
+    }));
+    setIsModalOpen(false);
+  };
+
+  const handleCommentClick = (e) => {
+    e.stopPropagation(); // Prevent modal from opening when clicking on the comment textbox
+  };
 
   const [datos, setDatos] = useState({
     id_usuario:0,
@@ -130,6 +170,7 @@ function Post() {
               boxShadow:
                 "-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)",
             }}
+            onClick={() => handlePostClick(publicacion)}
           >
             <div className="h-14 w-14 bg-white rounded-full mr-4">
               <img
@@ -185,22 +226,14 @@ function Post() {
             >
               <div>
                 {selectedPublication && (
-                  <div className="flex  mt-10 bg-gray-100 w-full rounded-md p-7 mb-6 flex-wrap mx-28 justify-end"
+                  <div className="flex  mt-10 bg-gray-100 w-full rounded-md p-7 mb-6 flex-wrap justify-end"
                     style={{
                       boxShadow:
                         "-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)",
+                        
                     }}
-                  >
-
-                    <button
-                      onClick={() => {
-                        handleCloseModal(publicacion.id);
-                        setSelectedPublication(null);
-                      }}
-                      className="bg-gray-200 text-gray-800 py-1 px-2 rounded-md hover:bg-purple-300 transition-colors duration-300 mb-2 -mt-4 ml-auto"
-                    >
-                      <FontAwesomeIcon icon={faTimes} style={{ color: "#351778" }} />
-                    </button>
+                  > 
+                    
 
 
                     <div className="border border-gray-400 bg-white p-6 rounded-lg w-full max-w-3xl relative shadow-lg">
@@ -250,7 +283,57 @@ function Post() {
                         </>
                       )}
 
-                      <CommentForm userId={datos.id_usuario} publicacionId={publicacion.id}/>
+                      <CommentForm 
+                      onClick={(e) => {handleCommentClick}}
+                      userId={datos.id_usuario} publicacionId={publicacion.id}/>
+
+{postComments[publicacion.id] && postComments[publicacion.id].map((comment) => (
+                                     <div
+                                     className="flex w-full bg-white rounded-md p-7 mt-4 flex-wrap"
+                                     style={{
+                                       boxShadow:
+                                         "-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)",
+                                       height: "fit-content", // Ajuste de altura para las tarjetas
+                                     }}
+                                     key={comment.id}
+                                   >
+                                     <div className="h-14 w-14 bg-[#724DC5] rounded-full mr-4">
+                                       <img
+                                         src="https://www.infobae.com/new-resizer/X28aHlsLoDl3i749c00aiQki6oc=/768x432/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/UGGM3NC5C5CVPJ7BCNSG6ALLBE.jpg"
+                                         className="object-cover w-full h-full rounded-full"
+                                         alt="profile"
+                                       />
+                                     </div>
+                                     <div className="text-left flex justify-between w-[88.5%] items-center">
+                                       <div>
+                                         <h2 className="text-md">{comment.username}</h2>
+                                         <p className="text-sm">{comment.correo}</p>
+                                       </div>
+         
+                                       <div>
+                                         <button>
+                                           <FontAwesomeIcon
+                                             icon={faHeart}
+                                             size="lg"
+                                             style={{ color: "#ff0066" }}
+                                           />{" "}
+                                         </button>
+                                       </div>
+                                     </div>
+                                     <div className="w-full">
+                                       <p className="text-lg py-2 bg-gray-100 mt-2 rounded-md px-2"
+                                         style={{
+                                           boxShadow: '-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)',
+                                         }}>
+                                         
+                                           {comment.comentario}
+                                       </p>
+                                     </div>
+         
+
+         
+                                   </div>
+          ))}
 
                     </div>
                     
