@@ -420,72 +420,70 @@ function Perfil() {
                 )}
 
               </div>
-            )}
+
+
+)
+}
+adaptar
+
 
             {/*Final del Publicacion*/}
             {seccionActiva === 'comentarios' && (
-              <div className="p-5">
-                <p className="font-bold text-center text-4xl mb-5">Comentarios</p>
-                <div className="flex items-center justify-center h-full">
-                  {comentarios.length !== 0 ? (
-                    comentarios.map((comentario) => (
-                      <>
-                        <div
-                          className="flex w-full bg-white mx-12 rounded-md p-7 mb-6 flex-wrap"
-                          style={{
-                            boxShadow:
-                              "-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)",
-                            height: "fit-content", // Ajuste de altura para las tarjetas
-                          }}
-                          key={comentario.id}
-                        >
-                          <div className="h-14 w-14 bg-[#724DC5] rounded-full mr-4">
-                            <img
-                              src={`${backendBaseUrl}/${comentario.img}`}
-                              className="object-cover w-full h-full rounded-full"
-                              alt="profile"
-                            />
-                          </div>
-                          <div className="text-left flex justify-between w-[88.5%] items-center">
-                            <div>
-                              <h2 className="text-md">{comentario.usuario}</h2>
-                              <p className="text-sm">{comentario.correo}</p>
-                            </div>
+  <div className="p-5 w-[80%] ml-24">
+    <p className="font-bold text-center text-4xl mb-5">Comentarios</p>
+    <div className="flex flex-col items-center">
+      {hasComments ? (
+        comentarios.map((comentario) => (
+          <div
+            className="w-full bg-white mx-12 rounded-md p-7 mb-6 flex flex-col"
+            style={{
+              boxShadow:
+                "-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)",
+              height: "fit-content", // Ajuste de altura para las tarjetas
+            }}
+            key={comentario.id}
+          >
+            <div className="flex items-center">
+              <div className="h-14 w-14 bg-[#724DC5] rounded-full mr-4">
+                <img
+                  src={`${backendBaseUrl}/${comentario.img}`}
+                  className="object-cover w-full h-full rounded-full"
+                  alt="profile"
+                />
+              </div>
+              <div className="text-left flex justify-between w-[88.5%] items-center">
+                <div>
+                  <h2 className="text-md">{comentario.usuario}</h2>
+                  <p className="text-sm">{comentario.correo}</p>
+                </div>
 
-                            <div>
-                              {/*
-                              <button>
-                                <FontAwesomeIcon
-                                  icon={faHeart}
-                                  size="lg"
-                                  style={{ color: "#ff0066" }}
-                                />{" "}
-                              </button>
-                              */}
-                            </div>
-                          </div>
-                          <div className="w-full">
-                            <p className="text-lg py-2 bg-gray-100 mt-2 rounded-md"
-                              style={{
-                                boxShadow: '-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)',
-                              }}>
-                              {comentario.img
-                                ? comentario.comentario
-                                : comentario.comentario}
-                            </p>
-                          </div>
-
-                        </div>
-                      </>
-                    ))
-                  ) : (
-                    <div className="flex items-center justify-center h-full">
-                      <p className="text-gray-500 text-xl ">Nada que ver aquí aún</p>
-                    </div>
-                  )}
+                <div>
+                  {/* Display additional actions if needed */}
                 </div>
               </div>
-            )}
+            </div>
+            <div className="w-full">
+              <p
+                className="text-lg py-2 bg-gray-100 mt-2 rounded-md"
+                style={{
+                  boxShadow:
+                    '-5px 0 5px -5px rgba(0, 0, 0, 0.3), 5px 0 5px -5px rgba(0, 0, 0, 0.3), 0 5px 5px -5px rgba(0, 0, 0, 0.5)',
+                }}
+              >
+                {comentario.comentario}
+              </p>
+            </div>
+          </div>
+        ))
+      ) : (
+        <div className="flex items-center justify-center h-full">
+          <p className="text-gray-500 text-xl ">Nada que ver aquí aún</p>
+        </div>
+      )}
+    </div>
+  </div>
+)}
+
           </div>    </div >
         <Footer />
       </div>

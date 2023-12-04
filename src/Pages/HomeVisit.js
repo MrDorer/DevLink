@@ -168,14 +168,12 @@ const HomeVisit = () => {
                 >
                   <div className="h-14 w-14 bg-[#724DC5] rounded-full mr-4">
                     <img
-                      src="https://www.infobae.com/new-resizer/X28aHlsLoDl3i749c00aiQki6oc=/768x432/filters:format(webp):quality(85)/cloudfront-us-east-1.images.arcpublishing.com/infobae/UGGM3NC5C5CVPJ7BCNSG6ALLBE.jpg"
-                      className="object-cover w-full h-full rounded-full"
-                      alt="profile"
+                      src={`${backendBaseUrl}/${publicacion.userImg}`}
                     />
                   </div>
                   <div className="text-left flex justify-between w-[88.5%] items-center">
                     <div>
-                      <h2 className="text-md">{publicacion.usuario}</h2>
+                      <h2 className="text-md">{publicacion.username}</h2>
                       <p className="text-sm">{publicacion.correo}</p>
                     </div>
 

@@ -79,7 +79,7 @@ const [imageUrl, setImageUrl] = useState(null);
           console.error("Error al publicar:", error);
           setPublicacionError("Error al publicar la publicación.");
         }
-
+        setImagen(null)
         setTrigger(!trigger)
       };
       
