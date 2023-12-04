@@ -6,6 +6,9 @@ import Config from './Pages/Config'
 import Comentarios from './Pages/Comentarios'
 import Perfil from './Pages/Perfil';
 import HomeVisit from './Pages/HomeVisit';
+import CRUDUser from './Pages/CRUDUser';
+import CRUDComment from './Pages/CRUDComment';
+import CRUDPost from './Pages/CRUDPost';
 import Map from './Components/Map';
 
 function AppRouter() {
@@ -19,6 +22,10 @@ function AppRouter() {
         <Route path ='/config' element={<Config/>}/>
         <Route path ='/comentar' element={<Comentarios/>}/>
         <Route path ='/' element={<HomeVisit/>}/>
+        <Route path ='/cruduser' element={<CRUDUser/>}/>
+        <Route path ='/crudcomment' element={<CRUDComment/>}/>
+        <Route path ='/crudpost' element={<CRUDPost/>}/>
+
         <Route path ='/jit' element={<Map/>}/>
       </Routes>
     </>
