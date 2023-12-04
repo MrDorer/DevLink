@@ -60,9 +60,9 @@ const PopupModal = ({ user, onClose, onDelete }) => {
                 </svg>
                 <span className="sr-only">Close modal</span>
               </button>
-              <div className="p-4 md:p-5 text-center">
+              <div className="p-4 md:p-5 text-center bg-gray-100 border border-gray-600 rounded-lg">
                 <svg
-                  className="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200"
+                  className="mx-auto mb-4 w-12 h-12 "
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -76,26 +76,26 @@ const PopupModal = ({ user, onClose, onDelete }) => {
                     d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                   />
                 </svg>
-                <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                  ¿Estás seguro de borrar este comentario?
+                <h3 className="mb-5 text-lg font-normal">
+                  ¿Estás seguro de Eliminar este comentario?
                 </h3>
                 <button
                   onClick={() => {
                     closeModal();
-                    handleDelete(user.id); // Pass user.id as an argument
+                    handleDelete(user.id);
                   }}
                   type="button"
-                  className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center me-2"
+                  className="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center me-2 shadow-md"
                 >
-                  Sip, ¡BORRALO!
+                  Eliminar
                 </button>
 
                 <button
                   onClick={closeModal}
                   type="button"
-                  className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+                  className="text-white bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center me-2 shadow-md"
                 >
-                  No, cambié de opinion
+                  Cancelar
                 </button>
               </div>
             </div>
@@ -123,34 +123,33 @@ const CRUDComment = () => {
   };
 
   return (
-    <div className="flex h-screen w-[100%]">
+    <div className="flex h-screen w-full">
       <div className="h-screen flex">
         <CRUDSidebar />
       </div>
-      <div className="flex self-start items-center w-auto pl-8 pt-10">
-        <table className="table-auto border-collapse border border-slate-600">
+      <div className="flex flex-col pl-8 pt-10 ml-96 mt-16">
+      <div className="overflow-x-auto">
+      <table className="table-auto min-w-full border-collapse border border-gray-300 rounded-lg">
           <thead>
-            <tr>
-              <th className="border border-slate-500">Usuario</th>
-              <th className="border border-slate-500">Contenido</th>
-              <th className="border border-slate-500">Likes</th>
+          <tr className="bg-gray-200">
+              <th className="border border-gray-300 px-4 py-2">Usuario</th>
+              <th className="border border-gray-300 px-4 py-2">Contenido</th>
+              <th className="border border-gray-300 px-4 py-2">Likes</th>
             </tr>
           </thead>
           <tbody>
             {users.map((user) => (
               <tr key={user.id}>
-                <td className="border border-slate-500 px-2">{user.name}</td>
-                <td className="border border-slate-500 px-2">
-                  {user.username}
-                </td>
-
-                <td className="p-2">
+                <td className="border border-gray-300 px-4 py-2">{user.name}</td>
+                <td className="border border-gray-300 px-4 py-2">{user.username}</td>
+                <td className="border border-gray-300 px-4 py-2">
                   <PopupModal user={user} />
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+      </div>
       </div>
     </div>
   );

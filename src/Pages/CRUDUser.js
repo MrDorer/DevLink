@@ -61,10 +61,10 @@ const CrudModal = ({ user, onClose, onDelete }) => {
         >
           <div className="relative p-4 w-full max-w-md max-h-full">
             {/* Modal content */}
-            <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <div className="relative rounded-lg shadow-md border bg-gray-100 border-gray-800">
               {/* Modal header */}
               <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                <h3 className="text-lg font-semibold text-gray-900 ">
                   Editar Usuario
                 </h3>
                 <button
@@ -98,7 +98,7 @@ const CrudModal = ({ user, onClose, onDelete }) => {
                   <div className="col-span-2">
                     <label
                       htmlFor="name"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      className="block mb-2 text-sm font-medium text-gray-900"
                     >
                       Nombre
                     </label>
@@ -106,7 +106,7 @@ const CrudModal = ({ user, onClose, onDelete }) => {
                       type="text"
                       name="name"
                       id="name"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:focus:ring-primary-500 dark:focus:border-primary-500 shadow-md"
                       placeholder="Type product name"
                       required=""
                     />
@@ -114,7 +114,7 @@ const CrudModal = ({ user, onClose, onDelete }) => {
                   <div className="col-span-2">
                     <label
                       htmlFor="name"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      className="block mb-2 text-sm font-medium text-gray-900 "
                     >
                       Nombre de usuario
                     </label>
@@ -122,7 +122,7 @@ const CrudModal = ({ user, onClose, onDelete }) => {
                       type="text"
                       name="name"
                       id="name"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:focus:ring-primary-500 dark:focus:border-primary-500 shadow-md"
                       placeholder="Type product name"
                       required=""
                     />
@@ -130,7 +130,7 @@ const CrudModal = ({ user, onClose, onDelete }) => {
                   <div className="col-span-2">
                     <label
                       htmlFor="name"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      className="block mb-2 text-sm font-medium text-gray-900 "
                     >
                       Correo electronico
                     </label>
@@ -138,7 +138,7 @@ const CrudModal = ({ user, onClose, onDelete }) => {
                       type="text"
                       name="name"
                       id="name"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-white dark:border-gray-500 dark:placeholder-gray-400 dark:focus:ring-primary-500 dark:focus:border-primary-500 shadow-md"
                       placeholder="Type product name"
                       required=""
                     />
@@ -146,27 +146,27 @@ const CrudModal = ({ user, onClose, onDelete }) => {
                   <div className="col-span-2">
                     <label
                       htmlFor="description"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      className="block mb-2 text-sm font-medium text-gray-900 "
                     >
                       Descripcion
                     </label>
                     <textarea
                       id="description"
                       rows="4"
-                      className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      className="block p-2.5 w-full text-sm rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 bg-white dark:border-gray-500 dark:focus:ring-blue-500 dark:focus:border-blue-500 shadow-md"
                       placeholder="Escribe o edita la descripcion aqui"
                     ></textarea>
                   </div>
                 </div>
                 <button
-                onClick={() => {
-                  closeModal();
-                  handleEdit(user.id);
-                }}
+                  onClick={() => {
+                    closeModal();
+                    handleEdit(user.id);
+                  }}
                   type="submit"
-                  className="text-white inline-flex items-center bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                  className="text-white inline-flex items-center bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 shadow-md"
                 >
-                  
+
                   <svg
                     className="me-1 -ms-1 w-5 h-5"
                     fill="currentColor"
@@ -225,7 +225,7 @@ const PopupModal = ({ user, onClose, onDelete }) => {
           className="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-screen"
         >
           <div className="relative p-4 w-full max-w-md max-h-full">
-            <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <div className="relative bg-white rounded-lg shadow-md">
               <button
                 onClick={closeModal}
                 type="button"
@@ -248,9 +248,9 @@ const PopupModal = ({ user, onClose, onDelete }) => {
                 </svg>
                 <span className="sr-only">Cerrar modal</span>
               </button>
-              <div className="p-4 md:p-5 text-center">
+              <div className="p-4 md:p-5 text-center bg-gray-100 border border-gray-600 rounded-lg">
                 <svg
-                  className="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200"
+                  className="mx-auto mb-4 w-12 h-12 "
                   aria-hidden="true"
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -264,8 +264,9 @@ const PopupModal = ({ user, onClose, onDelete }) => {
                     d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
                   />
                 </svg>
-                <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
-                  ¿Estás seguro de borrar este usuario (se borrarán cualquier contenido relacionado con el usuario, como publicaciones y comentarios)?
+                <h3 className="mb-5 text-lg font-normal">
+                  ¿Estás seguro de Eliminar este usuario? 
+                  (se borrarán cualquier contenido relacionado con el usuario, como publicaciones y comentarios)
                 </h3>
                 <button
                   onClick={() => {
@@ -273,19 +274,20 @@ const PopupModal = ({ user, onClose, onDelete }) => {
                     handleDelete(user.id);
                   }}
                   type="button"
-                  className="text-white bg-red-600 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center me-2"
+                  className="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center me-2 shadow-md"
                 >
-                  Sip, ¡BORRALO!
+                  Eliminar
                 </button>
 
                 <button
                   onClick={closeModal}
                   type="button"
-                  className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-200 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
+                  className="text-white bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center me-2 shadow-md"
                 >
-                  No, cambié de opinion
+                  Cancelar
                 </button>
               </div>
+
             </div>
           </div>
         </div>
@@ -311,40 +313,38 @@ const CRUDUser = () => {
   };
 
   return (
-    <div className="flex h-screen w-[100%]">
-      <div className="h-screen flex">
+    <div className="flex h-screen">
+      <div className="h-screen">
         <CRUDSidebar />
       </div>
-      <div className="flex self-start items-center w-auto pl-8 pt-10">
-        <table className="table-auto border-collapse border border-slate-600">
-          <thead>
-            <tr>
-              <th className="border border-slate-500">Nombre</th>
-              <th className="border border-slate-500">Username</th>
-              <th className="border border-slate-500">Email</th>
-              <th className="border border-slate-500">Descripcion</th>
-              <th className="border border-slate-500">Opciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map((user) => (
-              <tr key={user.id}>
-                <td className="border border-slate-500 px-2">{user.name}</td>
-                <td className="border border-slate-500 px-2">
-                  {user.username}
-                </td>
-                <td className="border border-slate-500 px-2">{user.email}</td>
-                <td className="border border-slate-500 px-2">
-                  {user.description}
-                </td>
-                <td className="p-2">
-                  <CrudModal user={user} />
-                  <PopupModal user={user} />
-                </td>
+      <div className="flex flex-col pl-8 pt-10 ml-32 mt-16">
+        <div className="overflow-x-auto">
+          <table className="table-auto min-w-full border-collapse border border-gray-300 rounded-lg">
+            <thead>
+              <tr className="bg-gray-200">
+                <th className="border border-gray-300 px-4 py-2">Nombre</th>
+                <th className="border border-gray-300 px-4 py-2">Username</th>
+                <th className="border border-gray-300 px-4 py-2">Email</th>
+                <th className="border border-gray-300 px-4 py-2">Descripción</th>
+                <th className="border border-gray-300 px-4 py-2">Opciones</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {users.map((user) => (
+                <tr key={user.id} className="bg-white">
+                  <td className="border border-gray-300 px-4 py-2">{user.name}</td>
+                  <td className="border border-gray-300 px-4 py-2">{user.username}</td>
+                  <td className="border border-gray-300 px-4 py-2">{user.email}</td>
+                  <td className="border border-gray-300 px-4 py-2">{user.description}</td>
+                  <td className="border border-gray-300 px-4 py-2 flex gap-2">
+                    <CrudModal user={user} />
+                    <PopupModal user={user} />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );
