@@ -81,15 +81,32 @@ function loginGH(){
     }
     if(ghUser.length > 0){
       console.log(sessionStorage.getItem("loggedIn"))
-
       if(sessionStorage.getItem("loggedIn")){
+        console.log('Condiciones cumplidas')
         axios.post(`http://localhost:8082/add/github/${userId}`, {ghUser})
         .then((response) => {
-          console.log(response.data)
-          sessionStorage.setItem('user', JSON.stringify(response.data));
-          
-
-          navigate('/config')
+          console.log(response.status)
+          if (response.status === 200) {
+            console.log(response.data);
+            sessionStorage.setItem('user', JSON.stringify(response.data));
+            Swal.fire({
+              icon: 'success',
+              title: 'Cuenta vinculada exitosamente',
+              showConfirmButton: true,
+              timer: 1200,
+            });
+            navigate('/home');
+          } else {
+            
+            navigate('/home')
+            Swal.fire({
+              icon: 'error',
+              title: 'Cuenta ya vinculada',
+              showConfirmButton: true,
+              timer: 1200,
+            });
+          } 
+        
         })
       }
       else{
