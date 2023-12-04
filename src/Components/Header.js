@@ -35,7 +35,7 @@ function Header() {
     // Puedes agregar lógica de cierre de sesión aquí si es necesario
     // Por ejemplo, limpiar la información del usuario en el estado y la sesión
     setLoggedInUser(null);
-    sessionStorage.removeItem('user');
+    sessionStorage.clear();
     localStorage.clear()
     // Muestra la alerta de cierre de sesión exitoso
     Swal.fire({
