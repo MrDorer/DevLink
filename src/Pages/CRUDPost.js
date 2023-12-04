@@ -2,9 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import CRUDSidebar from "../Components/CRUDSidebar";
 
-
-
-const PopupModal = ({ user, onClose, onDelete }) => {
+const PopupModal = ({ post, onClose, onDelete }) => {
   const [isModalOpen, setModalOpen] = useState(false);
 
   const toggleModal = () => {
@@ -15,8 +13,17 @@ const PopupModal = ({ user, onClose, onDelete }) => {
     setModalOpen(false);
   };
 
-  const handleDelete = (userId) => {
-    console.log(`Eliminar usuario con ID: ${userId}`);
+  const handleDelete = async (postId) => {
+    try {
+      await axios.delete(`http://localhost:8082/publicaciones/${postId}`);
+      console.log(`Publicación con ID ${postId} eliminada con éxito`);
+
+      closeModal();
+      onDelete(postId);
+    } catch (error) {
+      console.error("Error al eliminar la publicación:", error);
+      // Manejar errores aquí
+    }
   };
 
   return (
@@ -39,7 +46,7 @@ const PopupModal = ({ user, onClose, onDelete }) => {
           className="fixed top-0 right-0 left-0 z-50 flex justify-center items-center w-full h-screen"
         >
           <div className="relative p-4 w-full max-w-md max-h-full">
-          <div className="relative bg-white rounded-lg shadow-md">
+            <div className="relative bg-white rounded-lg shadow-md">
               <button
                 onClick={closeModal}
                 type="button"
@@ -84,7 +91,7 @@ const PopupModal = ({ user, onClose, onDelete }) => {
                 <button
                   onClick={() => {
                     closeModal();
-                    handleDelete(user.id);
+                    handleDelete(post.id);
                   }}
                   type="button"
                   className="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-sm inline-flex items-center px-5 py-2.5 text-center me-2 shadow-md"
@@ -109,19 +116,24 @@ const PopupModal = ({ user, onClose, onDelete }) => {
 };
 
 const CRUDPost = () => {
-  const [users, setUsers] = useState([]);
+  const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    fetchUsers();
+    fetchPosts();
   }, []);
 
-  const fetchUsers = async () => {
+  const fetchPosts = async () => {
     try {
-      const response = await axios.get("http://localhost:8082/users");
-      setUsers(response.data);
+      const response = await axios.get("http://localhost:8082/publicaciones");
+      setPosts(response.data);
     } catch (error) {
-      console.error("Error fetching users:", error);
+      console.error("Error fetching posts:", error);
     }
+  };
+
+  const handleDelete = (postId) => {
+    // Actualiza el estado eliminando la publicación con el postId
+    setPosts((prevPosts) => prevPosts.filter((post) => post.id !== postId));
   };
 
   return (
@@ -136,17 +148,23 @@ const CRUDPost = () => {
             <thead>
               <tr className="bg-gray-200">
                 <th className="border border-gray-300 px-4 py-2">Usuario</th>
-                <th className="border border-gray-300 px-4 py-2">Titulo</th>
-                <th className="border border-gray-300 px-4 py-2">Descripcion</th>
+                <th className="border border-gray-300 px-4 py-2">
+                  Descripcion
+                </th>
+                <th className="border border-gray-300 px-4 py-2">Acciones</th>
               </tr>
             </thead>
             <tbody>
-              {users.map((user) => (
-                <tr key={user.id}>
-                  <td className="border border-gray-300 px-4 py-2">{user.name}</td>
-                  <td className="border border-gray-300 px-4 py-2">{user.username}</td>
+              {posts.map((post) => (
+                <tr key={post.id}>
                   <td className="border border-gray-300 px-4 py-2">
-                    <PopupModal user={user} />
+                    {post.id_usuario}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    {post.contenido}
+                  </td>
+                  <td className="border border-gray-300 px-4 py-2">
+                    <PopupModal post={post} onDelete={handleDelete} />
                   </td>
                 </tr>
               ))}

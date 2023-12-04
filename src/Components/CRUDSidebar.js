@@ -26,7 +26,7 @@ function CRUDSidebar() {
           </div>
         </div>
         <div>
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col pb-12 items-center">
             <Link to="/">
               <button className="w-full py-2 px-4 mb-8 bg-red-600 hover:bg-red-500 text-white rounded font-semibold">
                 Cerrar sesión
